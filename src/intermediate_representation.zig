@@ -1,4 +1,7 @@
 const std = @import("std");
+// TODO: this crap needs to stream at some point, file in, ir streamed out
+// TODO:: set description field on needed fields
+// TODO:: make sure pattern is set where it's available
 
 pub const ZigPrimitive = enum {
     boolean,
@@ -7,10 +10,10 @@ pub const ZigPrimitive = enum {
     string,
 };
 
-// TODO: add a description: ?[]const u8 that we parse the description field into (for FhirTypes and FhirFields)
 pub const FhirType_Primitive = struct {
     pattern: ?[]const u8,
     name: []const u8,
+    type: []const u8,
 };
 
 pub const FhirType_Structure = struct {
@@ -52,7 +55,7 @@ pub const FhirIntermediateRepresentationError = error{
     OutOfMemory,
 };
 
-// All this garbage will panic as written
+// TODO: All this garbage will panic as written
 pub fn buildIntermediateRepresentation(parsed: std.json.Parsed(std.json.Value), arena: std.mem.Allocator) FhirIntermediateRepresentationError!std.ArrayList(FhirType) {
     std.debug.print("Building Intermediate Representation\n", .{});
     const obj = switch (parsed.value) {
@@ -130,13 +133,22 @@ fn parseDefinitionObject(arena: std.mem.Allocator, key: []const u8, value: std.j
                     try fields.append(arena, parsedField);
                 }
 
-                fhirType = .{ .structure = .{ .name = key, .fields = try fields.toOwnedSlice(arena), .is_resource = isResource } };
+                var description: []const u8 = "";
+                if (obj.get("description")) |descriptionOnObj| {
+                    description = switch (descriptionOnObj) {
+                        .string => |descriptionString| descriptionString,
+                        else => "",
+                    };
+                }
+
+                fhirType = .{ .structure = .{ .name = key, .fields = try fields.toOwnedSlice(arena), .is_resource = isResource, .description = description } };
             },
             else => {},
         }
-    } else if (obj.get("type")) |_| {
+    } else if (obj.get("type")) |primitiveType| {
         const pattern: ?[]const u8 = if (obj.get("pattern")) |p| p.string else null;
-        fhirType = .{ .primitive = .{ .name = key, .pattern = pattern } };
+        // TODO: this .type primitiveType.string could panic
+        fhirType = .{ .primitive = .{ .name = key, .pattern = pattern, .type = primitiveType.string } };
     } else {
         return error.UnknownDefinitionType;
     }
@@ -196,7 +208,15 @@ fn parseField(arena: std.mem.Allocator, key: []const u8, value: std.json.Value, 
         }
     }
 
-    return FhirField{ .name = key, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice };
+    var description: []const u8 = "";
+    if (obj.get("description")) |descriptionOnObj| {
+        description = switch (descriptionOnObj) {
+            .string => |descriptionString| descriptionString,
+            else => "",
+        };
+    }
+
+    return FhirField{ .name = key, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice, .description = description };
 }
 
 fn cleanRef(ref: []const u8) []const u8 {

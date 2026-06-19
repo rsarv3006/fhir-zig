@@ -3,6 +3,7 @@ const Io = std.Io;
 
 const fhir_zig = @import("fhir_zig");
 const ir = @import("intermediate_representation.zig");
+const emitter = @import("emitter.zig");
 
 pub fn writeTestZigFile(arena: std.mem.Allocator, output_dir: std.Io.Dir, io: Io, resourceName: []const u8) !void {
     const parts = &[_][]const u8{ resourceName, ".zig" };
@@ -96,12 +97,26 @@ pub fn main(init: std.process.Init) !void {
         }
     }
 
-    const irFile: std.Io.File = try output_dir.createFile(init.io, "ir.out.txt", .{});
+    // const irFile: std.Io.File = try output_dir.createFile(init.io, "ir.out.txt", .{});
+    // defer irFile.close(init.io);
+
+    // var file_writer = irFile.writer(init.io, &.{});
+    // const writer = &file_writer.interface;
+
+    // const byte_written = try writer.write(try outArr.toOwnedSlice(arena));
+    // std.debug.print("Successfully wrote {d} bytes.\n", .{byte_written});
+
+    const emitted = try emitter.emit(arena, fhirTypes);
+    std.debug.print("post emitted\n", .{});
+
+    std.debug.print("mwep - {d}", .{emitted.len});
+
+    const irFile: std.Io.File = try output_dir.createFile(init.io, "fhir_r4.zig", .{});
     defer irFile.close(init.io);
 
     var file_writer = irFile.writer(init.io, &.{});
     const writer = &file_writer.interface;
 
-    const byte_written = try writer.write(try outArr.toOwnedSlice(arena));
+    const byte_written = try writer.write(emitted);
     std.debug.print("Successfully wrote {d} bytes.\n", .{byte_written});
 }
