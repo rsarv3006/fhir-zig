@@ -55,7 +55,7 @@ pub const FhirIntermediateRepresentationError = error{
     OutOfMemory,
 };
 
-// TODO: All this garbage will panic as written
+// TODO: All this garbage will panic as written (specifically the json unwrapping without checking)
 pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.json.Parsed(std.json.Value)) FhirIntermediateRepresentationError!std.ArrayList(FhirType) {
     std.debug.print("Building Intermediate Representation\n", .{});
     const obj = switch (parsed.value) {

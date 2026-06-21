@@ -5,6 +5,13 @@ const fhir_zig = @import("fhir_zig");
 const ir = @import("intermediate_representation.zig");
 const emitter = @import("emitter.zig");
 
+// const generatedFhir = @import("../output/fhir_r4.zig");
+
+// fn testTheThing() void {
+//     const patient = generatedFhir.Patient {};
+//     patient.resourceType;
+// }
+
 pub fn main(init: std.process.Init) !void {
     const arena: std.mem.Allocator = init.arena.allocator();
 

@@ -6,6 +6,7 @@ const utils = @import("utils.zig");
 const SIZE_ESTIMATE: usize = 128;
 
 pub fn emit(arena: std.mem.Allocator, fhirTypes: std.ArrayList(ir.FhirType)) ![]const u8 {
+    std.debug.print("Emitting Fhir Types...\n", .{});
     var buffer = try std.ArrayList(u8).initCapacity(arena, fhirTypes.items.len * SIZE_ESTIMATE);
     for (fhirTypes.items) |fhirType| {
         try buffer.appendSlice(arena, try generateZigSource(arena, fhirType));
@@ -17,7 +18,7 @@ pub fn emit(arena: std.mem.Allocator, fhirTypes: std.ArrayList(ir.FhirType)) ![]
 fn generateZigSource(arena: std.mem.Allocator, fhirType: ir.FhirType) ![]const u8 {
     switch (fhirType) {
         .structure => |fhirTypeStruct| {
-            return try generateZigSourceFhirStructure(fhirTypeStruct);
+            return try generateZigSourceFhirStructure(arena, fhirTypeStruct);
         },
         .primitive => |fhirTypePrimitive| {
             return try generateZigSourceFhirPrimitive(arena, fhirTypePrimitive);
@@ -28,23 +29,76 @@ fn generateZigSource(arena: std.mem.Allocator, fhirType: ir.FhirType) ![]const u
     }
 }
 
-fn generateZigSourceFhirStructure(fhirStruct: ir.FhirType_Structure) ![]const u8 {
-    _ = fhirStruct;
-    return "";
+fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirType_Structure) ![]const u8 {
+    const description = try getSanitizedDescription(arena, fhirStruct.description);
+    const name = try getSanitizedName(arena, fhirStruct.name);
+    const parts = &[_][]const u8{ description, "\n", "pub const ", name, " = struct {\n" };
+
+    var buffer = try std.ArrayList(u8).initCapacity(arena, name.len + description.len + fhirStruct.fields.len * 20 + 20);
+    try buffer.appendSlice(arena, try std.mem.concat(arena, u8, parts));
+
+    if (fhirStruct.is_resource) {
+        const isResourceParts = &[_][]const u8{ "    resourceType: []const u8 = \"", fhirStruct.name, "\",\n" };
+        try buffer.appendSlice(arena, try std.mem.concat(arena, u8, isResourceParts));
+    }
+
+    for (fhirStruct.fields) |field| {
+        const sanitizedFieldName = try getSanitizedName(arena, field.name);
+        const sanitizedFieldDescription = try getSanitizedDescription(arena, field.description);
+
+        try buffer.appendSlice(arena, "    ");
+        try buffer.appendSlice(arena, sanitizedFieldDescription);
+        try buffer.appendSlice(arena, "\n    ");
+        try buffer.appendSlice(arena, sanitizedFieldName);
+        try buffer.appendSlice(arena, ": ");
+
+        if (field.is_optional) {
+            try buffer.appendSlice(arena, "?");
+        }
+
+        if (field.is_slice) {
+            try buffer.appendSlice(arena, "[] const ");
+        }
+
+        switch (field.type_ref) {
+            .primitive => |primitiveFieldType| {
+                try buffer.appendSlice(arena, primitiveFieldType);
+            },
+            .inline_enum => |inlineEnumFieldType| {
+                try buffer.appendSlice(arena, "enum {\n");
+                for (inlineEnumFieldType) |enumField| {
+                    const sanitizedEnumField = try getSanitizedName(arena, enumField);
+                    try buffer.appendSlice(arena, sanitizedEnumField);
+                    try buffer.appendSlice(arena, ", \n");
+                }
+
+                try buffer.appendSlice(arena, "}\n");
+            },
+            .ref => |refFieldType| {
+                try buffer.appendSlice(arena, refFieldType);
+            },
+        }
+        try buffer.appendSlice(arena, ",\n");
+    }
+
+    try buffer.appendSlice(arena, "\n};\n\n");
+
+    return buffer.toOwnedSlice(arena);
 }
 
 fn generateZigSourceFhirPrimitive(arena: std.mem.Allocator, fhirPrimitive: ir.FhirType_Primitive) ![]const u8 {
-    const description = fhirPrimitive.pattern orelse "";
+    const description = try getSanitizedDescription(arena, fhirPrimitive.pattern);
     const name = try getSanitizedName(arena, fhirPrimitive.name);
-    const parts = &[_][]const u8{ "// ", description, "\n", "pub const ", name, " = ", fhirPrimitiveToZigType(name), ";\n" };
+
+    const parts = &[_][]const u8{ description, "\n", "pub const ", name, " = ", fhirPrimitiveToZigType(name), ";\n" };
 
     return try std.mem.concat(arena, u8, parts);
 }
 
 fn generateZigSourceFhirEnumeration(arena: std.mem.Allocator, fhirEnumeration: ir.FhirType_Enumeration) ![]const u8 {
     const name = try getSanitizedName(arena, fhirEnumeration.name);
-    const description = fhirEnumeration.description orelse "";
-    const parts = &[_][]const u8{ "// ", description, "\n", "pub const ", name, " = enum {\n" };
+    const description = try getSanitizedDescription(arena, fhirEnumeration.description);
+    const parts = &[_][]const u8{ description, "\n", "pub const ", name, " = enum {\n" };
 
     var buffer = try std.ArrayList(u8).initCapacity(arena, name.len + description.len + fhirEnumeration.variants.len * 6 + 20);
     try buffer.appendSlice(arena, try std.mem.concat(arena, u8, parts));
@@ -53,7 +107,7 @@ fn generateZigSourceFhirEnumeration(arena: std.mem.Allocator, fhirEnumeration: i
         const variantParts = &[_][]const u8{ variant, ",\n" };
         try buffer.appendSlice(arena, try std.mem.concat(arena, u8, variantParts));
     }
-    try buffer.appendSlice(arena, "};");
+    try buffer.appendSlice(arena, "};\n");
 
     // TODO: This is probably not ideal, should probably pass in the buffer
     return try buffer.toOwnedSlice(arena);
@@ -72,11 +126,37 @@ fn fhirPrimitiveToZigType(name: []const u8) []const u8 {
 }
 
 fn getSanitizedName(arena: std.mem.Allocator, name: []const u8) ![]const u8 {
-    if (utils.isReserveKeyword(name)) {
+    if (utils.isReserveKeyword(name) or utils.doesContainCharNotAllowedInName(name)) {
         const parts = &[_][]const u8{ "@\"", name, "\"" };
         return try std.mem.concat(arena, u8, parts);
     }
+
     return name;
+}
+
+// TODO: Can we pass the description in as a reference to save on value copy
+fn getSanitizedDescription(arena: std.mem.Allocator, description: ?[]const u8) ![]const u8 {
+    const nonNullDescription = description orelse "";
+    if (std.mem.eql(u8, nonNullDescription, "")) {
+        return "";
+    }
+
+    // 5 is a WAG here for extra space needed by the slashes
+    var sanitizedDescriptionBuffer = try std.ArrayList(u8).initCapacity(arena, nonNullDescription.len + 5);
+
+    try sanitizedDescriptionBuffer.appendSlice(arena, "/// ");
+    for (nonNullDescription) |descrByte| {
+        if (descrByte == '\t' or descrByte == '\r') {
+            try sanitizedDescriptionBuffer.appendSlice(arena, " ");
+        } else {
+            try sanitizedDescriptionBuffer.append(arena, descrByte);
+        }
+        if (descrByte == '\n') {
+            try sanitizedDescriptionBuffer.appendSlice(arena, "/// ");
+        }
+    }
+
+    return try sanitizedDescriptionBuffer.toOwnedSlice(arena);
 }
 
 // Tests
