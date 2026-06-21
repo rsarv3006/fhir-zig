@@ -56,7 +56,7 @@ pub const FhirIntermediateRepresentationError = error{
 };
 
 // TODO: All this garbage will panic as written
-pub fn buildIntermediateRepresentation(parsed: std.json.Parsed(std.json.Value), arena: std.mem.Allocator) FhirIntermediateRepresentationError!std.ArrayList(FhirType) {
+pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.json.Parsed(std.json.Value)) FhirIntermediateRepresentationError!std.ArrayList(FhirType) {
     std.debug.print("Building Intermediate Representation\n", .{});
     const obj = switch (parsed.value) {
         .object => |o| o,
