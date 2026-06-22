@@ -78,3 +78,13 @@ pub fn doesContainCharNotAllowedInName(name: []const u8) bool {
 
     return false;
 }
+
+const BAD_STARTING_CHARS = [_]u8{ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+
+pub fn doesStartWithBadChar(name: []const u8) bool {
+    for (BAD_STARTING_CHARS) |i| {
+        // TODO: Will this cause a bad access issue?
+        if (i == name[0]) return true;
+    }
+    return false;
+}

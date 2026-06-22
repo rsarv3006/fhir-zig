@@ -5,6 +5,8 @@ const utils = @import("utils.zig");
 
 const SIZE_ESTIMATE: usize = 128;
 
+//TODO: optional fields should have = null; since we don't define a value
+
 pub fn emit(arena: std.mem.Allocator, fhirTypes: std.ArrayList(ir.FhirType)) ![]const u8 {
     std.debug.print("Emitting Fhir Types...\n", .{});
     var buffer = try std.ArrayList(u8).initCapacity(arena, fhirTypes.items.len * SIZE_ESTIMATE);
@@ -26,7 +28,31 @@ fn generateZigSource(arena: std.mem.Allocator, fhirType: ir.FhirType) ![]const u
         .enumeration => |fhirTypeEnumeration| {
             return try generateZigSourceFhirEnumeration(arena, fhirTypeEnumeration);
         },
+        .oneOf => |fhirTypeOneOf| {
+            return try generateZigSourceFhirOneOf(arena, fhirTypeOneOf);
+        },
     }
+}
+
+fn generateZigSourceFhirOneOf(arena: std.mem.Allocator, fhirTypeOneOf: ir.FhirType_OneOf) ![]const u8 {
+    const name = try getSanitizedName(arena, fhirTypeOneOf.name);
+    const parts = &[_][]const u8{ "pub const ", name, " = union(enum) {\n" };
+
+    var buffer = try std.ArrayList(u8).initCapacity(arena, name.len + fhirTypeOneOf.refs.len * 10);
+    try buffer.appendSlice(arena, try std.mem.concat(arena, u8, parts));
+
+    for (fhirTypeOneOf.refs) |refItem| {
+        const sanitizedRefItem = try getSanitizedName(arena, refItem);
+        try buffer.appendSlice(arena, "    ");
+        try buffer.appendSlice(arena, sanitizedRefItem);
+        try buffer.appendSlice(arena, ": ");
+        try buffer.appendSlice(arena, sanitizedRefItem);
+        try buffer.appendSlice(arena, ",\n");
+    }
+
+    try buffer.appendSlice(arena, "};\n");
+
+    return buffer.toOwnedSlice(arena);
 }
 
 fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirType_Structure) ![]const u8 {
@@ -113,12 +139,15 @@ fn generateZigSourceFhirEnumeration(arena: std.mem.Allocator, fhirEnumeration: i
     return try buffer.toOwnedSlice(arena);
 }
 
+// TODO: validate this translation against the spec
 const primitiveMap = std.StaticStringMap([]const u8).initComptime(.{
     .{ "boolean", "bool" },
-    .{ "integer", "i64" },
+    .{ "integer", "i32" },
     .{ "decimal", "f64" },
-    .{ "positiveInt", "u64" },
-    .{ "unsignedInt", "u64" },
+    .{ "positiveInt", "u32" },
+    .{ "unsignedInt", "u32" },
+    .{ "number", "f64" },
+    .{ "integer64", "i64" },
 });
 
 fn fhirPrimitiveToZigType(name: []const u8) []const u8 {
@@ -126,7 +155,7 @@ fn fhirPrimitiveToZigType(name: []const u8) []const u8 {
 }
 
 fn getSanitizedName(arena: std.mem.Allocator, name: []const u8) ![]const u8 {
-    if (utils.isReserveKeyword(name) or utils.doesContainCharNotAllowedInName(name)) {
+    if (utils.isReserveKeyword(name) or utils.doesContainCharNotAllowedInName(name) or utils.doesStartWithBadChar(name)) {
         const parts = &[_][]const u8{ "@\"", name, "\"" };
         return try std.mem.concat(arena, u8, parts);
     }

@@ -9,7 +9,6 @@ const emitter = @import("emitter.zig");
 
 // fn testTheThing() void {
 //     const patient = generatedFhir.Patient {};
-//     patient.resourceType;
 // }
 
 pub fn main(init: std.process.Init) !void {
@@ -62,6 +61,9 @@ pub fn main(init: std.process.Init) !void {
             },
             .enumeration => |e| {
                 try outArr.print(arena, "enum: {s}\n", .{e.name});
+            },
+            else => {
+                // TODO: Ignoring the one of ir type
             },
         }
     }

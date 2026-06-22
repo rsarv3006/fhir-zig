@@ -3,13 +3,6 @@ const std = @import("std");
 // TODO:: set description field on needed fields
 // TODO:: make sure pattern is set where it's available
 
-pub const ZigPrimitive = enum {
-    boolean,
-    integer,
-    decimal,
-    string,
-};
-
 pub const FhirType_Primitive = struct {
     pattern: ?[]const u8,
     name: []const u8,
@@ -27,6 +20,11 @@ pub const FhirType_Enumeration = struct {
     name: []const u8,
     description: ?[]const u8,
     variants: []const []const u8,
+};
+
+pub const FhirType_OneOf = struct {
+    name: []const u8,
+    refs: []const []const u8,
 };
 
 pub const FhirField = struct {
@@ -47,6 +45,7 @@ pub const FhirType = union(enum) {
     primitive: FhirType_Primitive,
     structure: FhirType_Structure,
     enumeration: FhirType_Enumeration,
+    oneOf: FhirType_OneOf,
 };
 
 pub const FhirIntermediateRepresentationError = error{
@@ -77,7 +76,7 @@ pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.jso
     while (iter.next()) |entry| {
         const key = entry.key_ptr.*;
 
-        // if (std.mem.eql(u8, key, "Patient")) {
+        // if (std.mem.eql(u8, key, "xhtml")) {
         //     std.debug.print("{s}\n", .{key});
 
         //     const valueString = try std.json.Stringify.valueAlloc(arena, entry.value_ptr.*, .{ .whitespace = .indent_2 });
@@ -147,8 +146,30 @@ fn parseDefinitionObject(arena: std.mem.Allocator, key: []const u8, value: std.j
         }
     } else if (obj.get("type")) |primitiveType| {
         const pattern: ?[]const u8 = if (obj.get("pattern")) |p| p.string else null;
-        // TODO: this .type primitiveType.string could panic
-        fhirType = .{ .primitive = .{ .name = key, .pattern = pattern, .type = primitiveType.string } };
+        const typeString = switch (primitiveType) {
+            .string => |str| str,
+            else => return error.FieldNotString,
+        };
+        fhirType = .{ .primitive = .{ .name = key, .pattern = pattern, .type = typeString } };
+    } else if (obj.get("oneOf")) |oneOf| {
+        std.debug.print("Top of oneOf check...\n", .{});
+        const oneOfArr = switch (oneOf) {
+            .array => |arr| arr,
+            else => return error.FieldNotArray,
+        };
+
+        var cleanedRefArr = try std.ArrayList([]const u8).initCapacity(arena, oneOfArr.items.len);
+
+        for (oneOfArr.items) |item| {
+            // TODO: Un bork this
+            if (item.object.get("$ref")) |val| {
+                try cleanedRefArr.append(arena, cleanRef(val.string));
+            }
+        }
+
+        fhirType = .{ .oneOf = .{ .name = key, .refs = try cleanedRefArr.toOwnedSlice(arena) } };
+    } else if (std.mem.eql(u8, key, "xhtml")) {
+        fhirType = .{ .primitive = .{ .name = key, .pattern = null, .type = "string" } };
     } else {
         return error.UnknownDefinitionType;
     }
@@ -178,6 +199,21 @@ fn parseField(arena: std.mem.Allocator, key: []const u8, value: std.json.Value, 
                 if (std.mem.eql(u8, typeName, "array")) {
                     isSlice = true;
                     fieldType = try getItemsRef(arena, value);
+                } else if (std.mem.eql(u8, typeName, "number")) {
+                    const pattern = if (obj.get("pattern")) |p| switch (p) {
+                        .string => |s| s,
+                        else => null,
+                    } else null;
+
+                    if (pattern) |pat| {
+                        if (std.mem.indexOf(u8, pat, "\\.") != null) {
+                            fieldType = .{ .primitive = "decimal" };
+                        } else {
+                            fieldType = .{ .primitive = "integer" };
+                        }
+                    } else {
+                        return error.FailedToParsePatternForTypeNumber;
+                    }
                 } else {
                     fieldType = .{ .primitive = typeName };
                 }
