@@ -51,3 +51,8 @@ pub fn emitFhirR4Types(arena: std.mem.Allocator, initIo: Io) !void {
     const inputPath = "schemas/schema-json-r4/fhir.schema.json/fhir.schema.json";
     try emitFhirTypes(arena, initIo, inputPath, "fhir_r4.zig");
 }
+
+pub fn emitFhirR5Types(arena: std.mem.Allocator, initIo: Io) !void {
+    const inputPath = "schemas/schema-json-r5/fhir.schema.json";
+    try emitFhirTypes(arena, initIo, inputPath, "fhir_r5.zig");
+}

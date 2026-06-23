@@ -13,3 +13,16 @@ built schema files are in the output folder (just a heads up zls sometimes choke
 ## AI Policy
 
 AI will NOT right any of the code for this project directly.
+
+## Notes
+
+Curl command for the r4 definitions
+
+```sh
+curl -o r4schemajson.zip https://hl7.org/fhir/R4/definitions.json.zip
+curl -o r5schemajson.zip https://hl7.org/fhir/R5/definitions.json.zip
+```
+
+## TODO
+
+-
