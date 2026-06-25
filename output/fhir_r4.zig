@@ -360,7 +360,7 @@ pub const Narrative = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// The actual narrative content, a stripped down version of XHTML.
-    div: xhtml = null,
+    div: xhtml,
 };
 
 /// A  text note which also  contains information about who made the statement and when.
@@ -454,7 +454,7 @@ pub const Identifier = struct {
     /// Time period during which identifier is/was valid for use.
     period: ?Period = null,
     /// Organization that issued/manages the identifier.
-    assigner: ?Reference = null,
+    assigner: ?*const Reference = null,
 };
 
 /// A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.
@@ -751,7 +751,7 @@ pub const SampledData = struct {
     /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
     extension: ?[]const Extension = null,
     /// The base quantity that a measured value of zero represents. In addition, this provides the units of the entire measurement series.
-    origin: Quantity = null,
+    origin: Quantity,
     /// The length of time between sampling times, measured in milliseconds.
     period: ?decimal = null,
     /// Extensions for period
@@ -785,13 +785,13 @@ pub const Signature = struct {
     /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
     extension: ?[]const Extension = null,
     /// An indication of the reason that the entity signed this document. This may be explicitly included as part of the signature information and can be used when determining accountability for various actions concerning the document.
-    type: []const Coding = null,
+    type: []const Coding,
     /// When the digital signature was signed.
     when: ?instant = null,
     /// Extensions for when
     _when: ?Element = null,
     /// A reference to an application-usable description of the identity that signed  (e.g. the signature used their private key).
-    who: Reference = null,
+    who: Reference,
     /// A reference to an application-usable description of the identity that is represented by the signature.
     onBehalfOf: ?Reference = null,
     /// A mime type that indicates the technical format of the target resources signed by the signature.
@@ -1378,7 +1378,7 @@ pub const UsageContext = struct {
     /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
     extension: ?[]const Extension = null,
     /// A code that identifies the type of context being specified by this usage context.
-    code: Coding = null,
+    code: Coding,
     /// A value that defines the context specified in this context of use. The interpretation of the value is defined by the code.
     valueCodeableConcept: ?CodeableConcept = null,
     /// A value that defines the context specified in this context of use. The interpretation of the value is defined by the code.
@@ -1496,9 +1496,9 @@ pub const ProductShelfLife = struct {
     /// Unique identifier for the packaged Medicinal Product.
     identifier: ?Identifier = null,
     /// This describes the shelf life, taking into account various scenarios such as shelf life of the packaged Medicinal Product itself, shelf life after transformation where necessary and shelf life after the first opening of a bottle, etc. The shelf life type shall be specified using an appropriate controlled vocabulary The controlled term and the controlled term identifier shall be specified.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The shelf life time period can be specified using a numerical value for the period of time and its unit of time measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
-    period: Quantity = null,
+    period: Quantity,
     /// Special precautions for storage, if any, can be specified using an appropriate controlled vocabulary The controlled term and the controlled term identifier shall be specified.
     specialPrecautionsForStorage: ?[]const CodeableConcept = null,
 };
@@ -1554,13 +1554,13 @@ pub const MarketingStatus = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The country in which the marketing authorisation has been granted shall be specified It should be specified using the ISO 3166 ‑ 1 alpha-2 code elements.
-    country: CodeableConcept = null,
+    country: CodeableConcept,
     /// Where a Medicines Regulatory Agency has granted a marketing authorisation for which specific provisions within a jurisdiction apply, the jurisdiction can be specified using an appropriate controlled terminology The controlled term and the controlled term identifier shall be specified.
     jurisdiction: ?CodeableConcept = null,
     /// This attribute provides information on the status of the marketing of the medicinal product See ISO/TS 20443 for more information and examples.
-    status: CodeableConcept = null,
+    status: CodeableConcept,
     /// The date when the Medicinal Product is placed on the market by the Marketing Authorisation Holder (or where applicable, the manufacturer/distributor) in a country and/or jurisdiction shall be provided A complete date consisting of day, month and year shall be specified using the ISO 8601 date format NOTE “Placed on the market” refers to the release of the Medicinal Product into the distribution chain.
-    dateRange: Period = null,
+    dateRange: Period,
     /// The date when the Medicinal Product is placed on the market by the Marketing Authorisation Holder (or where applicable, the manufacturer/distributor) in a country and/or jurisdiction shall be provided A complete date consisting of day, month and year shall be specified using the ISO 8601 date format NOTE “Placed on the market” refers to the release of the Medicinal Product into the distribution chain.
     restoreDate: ?dateTime = null,
     /// Extensions for restoreDate
@@ -3183,7 +3183,7 @@ pub const Account_Coverage = struct {
     /// The party(s) that contribute to payment (or part of) of the charges applied to this account (including self-pay).
     ///
     /// A coverage may only be responsible for specific types of charges, and the sequence of the coverages in the account could be important when processing billing.
-    coverage: Reference = null,
+    coverage: Reference,
     /// The priority of the coverage in the context of this account.
     priority: ?positiveInt = null,
     /// Extensions for priority
@@ -3201,7 +3201,7 @@ pub const Account_Guarantor = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The entity who is responsible.
-    party: Reference = null,
+    party: Reference,
     /// A guarantor may be placed on credit hold or otherwise have their role temporarily suspended.
     onHold: ?boolean = null,
     /// Extensions for onHold
@@ -3421,7 +3421,7 @@ pub const ActivityDefinition_DynamicValue = struct {
     /// Extensions for path
     _path: ?Element = null,
     /// An expression specifying the value of the customized element.
-    expression: Expression = null,
+    expression: Expression,
 };
 
 /// Actual or  potential/avoided event causing unintended physical injury resulting from or contributed to by medical care, a research study or other healthcare setting factors that requires additional monitoring, treatment, or hospitalization, or that results in death.
@@ -3463,7 +3463,7 @@ pub const AdverseEvent = struct {
     /// This element defines the specific type of event that occurred or that was prevented from occurring.
     event: ?CodeableConcept = null,
     /// This subject or group impacted by the event.
-    subject: Reference = null,
+    subject: Reference,
     /// The Encounter during which AdverseEvent was created or to which the creation of this record is tightly associated.
     encounter: ?Reference = null,
     /// The date (and perhaps time) when the adverse event occurred.
@@ -3513,7 +3513,7 @@ pub const AdverseEvent_SuspectEntity = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Identifies the actual instance of what caused the adverse event.  May be a substance, medication, medication administration, medication statement or a device.
-    instance: Reference = null,
+    instance: Reference,
     /// Information on the possible cause of the event.
     causality: ?[]const AdverseEvent_Causality = null,
 };
@@ -3598,7 +3598,7 @@ pub const AllergyIntolerance = struct {
     /// Code for an allergy or intolerance statement (either a positive or a negated/excluded statement).  This may be a code for a substance or pharmaceutical product that is considered to be responsible for the adverse reaction risk (e.g., "Latex"), an allergy or intolerance condition (e.g., "Latex allergy"), or a negated/excluded code for a specific substance or class (e.g., "No latex allergy") or a general or categorical negated statement (e.g.,  "No known allergy", "No known drug allergies").  Note: the substance for a specific reaction may be different from the substance identified as the cause of the risk, but it must be consistent with it. For instance, it may be a more specific substance (e.g. a brand medication) or a composite product that includes the identified substance. It must be clinically safe to only process the 'code' and ignore the 'reaction.substance'.  If a receiving system is unable to confirm that AllergyIntolerance.reaction.substance falls within the semantic scope of AllergyIntolerance.code, then the receiving system should ignore AllergyIntolerance.reaction.substance.
     code: ?CodeableConcept = null,
     /// The patient who has the allergy or intolerance.
-    patient: Reference = null,
+    patient: Reference,
     /// The encounter when the allergy or intolerance was asserted.
     encounter: ?Reference = null,
     /// Estimated or actual date,  date-time, or age when allergy or intolerance was identified.
@@ -3646,7 +3646,7 @@ pub const AllergyIntolerance_Reaction = struct {
     /// Identification of the specific substance (or pharmaceutical product) considered to be responsible for the Adverse Reaction event. Note: the substance for a specific reaction may be different from the substance identified as the cause of the risk, but it must be consistent with it. For instance, it may be a more specific substance (e.g. a brand medication) or a composite product that includes the identified substance. It must be clinically safe to only process the 'code' and ignore the 'reaction.substance'.  If a receiving system is unable to confirm that AllergyIntolerance.reaction.substance falls within the semantic scope of AllergyIntolerance.code, then the receiving system should ignore AllergyIntolerance.reaction.substance.
     substance: ?CodeableConcept = null,
     /// Clinical symptoms and/or signs that are observed or associated with the adverse reaction event.
-    manifestation: []const CodeableConcept = null,
+    manifestation: []const CodeableConcept,
     /// Text description about the reaction as a whole, including details of the manifestation if required.
     description: ?string = null,
     /// Extensions for description
@@ -3764,7 +3764,7 @@ pub const Appointment = struct {
     /// The service request this appointment is allocated to assess (e.g. incoming referral or procedure request).
     basedOn: ?[]const Reference = null,
     /// List of participants involved in the appointment.
-    participant: []const Appointment_Participant = null,
+    participant: []const Appointment_Participant,
     /// A set of date ranges (potentially including times) that the appointment is preferred to be scheduled within.
     ///
     /// The duration (usually in minutes) could also be provided to indicate the length of the appointment to fill and populate the start/end times for the actual allocated time. However, in other situations the duration may be calculated by the scheduling system.
@@ -3834,7 +3834,7 @@ pub const AppointmentResponse = struct {
     /// This records identifiers associated with this appointment response concern that are defined by business processes and/ or used to refer to it when a direct URL reference to the resource itself is not appropriate.
     identifier: ?[]const Identifier = null,
     /// Appointment that this response is replying to.
-    appointment: Reference = null,
+    appointment: Reference,
     /// Date/Time that the appointment is to take place, or requested new start time.
     start: ?instant = null,
     /// Extensions for start
@@ -3883,7 +3883,7 @@ pub const AuditEvent = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Identifier for a family of the event.  For example, a menu item, program, rule, policy, function code, application name or URL. It identifies the performed function.
-    type: Coding = null,
+    type: Coding,
     /// Identifier for the category of event.
     subtype: ?[]const Coding = null,
     /// Indicator for type of action performed during the event that generated the audit.
@@ -3918,9 +3918,9 @@ pub const AuditEvent = struct {
     /// The purposeOfUse (reason) that was used during the event being recorded.
     purposeOfEvent: ?[]const CodeableConcept = null,
     /// An actor taking an active role in the event or activity that is logged.
-    agent: []const AuditEvent_Agent = null,
+    agent: []const AuditEvent_Agent,
     /// The system that is reporting the event.
-    source: AuditEvent_Source = null,
+    source: AuditEvent_Source,
     /// Specific instances of data or objects that have been accessed.
     entity: ?[]const AuditEvent_Entity = null,
 };
@@ -4008,7 +4008,7 @@ pub const AuditEvent_Source = struct {
     /// Extensions for site
     _site: ?Element = null,
     /// Identifier of the source where the event was detected.
-    observer: Reference = null,
+    observer: Reference,
     /// Code specifying the type of source where event originated.
     type: ?[]const Coding = null,
 };
@@ -4101,7 +4101,7 @@ pub const Basic = struct {
     /// Identifier assigned to the resource for business purposes, outside the context of FHIR.
     identifier: ?[]const Identifier = null,
     /// Identifies the 'type' of resource - equivalent to the resource name for other resources.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// Identifies the patient, practitioner, device or any other resource that is the "focus" of this resource.
     subject: ?Reference = null,
     /// Identifies when the resource was first created.
@@ -4352,7 +4352,7 @@ pub const BodyStructure = struct {
     /// Image or images used to identify a location.
     image: ?[]const Attachment = null,
     /// The person to which the body site belongs.
-    patient: Reference = null,
+    patient: Reference,
 };
 
 /// A container for a collection of resources.
@@ -4961,7 +4961,7 @@ pub const CapabilityStatement_Operation = struct {
     /// Extensions for name
     _name: ?Element = null,
     /// Where the formal definition can be found. If a server references the base definition of an Operation (i.e. from the specification itself such as ```http://hl7.org/fhir/OperationDefinition/ValueSet-expand```), that means it supports the full capabilities of the operation - e.g. both GET and POST invocation.  If it only supports a subset, it must define its own custom [[[OperationDefinition]]] with a 'base' of the original OperationDefinition.  The custom definition would describe the specific subset of functionality supported.
-    definition: canonical = null,
+    definition: canonical,
     /// Documentation that describes anything special about the operation behavior, possibly detailing different behavior for system, type and instance-level invocation of the operation.
     documentation: ?markdown = null,
     /// Extensions for documentation
@@ -5028,7 +5028,7 @@ pub const CapabilityStatement_Endpoint = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A list of the messaging transport protocol(s) identifiers, supported by this endpoint.
-    protocol: Coding = null,
+    protocol: Coding,
     /// The network address of the endpoint. For solutions that do not use network addresses for routing, it can be just an identifier.
     address: ?url = null,
     /// Extensions for address
@@ -5053,7 +5053,7 @@ pub const CapabilityStatement_SupportedMessage = struct {
     /// Extensions for mode
     _mode: ?Element = null,
     /// Points to a message definition that identifies the messaging event, message structure, allowed responses, etc.
-    definition: canonical = null,
+    definition: canonical,
 };
 
 /// A Capability Statement documents a set of capabilities (behaviors) of a FHIR Server for a particular version of FHIR that may be used as a statement of actual server functionality or a statement of required or desired server implementation.
@@ -5078,7 +5078,7 @@ pub const CapabilityStatement_Document = struct {
     /// Extensions for documentation
     _documentation: ?Element = null,
     /// A profile on the document Bundle that constrains which resources are present, and their contents.
-    profile: canonical = null,
+    profile: canonical,
 };
 
 /// Describes the intention of how one or more practitioners intend to deliver care for a particular patient, group or community for a period of time, possibly limited to care for a specific condition or set of conditions.
@@ -5139,7 +5139,7 @@ pub const CarePlan = struct {
     /// Extensions for description
     _description: ?Element = null,
     /// Identifies the patient or group whose intended care is described by the plan.
-    subject: Reference = null,
+    subject: Reference,
     /// The Encounter during which this CarePlan was created or to which the creation of this record is tightly associated.
     encounter: ?Reference = null,
     /// Indicates when the plan did (or is intended to) come into effect and end.
@@ -5379,7 +5379,7 @@ pub const CatalogEntry = struct {
     /// Extensions for orderable
     _orderable: ?Element = null,
     /// The item in a catalog or definition.
-    referencedItem: Reference = null,
+    referencedItem: Reference,
     /// Used in supporting related concepts, e.g. NDC to RxNorm.
     additionalIdentifier: ?[]const Identifier = null,
     /// Classes of devices, or ATC for medication.
@@ -5429,7 +5429,7 @@ pub const CatalogEntry_RelatedEntry = struct {
     /// Extensions for relationtype
     _relationtype: ?Element = null,
     /// The reference to the related item.
-    item: Reference = null,
+    item: Reference,
 };
 
 /// The resource ChargeItem describes the provision of healthcare provider products for a certain patient, therefore referring not only to the product, but containing in addition details of the provision, like date, time, amounts and participating organizations and persons. Main Usage of the ChargeItem is to enable the billing process and internal cost allocation.
@@ -5480,9 +5480,9 @@ pub const ChargeItem = struct {
     /// ChargeItems can be grouped to larger ChargeItems covering the whole set.
     partOf: ?[]const Reference = null,
     /// A code that identifies the charge, like a billing code.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The individual or set of individuals the action is being or was performed on.
-    subject: Reference = null,
+    subject: Reference,
     /// The encounter or episode of care that establishes the context for this event.
     context: ?Reference = null,
     /// Date/time(s) or duration when the charged service was applied.
@@ -5550,7 +5550,7 @@ pub const ChargeItem_Performer = struct {
     /// Describes the type of performance or participation(e.g. primary surgeon, anesthesiologiest, etc.).
     function: ?CodeableConcept = null,
     /// The device, practitioner, etc. who performed or participated in the service.
-    actor: Reference = null,
+    actor: Reference,
 };
 
 /// The ChargeItemDefinition resource provides the properties that apply to the (billing) codes necessary to calculate costs and prices. The properties may differ largely depending on type and realm, therefore this resource gives only a rough structure and requires profiling for each type of billing code system.
@@ -5751,7 +5751,7 @@ pub const Claim = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// The category of claim, e.g. oral, pharmacy, vision, institutional, professional.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// A finer grained suite of claim type codes which may convey additional information such as Inpatient vs Outpatient and/or a specialty service.
     subType: ?CodeableConcept = null,
     /// A code to indicate whether the nature of the request is: to request adjudication of products and services previously rendered; or requesting authorization and adjudication for provision in the future; or requesting the non-binding adjudication of the listed products and services which could be provided in the future.
@@ -5763,7 +5763,7 @@ pub const Claim = struct {
     /// Extensions for use
     _use: ?Element = null,
     /// The party to whom the professional services and/or products have been supplied or are being considered and for whom actual or forecast reimbursement is sought.
-    patient: Reference = null,
+    patient: Reference,
     /// The period for which charges are being submitted.
     billablePeriod: ?Period = null,
     /// The date this resource was created.
@@ -5775,9 +5775,9 @@ pub const Claim = struct {
     /// The Insurer who is target of the request.
     insurer: ?Reference = null,
     /// The provider which is responsible for the claim, predetermination or preauthorization.
-    provider: Reference = null,
+    provider: Reference,
     /// The provider-required urgency of processing the request. Typical values include: stat, routine deferred.
-    priority: CodeableConcept = null,
+    priority: CodeableConcept,
     /// A code to indicate whether and for whom funds are to be reserved for future claims.
     fundsReserve: ?CodeableConcept = null,
     /// Other claims which are related to this claim such as prior submissions or claims for related services or for the same event.
@@ -5801,7 +5801,7 @@ pub const Claim = struct {
     /// Procedures performed on the patient relevant to the billing items with the claim.
     procedure: ?[]const Claim_Procedure = null,
     /// Financial instruments for reimbursement for the health care products and services specified on the claim.
-    insurance: []const Claim_Insurance = null,
+    insurance: []const Claim_Insurance,
     /// Details of an accident which resulted in injuries which required the products and services listed in the claim.
     accident: ?Claim_Accident = null,
     /// A claim line. Either a simple  product or service or a 'group' of details which can each be a simple items or groups of sub-details.
@@ -5839,7 +5839,7 @@ pub const Claim_Payee = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Type of Party to be reimbursed: subscriber, provider, other.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Reference to the individual or organization to whom any payment will be made.
     party: ?Reference = null,
 };
@@ -5859,7 +5859,7 @@ pub const Claim_CareTeam = struct {
     /// Extensions for sequence
     _sequence: ?Element = null,
     /// Member of the team who provided the product or service.
-    provider: Reference = null,
+    provider: Reference,
     /// The party who is billing and/or responsible for the claimed products or services.
     responsible: ?boolean = null,
     /// Extensions for responsible
@@ -5885,7 +5885,7 @@ pub const Claim_SupportingInfo = struct {
     /// Extensions for sequence
     _sequence: ?Element = null,
     /// The general class of the information supplied: information; exception; accident, employment; onset, etc.
-    category: CodeableConcept = null,
+    category: CodeableConcept,
     /// System and code pertaining to the specific information regarding special conditions relating to the setting, treatment or patient  for which care is sought.
     code: ?CodeableConcept = null,
     /// The date when or period to which this information refers.
@@ -5987,7 +5987,7 @@ pub const Claim_Insurance = struct {
     /// The business identifier to be used when the claim is sent for adjudication against this insurance policy.
     identifier: ?Identifier = null,
     /// Reference to the insurance card level information contained in the Coverage resource. The coverage issuing insurer will use these details to locate the patient's actual coverage within the insurer's information system.
-    coverage: Reference = null,
+    coverage: Reference,
     /// A business agreement number established between the provider and the insurer for special business processing purposes.
     businessArrangement: ?string = null,
     /// Extensions for businessArrangement
@@ -6057,7 +6057,7 @@ pub const Claim_Item = struct {
     /// Code to identify the general type of benefits under which products and services are provided.
     category: ?CodeableConcept = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// Identifies the program under which this may be recovered.
@@ -6115,7 +6115,7 @@ pub const Claim_Detail = struct {
     /// Code to identify the general type of benefits under which products and services are provided.
     category: ?CodeableConcept = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// Identifies the program under which this may be recovered.
@@ -6155,7 +6155,7 @@ pub const Claim_SubDetail = struct {
     /// Code to identify the general type of benefits under which products and services are provided.
     category: ?CodeableConcept = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// Identifies the program under which this may be recovered.
@@ -6206,7 +6206,7 @@ pub const ClaimResponse = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// A finer grained suite of claim type codes which may convey additional information such as Inpatient vs Outpatient and/or a specialty service.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// A finer grained suite of claim type codes which may convey additional information such as Inpatient vs Outpatient and/or a specialty service.
     subType: ?CodeableConcept = null,
     /// A code to indicate whether the nature of the request is: to request adjudication of products and services previously rendered; or requesting authorization and adjudication for provision in the future; or requesting the non-binding adjudication of the listed products and services which could be provided in the future.
@@ -6214,13 +6214,13 @@ pub const ClaimResponse = struct {
     /// Extensions for use
     _use: ?Element = null,
     /// The party to whom the professional services and/or products have been supplied or are being considered and for whom actual for facast reimbursement is sought.
-    patient: Reference = null,
+    patient: Reference,
     /// The date this resource was created.
     created: ?dateTime = null,
     /// Extensions for created
     _created: ?Element = null,
     /// The party responsible for authorization, adjudication and reimbursement.
-    insurer: Reference = null,
+    insurer: Reference,
     /// The provider which is responsible for the claim, predetermination or preauthorization.
     requestor: ?Reference = null,
     /// Original request resource reference.
@@ -6286,7 +6286,7 @@ pub const ClaimResponse_Item = struct {
     /// Extensions for noteNumber
     _noteNumber: ?[]const Element = null,
     /// If this item is a group then the values here are a summary of the adjudication of the detail items. If this item is a simple product or service then this is the result of the adjudication of this item.
-    adjudication: []const ClaimResponse_Adjudication = null,
+    adjudication: []const ClaimResponse_Adjudication,
     /// A claim detail. Either a simple (a product or service) or a 'group' of sub-details which are simple items.
     detail: ?[]const ClaimResponse_Detail = null,
 };
@@ -6302,7 +6302,7 @@ pub const ClaimResponse_Adjudication = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A code to indicate the information type of this adjudication record. Information types may include the value submitted, maximum values or percentages allowed or payable under the plan, amounts that: the patient is responsible for in aggregate or pertaining to this item; amounts paid by other coverages; and, the benefit payable for this item.
-    category: CodeableConcept = null,
+    category: CodeableConcept,
     /// A code supporting the understanding of the adjudication result and explaining variance from expected amount.
     reason: ?CodeableConcept = null,
     /// Monetary amount associated with the category.
@@ -6332,7 +6332,7 @@ pub const ClaimResponse_Detail = struct {
     /// Extensions for noteNumber
     _noteNumber: ?[]const Element = null,
     /// The adjudication results.
-    adjudication: []const ClaimResponse_Adjudication = null,
+    adjudication: []const ClaimResponse_Adjudication,
     /// A sub-detail adjudication of a simple product or service.
     subDetail: ?[]const ClaimResponse_SubDetail = null,
 };
@@ -6384,7 +6384,7 @@ pub const ClaimResponse_AddItem = struct {
     /// The providers who are authorized for the services rendered to the patient.
     provider: ?[]const Reference = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// Identifies the program under which this may be recovered.
@@ -6420,7 +6420,7 @@ pub const ClaimResponse_AddItem = struct {
     /// Extensions for noteNumber
     _noteNumber: ?[]const Element = null,
     /// The adjudication results.
-    adjudication: []const ClaimResponse_Adjudication = null,
+    adjudication: []const ClaimResponse_Adjudication,
     /// The second-tier service adjudications for payor added services.
     detail: ?[]const ClaimResponse_Detail1 = null,
 };
@@ -6436,7 +6436,7 @@ pub const ClaimResponse_Detail1 = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// The number of repetitions of a service or product.
@@ -6454,7 +6454,7 @@ pub const ClaimResponse_Detail1 = struct {
     /// Extensions for noteNumber
     _noteNumber: ?[]const Element = null,
     /// The adjudication results.
-    adjudication: []const ClaimResponse_Adjudication = null,
+    adjudication: []const ClaimResponse_Adjudication,
     /// The third-tier service adjudications for payor added services.
     subDetail: ?[]const ClaimResponse_SubDetail1 = null,
 };
@@ -6470,7 +6470,7 @@ pub const ClaimResponse_SubDetail1 = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// The number of repetitions of a service or product.
@@ -6488,7 +6488,7 @@ pub const ClaimResponse_SubDetail1 = struct {
     /// Extensions for noteNumber
     _noteNumber: ?[]const Element = null,
     /// The adjudication results.
-    adjudication: []const ClaimResponse_Adjudication = null,
+    adjudication: []const ClaimResponse_Adjudication,
 };
 
 /// This resource provides the adjudication details from the processing of a Claim resource.
@@ -6502,9 +6502,9 @@ pub const ClaimResponse_Total = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A code to indicate the information type of this adjudication record. Information types may include: the value submitted, maximum values or percentages allowed or payable under the plan, amounts that the patient is responsible for in aggregate or pertaining to this item, amounts paid by other coverages, and the benefit payable for this item.
-    category: CodeableConcept = null,
+    category: CodeableConcept,
     /// Monetary total amount associated with the category.
-    amount: Money = null,
+    amount: Money,
 };
 
 /// This resource provides the adjudication details from the processing of a Claim resource.
@@ -6518,7 +6518,7 @@ pub const ClaimResponse_Payment = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Whether this represents partial or complete payment of the benefits payable.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Total amount of all adjustments to this payment included in this transaction which are not related to this claim's adjudication.
     adjustment: ?Money = null,
     /// Reason for the payment adjustment.
@@ -6528,7 +6528,7 @@ pub const ClaimResponse_Payment = struct {
     /// Extensions for date
     _date: ?Element = null,
     /// Benefits payable less any payment adjustment.
-    amount: Money = null,
+    amount: Money,
     /// Issuer's unique identifier for the payment instrument.
     identifier: ?Identifier = null,
 };
@@ -6582,7 +6582,7 @@ pub const ClaimResponse_Insurance = struct {
     /// Extensions for focal
     _focal: ?Element = null,
     /// Reference to the insurance card level information contained in the Coverage resource. The coverage issuing insurer will use these details to locate the patient's actual coverage within the insurer's information system.
-    coverage: Reference = null,
+    coverage: Reference,
     /// A business agreement number established between the provider and the insurer for special business processing purposes.
     businessArrangement: ?string = null,
     /// Extensions for businessArrangement
@@ -6614,7 +6614,7 @@ pub const ClaimResponse_Error = struct {
     /// Extensions for subDetailSequence
     _subDetailSequence: ?Element = null,
     /// An error code, from a specified code system, which details why the claim could not be adjudicated.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
 };
 
 /// A record of a clinical assessment performed to determine what problem(s) may affect the patient and before planning the treatments or management strategies that are best to manage a patient's condition. Assessments are often 1:1 with a clinical consultation / encounter,  but this varies greatly depending on the clinical workflow. This resource is called "ClinicalImpression" rather than "ClinicalAssessment" to avoid confusion with the recording of assessment tools such as Apgar score.
@@ -6657,7 +6657,7 @@ pub const ClinicalImpression = struct {
     /// Extensions for description
     _description: ?Element = null,
     /// The patient or group of individuals assessed as part of this record.
-    subject: Reference = null,
+    subject: Reference,
     /// The Encounter during which this ClinicalImpression was created or to which the creation of this record is tightly associated.
     encounter: ?Reference = null,
     /// The point in time or period over which the subject was assessed.
@@ -6709,7 +6709,7 @@ pub const ClinicalImpression_Investigation = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A name/code for the group ("set") of investigations. Typically, this will be something like "signs", "symptoms", "clinical", "diagnostic", but the list is not constrained, and others such groups such as (exposure|family|travel|nutritional) history may be used.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// A record of a specific investigation that was undertaken.
     item: ?[]const Reference = null,
 };
@@ -7376,7 +7376,7 @@ pub const Composition = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// Specifies the particular kind of composition (e.g. History and Physical, Discharge Summary, Progress Note). This usually equates to the purpose of making the composition.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// A categorization for the type of the composition - helps for indexing and searching. This may be implied by or derived from the code specified in the Composition Type.
     category: ?[]const CodeableConcept = null,
     /// Who or what the composition is about. The composition can be about a person, (patient or healthcare practitioner), a device (e.g. a machine) or even a group of subjects (such as a document about a herd of livestock, or a set of patients that share a common exposure).
@@ -7388,7 +7388,7 @@ pub const Composition = struct {
     /// Extensions for date
     _date: ?Element = null,
     /// Identifies who is responsible for the information in the composition, not necessarily who typed it in.
-    author: []const Reference = null,
+    author: []const Reference,
     /// Official human-readable label for the composition.
     title: ?string = null,
     /// Extensions for title
@@ -7639,7 +7639,7 @@ pub const ConceptMap_Group = struct {
     /// Extensions for targetVersion
     _targetVersion: ?Element = null,
     /// Mappings for an individual concept in the source to one or more concepts in the target.
-    element: []const ConceptMap_Element = null,
+    element: []const ConceptMap_Element,
     /// What to do when there is no mapping for the source concept. "Unmapped" does not include codes that are unmatched, and the unmapped element is ignored in a code is specified to have equivalence = unmatched.
     unmapped: ?ConceptMap_Unmapped = null,
 };
@@ -7805,7 +7805,7 @@ pub const Condition = struct {
     /// The anatomical location where this condition manifests itself.
     bodySite: ?[]const CodeableConcept = null,
     /// Indicates the patient or group who the condition record is associated with.
-    subject: Reference = null,
+    subject: Reference,
     /// The Encounter during which this Condition was created or to which the creation of this record is tightly associated.
     encounter: ?Reference = null,
     /// Estimated or actual date or date-time  the condition began, in the opinion of the clinician.
@@ -7925,9 +7925,9 @@ pub const Consent = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// A selector of the type of consent being presented: ADR, Privacy, Treatment, Research.  This list is now extensible.
-    scope: CodeableConcept = null,
+    scope: CodeableConcept,
     /// A classification of the type of consents found in the statement. This element supports indexing and retrieval of consent statements.
-    category: []const CodeableConcept = null,
+    category: []const CodeableConcept,
     /// The patient/healthcare consumer to whom this consent applies.
     patient: ?Reference = null,
     /// When this  Consent was issued / created / indexed.
@@ -8044,9 +8044,9 @@ pub const Consent_Actor = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// How the individual is involved in the resources content that is described in the exception.
-    role: CodeableConcept = null,
+    role: CodeableConcept,
     /// The resource that identifies the actor. To identify actors by type, use group to identify a set of actors by some property they share (e.g. 'admitting officers').
-    reference: Reference = null,
+    reference: Reference,
 };
 
 /// A record of a healthcare consumer’s  choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.
@@ -8069,7 +8069,7 @@ pub const Consent_Data = struct {
     /// Extensions for meaning
     _meaning: ?Element = null,
     /// A reference to a specific resource that defines which resources are covered by this consent.
-    reference: Reference = null,
+    reference: Reference,
 };
 
 /// Legally enforceable, formally recorded unilateral or bilateral directive i.e., a policy or agreement.
@@ -8198,7 +8198,7 @@ pub const Contract_ContentDefinition = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Precusory content structure and use, i.e., a boilerplate, template, application for a contract such as an insurance policy or benefits under a program, e.g., workers compensation.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Detailed Precusory content type.
     subType: ?CodeableConcept = null,
     /// The  individual or organization that published the Contract precursor content.
@@ -8250,7 +8250,7 @@ pub const Contract_Term = struct {
     /// Security labels that protect the handling of information about the term and its elements, which may be specifically identified..
     securityLabel: ?[]const Contract_SecurityLabel = null,
     /// The matter of concern in the context of this provision of the agrement.
-    offer: Contract_Offer = null,
+    offer: Contract_Offer,
     /// Contract Term Asset List.
     asset: ?[]const Contract_Asset = null,
     /// An actor taking a role in an activity for which it can be assigned some degree of responsibility for the activity taking place.
@@ -8274,7 +8274,7 @@ pub const Contract_SecurityLabel = struct {
     /// Extensions for number
     _number: ?[]const Element = null,
     /// Security label privacy tag that species the level of confidentiality protection required for this term and/or term elements.
-    classification: Coding = null,
+    classification: Coding,
     /// Security label privacy tag that species the applicable privacy and security policies governing this term and/or term elements.
     category: ?[]const Coding = null,
     /// Security label privacy tag that species the manner in which term and/or term elements are to be protected.
@@ -8330,9 +8330,9 @@ pub const Contract_Party = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Participant in the offer.
-    reference: []const Reference = null,
+    reference: []const Reference,
     /// How the party participates in the offer.
-    role: CodeableConcept = null,
+    role: CodeableConcept,
 };
 
 /// Legally enforceable, formally recorded unilateral or bilateral directive i.e., a policy or agreement.
@@ -8528,17 +8528,17 @@ pub const Contract_Action = struct {
     /// Extensions for doNotPerform
     _doNotPerform: ?Element = null,
     /// Activity or service obligation to be done or not done, performed or not performed, effectuated or not by this Contract term.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Entity of the action.
     subject: ?[]const Contract_Subject = null,
     /// Reason or purpose for the action stipulated by this Contract Provision.
-    intent: CodeableConcept = null,
+    intent: CodeableConcept,
     /// Id [identifier??] of the clause or question text related to this action in the referenced form or QuestionnaireResponse.
     linkId: ?[]const string = null,
     /// Extensions for linkId
     _linkId: ?[]const Element = null,
     /// Current state of the term action.
-    status: CodeableConcept = null,
+    status: CodeableConcept,
     /// Encounter or Episode with primary association to specified term activity.
     context: ?Reference = null,
     /// Id [identifier??] of the clause or question text related to the requester of this action in the referenced form or QuestionnaireResponse.
@@ -8600,7 +8600,7 @@ pub const Contract_Subject = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The entity the action is performed or not performed on or for.
-    reference: []const Reference = null,
+    reference: []const Reference,
     /// Role type of agent assigned roles in this Contract.
     role: ?CodeableConcept = null,
 };
@@ -8616,11 +8616,11 @@ pub const Contract_Signer = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Role of this Contract signer, e.g. notary, grantee.
-    type: Coding = null,
+    type: Coding,
     /// Party which is a signator to this Contract.
-    party: Reference = null,
+    party: Reference,
     /// Legally binding Contract DSIG signature contents in Base64.
-    signature: []const Signature = null,
+    signature: []const Signature,
 };
 
 /// Legally enforceable, formally recorded unilateral or bilateral directive i.e., a policy or agreement.
@@ -8713,7 +8713,7 @@ pub const Coverage = struct {
     /// Extensions for subscriberId
     _subscriberId: ?Element = null,
     /// The party who benefits from the insurance coverage; the patient when products and/or services are provided.
-    beneficiary: Reference = null,
+    beneficiary: Reference,
     /// A unique identifier for a dependent under the coverage.
     dependent: ?string = null,
     /// Extensions for dependent
@@ -8723,7 +8723,7 @@ pub const Coverage = struct {
     /// Time period during which the coverage is in force. A missing start date indicates the start date isn't known, a missing end date means the coverage is continuing to be in force.
     period: ?Period = null,
     /// The program or plan underwriter or payor including both insurance and non-insurance agreements, such as patient-pay agreements.
-    payor: []const Reference = null,
+    payor: []const Reference,
     /// A suite of underwriter specific classifiers.
     class: ?[]const Coverage_Class = null,
     /// The order of applicability of this coverage relative to other coverages which are currently in force. Note, there may be gaps in the numbering and this does not imply primary, secondary etc. as the specific positioning of coverages depends upon the episode of care.
@@ -8755,7 +8755,7 @@ pub const Coverage_Class = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The type of classification for which an insurer-specific class label or number and optional name is provided, for example may be used to identify a class of coverage or employer group, Policy, Plan.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The alphanumeric string value associated with the insurer issued label.
     value: ?string = null,
     /// Extensions for value
@@ -8797,7 +8797,7 @@ pub const Coverage_Exception = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The code for the specific exception.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The timeframe during when the exception is in force.
     period: ?Period = null,
 };
@@ -8845,7 +8845,7 @@ pub const CoverageEligibilityRequest = struct {
     /// Extensions for purpose
     _purpose: ?[]const Element = null,
     /// The party who is the beneficiary of the supplied coverage and for whom eligibility is sought.
-    patient: Reference = null,
+    patient: Reference,
     /// The date or dates when the enclosed suite of services were performed or completed.
     servicedDate: ?string = null,
     /// Extensions for servicedDate
@@ -8861,7 +8861,7 @@ pub const CoverageEligibilityRequest = struct {
     /// The provider which is responsible for the request.
     provider: ?Reference = null,
     /// The Insurer who issued the coverage in question and is the recipient of the request.
-    insurer: Reference = null,
+    insurer: Reference,
     /// Facility where the services are intended to be provided.
     facility: ?Reference = null,
     /// Additional information codes regarding exceptions, special considerations, the condition, situation, prior or concurrent issues.
@@ -8887,7 +8887,7 @@ pub const CoverageEligibilityRequest_SupportingInfo = struct {
     /// Extensions for sequence
     _sequence: ?Element = null,
     /// Additional data or information such as resources, documents, images etc. including references to the data or the actual inclusion of the data.
-    information: Reference = null,
+    information: Reference,
     /// The supporting materials are applicable for all detail items, product/servce categories and specific billing codes.
     appliesToAll: ?boolean = null,
     /// Extensions for appliesToAll
@@ -8909,7 +8909,7 @@ pub const CoverageEligibilityRequest_Insurance = struct {
     /// Extensions for focal
     _focal: ?Element = null,
     /// Reference to the insurance card level information contained in the Coverage resource. The coverage issuing insurer will use these details to locate the patient's actual coverage within the insurer's information system.
-    coverage: Reference = null,
+    coverage: Reference,
     /// A business agreement number established between the provider and the insurer for special business processing purposes.
     businessArrangement: ?string = null,
     /// Extensions for businessArrangement
@@ -9007,7 +9007,7 @@ pub const CoverageEligibilityResponse = struct {
     /// Extensions for purpose
     _purpose: ?[]const Element = null,
     /// The party who is the beneficiary of the supplied coverage and for whom eligibility is sought.
-    patient: Reference = null,
+    patient: Reference,
     /// The date or dates when the enclosed suite of services were performed or completed.
     servicedDate: ?string = null,
     /// Extensions for servicedDate
@@ -9021,7 +9021,7 @@ pub const CoverageEligibilityResponse = struct {
     /// The provider which is responsible for the request.
     requestor: ?Reference = null,
     /// Reference to the original request resource.
-    request: Reference = null,
+    request: Reference,
     /// The outcome of the request processing.
     outcome: ?enum {
         queued,
@@ -9036,7 +9036,7 @@ pub const CoverageEligibilityResponse = struct {
     /// Extensions for disposition
     _disposition: ?Element = null,
     /// The Insurer who issued the coverage in question and is the author of the response.
-    insurer: Reference = null,
+    insurer: Reference,
     /// Financial instruments for reimbursement for the health care products and services.
     insurance: ?[]const CoverageEligibilityResponse_Insurance = null,
     /// A reference from the Insurer to which these services pertain to be used on further communication and as proof that the request occurred.
@@ -9060,7 +9060,7 @@ pub const CoverageEligibilityResponse_Insurance = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Reference to the insurance card level information contained in the Coverage resource. The coverage issuing insurer will use these details to locate the patient's actual coverage within the insurer's information system.
-    coverage: Reference = null,
+    coverage: Reference,
     /// Flag indicating if the coverage provided is inforce currently if no service date(s) specified or for the whole duration of the service dates.
     inforce: ?boolean = null,
     /// Extensions for inforce
@@ -9132,7 +9132,7 @@ pub const CoverageEligibilityResponse_Benefit = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Classification of benefit being provided.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The quantity of the benefit which is permitted under the coverage.
     allowedUnsignedInt: ?integer = null,
     /// Extensions for allowedUnsignedInt
@@ -9166,7 +9166,7 @@ pub const CoverageEligibilityResponse_Error = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// An error code,from a specified code system, which details why the eligibility check could not be performed.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
 };
 
 /// Indicates an actual or potential clinical issue with or between one or more active or proposed clinical actions for a patient; e.g. Drug-drug interaction, Ineffective treatment frequency, Procedure-condition conflict, etc.
@@ -9263,7 +9263,7 @@ pub const DetectedIssue_Mitigation = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Describes the action that was taken or the observation that was made that reduces/eliminates the risk associated with the identified issue.
-    action: CodeableConcept = null,
+    action: CodeableConcept,
     /// Indicates when the mitigating action was documented.
     date: ?dateTime = null,
     /// Extensions for date
@@ -9466,7 +9466,7 @@ pub const Device_Specialization = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The standard that is used to operate and communicate.
-    systemType: CodeableConcept = null,
+    systemType: CodeableConcept,
     /// The version of the standard that is used to operate and communicate.
     version: ?string = null,
     /// Extensions for version
@@ -9504,7 +9504,7 @@ pub const Device_Property = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Code that specifies the property DeviceDefinitionPropetyCode (Extensible).
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Property value as a quantity.
     valueQuantity: ?[]const Quantity = null,
     /// Property value as a code, e.g., NTP4 (synced to NTP).
@@ -9677,7 +9677,7 @@ pub const DeviceDefinition_Capability = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Type of capability.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Description of capability.
     description: ?[]const CodeableConcept = null,
 };
@@ -9693,7 +9693,7 @@ pub const DeviceDefinition_Property = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Code that specifies the property DeviceDefinitionPropetyCode (Extensible).
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Property value as a quantity.
     valueQuantity: ?[]const Quantity = null,
     /// Property value as a code, e.g., NTP4 (synced to NTP).
@@ -9711,7 +9711,7 @@ pub const DeviceDefinition_Material = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The substance.
-    substance: CodeableConcept = null,
+    substance: CodeableConcept,
     /// Indicates an alternative material of the device.
     alternate: ?boolean = null,
     /// Extensions for alternate
@@ -9750,7 +9750,7 @@ pub const DeviceMetric = struct {
     /// Unique instance identifiers assigned to a device by the device or gateway software, manufacturers, other organizations or owners. For example: handle ID.
     identifier: ?[]const Identifier = null,
     /// Describes the type of the metric. For example: Heart Rate, PEEP Setting, etc.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Describes the unit that an observed value determined for this metric will have. For example: Percent, Seconds, etc.
     unit: ?CodeableConcept = null,
     /// Describes the link to the  Device that this DeviceMetric belongs to and that contains administrative device information such as manufacturer, serial number, etc.
@@ -9886,7 +9886,7 @@ pub const DeviceRequest = struct {
     /// Specific parameters for the ordered item.  For example, the prism value for lenses.
     parameter: ?[]const DeviceRequest_Parameter = null,
     /// The patient who will use the device.
-    subject: Reference = null,
+    subject: Reference,
     /// An encounter that provides additional context in which this request is made.
     encounter: ?Reference = null,
     /// The timing schedule for the use of the device. The Schedule data type allows many different expressions, for example. "Every 8 hours"; "Three times a day"; "1/2 an hour before breakfast for 10 days from 23-Dec 2011:"; "15 Oct 2013, 17 Oct 2013 and 1 Nov 2013".
@@ -9986,7 +9986,7 @@ pub const DeviceUseStatement = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// The patient who used the device.
-    subject: Reference = null,
+    subject: Reference,
     /// Allows linking the DeviceUseStatement to the underlying Request, or to other information that supports or is used to derive the DeviceUseStatement.
     derivedFrom: ?[]const Reference = null,
     /// How often the device was used.
@@ -10004,7 +10004,7 @@ pub const DeviceUseStatement = struct {
     /// Who reported the device was being used by the patient.
     source: ?Reference = null,
     /// The details of the device used.
-    device: Reference = null,
+    device: Reference,
     /// Reason or justification for the use of the device.
     reasonCode: ?[]const CodeableConcept = null,
     /// Indicates another resource whose existence justifies this DeviceUseStatement.
@@ -10062,7 +10062,7 @@ pub const DiagnosticReport = struct {
     /// A code that classifies the clinical discipline, department or diagnostic service that created the report (e.g. cardiology, biochemistry, hematology, MRI). This is used for searching, sorting and display purposes.
     category: ?[]const CodeableConcept = null,
     /// A code or name that describes this diagnostic report.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The subject of the report. Usually, but not always, this is a patient. However, diagnostic services also perform analyses on specimens collected from a variety of other sources.
     subject: ?Reference = null,
     /// The healthcare event  (e.g. a patient and healthcare provider interaction) which this DiagnosticReport is about.
@@ -10114,7 +10114,7 @@ pub const DiagnosticReport_Media = struct {
     /// Extensions for comment
     _comment: ?Element = null,
     /// Reference to the image source.
-    link: Reference = null,
+    link: Reference,
 };
 
 /// A collection of documents compiled for a purpose together with metadata that applies to the collection.
@@ -10175,7 +10175,7 @@ pub const DocumentManifest = struct {
     /// Extensions for description
     _description: ?Element = null,
     /// The list of Resources that consist of the parts of this manifest.
-    content: []const Reference = null,
+    content: []const Reference,
     /// Related identifiers or resources associated with the DocumentManifest.
     related: ?[]const DocumentManifest_Related = null,
 };
@@ -10262,7 +10262,7 @@ pub const DocumentReference = struct {
     /// A set of Security-Tag codes specifying the level of privacy/security of the Document. Note that DocumentReference.meta.security contains the security labels of the "reference" to the document, while DocumentReference.securityLabel contains a snapshot of the security labels on the document the reference refers to.
     securityLabel: ?[]const CodeableConcept = null,
     /// The document and format referenced. There may be multiple content element repetitions, each with a different format.
-    content: []const DocumentReference_Content = null,
+    content: []const DocumentReference_Content,
     /// The clinical context in which the document was prepared.
     context: ?DocumentReference_Context = null,
 };
@@ -10287,7 +10287,7 @@ pub const DocumentReference_RelatesTo = struct {
     /// Extensions for code
     _code: ?Element = null,
     /// The target document of this relationship.
-    target: Reference = null,
+    target: Reference,
 };
 
 /// A reference to a document of any kind for any purpose. Provides metadata about the document so that the document can be discovered and managed. The scope of a document is any seralized object with a mime-type, so includes formal patient centric documents (CDA), cliical notes, scanned paper, and non-patient specific documents like policy text.
@@ -10301,7 +10301,7 @@ pub const DocumentReference_Content = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The document or URL of the document along with critical metadata to prove content has integrity.
-    attachment: Attachment = null,
+    attachment: Attachment,
     /// An identifier of the document encoding, structure, and template that the document conforms to beyond the base format indicated in the mimeType.
     format: ?Coding = null,
 };
@@ -10435,13 +10435,13 @@ pub const EffectEvidenceSynthesis = struct {
     /// Type of study eg randomized trial.
     studyType: ?CodeableConcept = null,
     /// A reference to a EvidenceVariable resource that defines the population for the research.
-    population: Reference = null,
+    population: Reference,
     /// A reference to a EvidenceVariable resource that defines the exposure for the research.
-    exposure: Reference = null,
+    exposure: Reference,
     /// A reference to a EvidenceVariable resource that defines the comparison exposure for the research.
-    exposureAlternative: Reference = null,
+    exposureAlternative: Reference,
     /// A reference to a EvidenceVariable resomece that defines the outcome for the research.
-    outcome: Reference = null,
+    outcome: Reference,
     /// A description of the size of the sample involved in the synthesis.
     sampleSize: ?EffectEvidenceSynthesis_SampleSize = null,
     /// A description of the results for each exposure considered in the effect estimate.
@@ -10500,7 +10500,7 @@ pub const EffectEvidenceSynthesis_ResultsByExposure = struct {
     /// Used to define variant exposure states such as low-risk state.
     variantState: ?CodeableConcept = null,
     /// Reference to a RiskEvidenceSynthesis resource.
-    riskEvidenceSynthesis: Reference = null,
+    riskEvidenceSynthesis: Reference,
 };
 
 /// The EffectEvidenceSynthesis resource describes the difference in an outcome between exposures states in a population where the effect estimate is derived from a combination of research studies.
@@ -10637,7 +10637,7 @@ pub const Encounter = struct {
     /// The status history permits the encounter resource to contain the status history without needing to read through the historical versions of the resource, or even have the server store them.
     statusHistory: ?[]const Encounter_StatusHistory = null,
     /// Concepts representing classification of patient encounter such as ambulatory (outpatient), inpatient, emergency, home health or others due to local variations.
-    class: Coding = null,
+    class: Coding,
     /// The class history permits the tracking of the encounters transitions without needing to go  through the resource history.  This would be used for a case where an admission starts of as an emergency encounter, then transitions into an inpatient scenario. Doing this and not restarting a new encounter ensures that any lab/diagnostic results can more easily follow the patient and not require re-processing and not get lost or cancelled during a kind of discharge from emergency to inpatient.
     classHistory: ?[]const Encounter_ClassHistory = null,
     /// Specific type of encounter (e.g. e-mail consultation, surgical day-care, skilled nursing, rehabilitation).
@@ -10703,7 +10703,7 @@ pub const Encounter_StatusHistory = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// The time that the episode was in the specified status.
-    period: Period = null,
+    period: Period,
 };
 
 /// An interaction between a patient and healthcare provider(s) for the purpose of providing healthcare service(s) or assessing the health status of a patient.
@@ -10717,9 +10717,9 @@ pub const Encounter_ClassHistory = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// inpatient | outpatient | ambulatory | emergency +.
-    class: Coding = null,
+    class: Coding,
     /// The time that the episode was in the specified class.
-    period: Period = null,
+    period: Period,
 };
 
 /// An interaction between a patient and healthcare provider(s) for the purpose of providing healthcare service(s) or assessing the health status of a patient.
@@ -10751,7 +10751,7 @@ pub const Encounter_Diagnosis = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Reason the encounter takes place, as specified using information from another resource. For admissions, this is the admission diagnosis. The indication will typically be a Condition (with other resources referenced in the evidence.detail), or a Procedure.
-    condition: Reference = null,
+    condition: Reference,
     /// Role that this diagnosis has within the encounter (e.g. admission, billing, discharge …).
     use: ?CodeableConcept = null,
     /// Ranking of the diagnosis (for each role type).
@@ -10801,7 +10801,7 @@ pub const Encounter_Location = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The location where the encounter takes place.
-    location: Reference = null,
+    location: Reference,
     /// The status of the participants' presence at the specified location during the period specified. If the participant is no longer at the location, then the period will have an end date/time.
     status: ?enum {
         planned,
@@ -10856,7 +10856,7 @@ pub const Endpoint = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// A coded value that represents the technical details of the usage of this endpoint, such as what WSDLs should be used in what way. (e.g. XDS.b/DICOM/cds-hook).
-    connectionType: Coding = null,
+    connectionType: Coding,
     /// A friendly name that this endpoint can be referred to with.
     name: ?string = null,
     /// Extensions for name
@@ -10868,7 +10868,7 @@ pub const Endpoint = struct {
     /// The interval during which the endpoint is expected to be operational.
     period: ?Period = null,
     /// The payload type describes the acceptable content that can be communicated on the endpoint.
-    payloadType: []const CodeableConcept = null,
+    payloadType: []const CodeableConcept,
     /// The mime type to send the payload in - e.g. application/fhir+xml, application/fhir+json. If the mime type is not specified, then the sender could send any content (including no content depending on the connectionType).
     payloadMimeType: ?[]const code = null,
     /// Extensions for payloadMimeType
@@ -11030,7 +11030,7 @@ pub const EpisodeOfCare = struct {
     /// The list of diagnosis relevant to this episode of care.
     diagnosis: ?[]const EpisodeOfCare_Diagnosis = null,
     /// The patient who is the focus of this episode of care.
-    patient: Reference = null,
+    patient: Reference,
     /// The organization that has assumed the specific responsibilities for the specified duration.
     managingOrganization: ?Reference = null,
     /// The interval during which the managing organization assumes the defined responsibility.
@@ -11068,7 +11068,7 @@ pub const EpisodeOfCare_StatusHistory = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// The period during this EpisodeOfCare that the specific status applied.
-    period: Period = null,
+    period: Period,
 };
 
 /// An association between a patient and an organization / healthcare provider(s) during which time encounters may occur. The managing organization assumes a level of responsibility for the patient during this time.
@@ -11082,7 +11082,7 @@ pub const EpisodeOfCare_Diagnosis = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A list of conditions/problems/diagnoses that this episode of care is intended to be providing care for.
-    condition: Reference = null,
+    condition: Reference,
     /// Role that this diagnosis has within the episode of care (e.g. admission, billing, discharge …).
     role: ?CodeableConcept = null,
     /// Ranking of the diagnosis (for each role type).
@@ -11208,7 +11208,7 @@ pub const EventDefinition = struct {
     /// Related resources such as additional documentation, justification, or bibliographic references.
     relatedArtifact: ?[]const RelatedArtifact = null,
     /// The trigger element defines when the event occurs. If more than one trigger condition is specified, the event fires whenever any one of the trigger conditions is met.
-    trigger: []const TriggerDefinition = null,
+    trigger: []const TriggerDefinition,
 };
 
 /// The Evidence resource describes the conditional state (population and any exposures being compared within the population) and outcome (if specified) that the knowledge (evidence, assertion, recommendation) is about.
@@ -11318,7 +11318,7 @@ pub const Evidence = struct {
     /// Related artifacts such as additional documentation, justification, or bibliographic references.
     relatedArtifact: ?[]const RelatedArtifact = null,
     /// A reference to a EvidenceVariable resource that defines the population for the research.
-    exposureBackground: Reference = null,
+    exposureBackground: Reference,
     /// A reference to a EvidenceVariable resource that defines the exposure for the research.
     exposureVariant: ?[]const Reference = null,
     /// A reference to a EvidenceVariable resomece that defines the outcome for the research.
@@ -11440,7 +11440,7 @@ pub const EvidenceVariable = struct {
     /// Extensions for type
     _type: ?Element = null,
     /// A characteristic that defines the members of the evidence element. Multiple characteristics are applied with "and" semantics.
-    characteristic: []const EvidenceVariable_Characteristic = null,
+    characteristic: []const EvidenceVariable_Characteristic,
 };
 
 /// The EvidenceVariable resource describes a "PICO" element that knowledge (evidence, assertion, recommendation) is about.
@@ -11847,7 +11847,7 @@ pub const ExplanationOfBenefit = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// The category of claim, e.g. oral, pharmacy, vision, institutional, professional.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// A finer grained suite of claim type codes which may convey additional information such as Inpatient vs Outpatient and/or a specialty service.
     subType: ?CodeableConcept = null,
     /// A code to indicate whether the nature of the request is: to request adjudication of products and services previously rendered; or requesting authorization and adjudication for provision in the future; or requesting the non-binding adjudication of the listed products and services which could be provided in the future.
@@ -11855,7 +11855,7 @@ pub const ExplanationOfBenefit = struct {
     /// Extensions for use
     _use: ?Element = null,
     /// The party to whom the professional services and/or products have been supplied or are being considered and for whom actual for forecast reimbursement is sought.
-    patient: Reference = null,
+    patient: Reference,
     /// The period for which charges are being submitted.
     billablePeriod: ?Period = null,
     /// The date this resource was created.
@@ -11865,9 +11865,9 @@ pub const ExplanationOfBenefit = struct {
     /// Individual who created the claim, predetermination or preauthorization.
     enterer: ?Reference = null,
     /// The party responsible for authorization, adjudication and reimbursement.
-    insurer: Reference = null,
+    insurer: Reference,
     /// The provider which is responsible for the claim, predetermination or preauthorization.
-    provider: Reference = null,
+    provider: Reference,
     /// The provider-required urgency of processing the request. Typical values include: stat, routine deferred.
     priority: ?CodeableConcept = null,
     /// A code to indicate whether and for whom funds are to be reserved for future claims.
@@ -11917,7 +11917,7 @@ pub const ExplanationOfBenefit = struct {
     /// Extensions for precedence
     _precedence: ?Element = null,
     /// Financial instruments for reimbursement for the health care products and services specified on the claim.
-    insurance: []const ExplanationOfBenefit_Insurance = null,
+    insurance: []const ExplanationOfBenefit_Insurance,
     /// Details of a accident which resulted in injuries which required the products and services listed in the claim.
     accident: ?ExplanationOfBenefit_Accident = null,
     /// A claim line. Either a simple (a product or service) or a 'group' of details which can also be a simple items or groups of sub-details.
@@ -11991,7 +11991,7 @@ pub const ExplanationOfBenefit_CareTeam = struct {
     /// Extensions for sequence
     _sequence: ?Element = null,
     /// Member of the team who provided the product or service.
-    provider: Reference = null,
+    provider: Reference,
     /// The party who is billing and/or responsible for the claimed products or services.
     responsible: ?boolean = null,
     /// Extensions for responsible
@@ -12017,7 +12017,7 @@ pub const ExplanationOfBenefit_SupportingInfo = struct {
     /// Extensions for sequence
     _sequence: ?Element = null,
     /// The general class of the information supplied: information; exception; accident, employment; onset, etc.
-    category: CodeableConcept = null,
+    category: CodeableConcept,
     /// System and code pertaining to the specific information regarding special conditions relating to the setting, treatment or patient  for which care is sought.
     code: ?CodeableConcept = null,
     /// The date when or period to which this information refers.
@@ -12113,7 +12113,7 @@ pub const ExplanationOfBenefit_Insurance = struct {
     /// Extensions for focal
     _focal: ?Element = null,
     /// Reference to the insurance card level information contained in the Coverage resource. The coverage issuing insurer will use these details to locate the patient's actual coverage within the insurer's information system.
-    coverage: Reference = null,
+    coverage: Reference,
     /// Reference numbers previously provided by the insurer to the provider to be quoted on subsequent claims containing services or products related to the prior authorization.
     preAuthRef: ?[]const string = null,
     /// Extensions for preAuthRef
@@ -12177,7 +12177,7 @@ pub const ExplanationOfBenefit_Item = struct {
     /// Code to identify the general type of benefits under which products and services are provided.
     category: ?CodeableConcept = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// Identifies the program under which this may be recovered.
@@ -12233,7 +12233,7 @@ pub const ExplanationOfBenefit_Adjudication = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A code to indicate the information type of this adjudication record. Information types may include: the value submitted, maximum values or percentages allowed or payable under the plan, amounts that the patient is responsible for in-aggregate or pertaining to this item, amounts paid by other coverages, and the benefit payable for this item.
-    category: CodeableConcept = null,
+    category: CodeableConcept,
     /// A code supporting the understanding of the adjudication result and explaining variance from expected amount.
     reason: ?CodeableConcept = null,
     /// Monetary amount associated with the category.
@@ -12263,7 +12263,7 @@ pub const ExplanationOfBenefit_Detail = struct {
     /// Code to identify the general type of benefits under which products and services are provided.
     category: ?CodeableConcept = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// Identifies the program under which this may be recovered.
@@ -12309,7 +12309,7 @@ pub const ExplanationOfBenefit_SubDetail = struct {
     /// Code to identify the general type of benefits under which products and services are provided.
     category: ?CodeableConcept = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// Identifies the program under which this may be recovered.
@@ -12359,7 +12359,7 @@ pub const ExplanationOfBenefit_AddItem = struct {
     /// The providers who are authorized for the services rendered to the patient.
     provider: ?[]const Reference = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// Identifies the program under which this may be recovered.
@@ -12411,7 +12411,7 @@ pub const ExplanationOfBenefit_Detail1 = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// The number of repetitions of a service or product.
@@ -12445,7 +12445,7 @@ pub const ExplanationOfBenefit_SubDetail1 = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// When the value is a group code then this item collects a set of related claim details, otherwise this contains the product, service, drug or other billing code for the item.
-    productOrService: CodeableConcept = null,
+    productOrService: CodeableConcept,
     /// Item typification or modifiers codes to convey additional context for the product or service.
     modifier: ?[]const CodeableConcept = null,
     /// The number of repetitions of a service or product.
@@ -12477,9 +12477,9 @@ pub const ExplanationOfBenefit_Total = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A code to indicate the information type of this adjudication record. Information types may include: the value submitted, maximum values or percentages allowed or payable under the plan, amounts that the patient is responsible for in aggregate or pertaining to this item, amounts paid by other coverages, and the benefit payable for this item.
-    category: CodeableConcept = null,
+    category: CodeableConcept,
     /// Monetary total amount associated with the category.
-    amount: Money = null,
+    amount: Money,
 };
 
 /// This resource provides: the claim details; adjudication details from the processing of a Claim; and optionally account balance information, for informing the subscriber of the benefits provided.
@@ -12549,7 +12549,7 @@ pub const ExplanationOfBenefit_BenefitBalance = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Code to identify the general type of benefits under which products and services are provided.
-    category: CodeableConcept = null,
+    category: CodeableConcept,
     /// True if the indicated class of service is excluded from the plan, missing or False indicates the product or service is included in the coverage.
     excluded: ?boolean = null,
     /// Extensions for excluded
@@ -12583,7 +12583,7 @@ pub const ExplanationOfBenefit_Financial = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Classification of benefit being provided.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The quantity of the benefit which is permitted under the coverage.
     allowedUnsignedInt: ?integer = null,
     /// Extensions for allowedUnsignedInt
@@ -12647,7 +12647,7 @@ pub const FamilyMemberHistory = struct {
     /// Describes why the family member's history is not available.
     dataAbsentReason: ?CodeableConcept = null,
     /// The person who this history concerns.
-    patient: Reference = null,
+    patient: Reference,
     /// The date (and possibly time) when the family member history was recorded or last updated.
     date: ?dateTime = null,
     /// Extensions for date
@@ -12657,7 +12657,7 @@ pub const FamilyMemberHistory = struct {
     /// Extensions for name
     _name: ?Element = null,
     /// The type of relationship this person has to the patient (father, mother, brother etc.).
-    relationship: CodeableConcept = null,
+    relationship: CodeableConcept,
     /// The birth sex of the family member.
     sex: ?CodeableConcept = null,
     /// The actual or approximate date of birth of the relative.
@@ -12719,7 +12719,7 @@ pub const FamilyMemberHistory_Condition = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The actual condition specified. Could be a coded condition (like MI or Diabetes) or a less specific string like 'cancer' depending on how much is known about the condition and the capabilities of the creating system.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// Indicates what happened following the condition.  If the condition resulted in death, deceased date is captured on the relation.
     outcome: ?CodeableConcept = null,
     /// This condition contributed to the cause of death of the related person. If contributedToDeath is not populated, then it is unknown.
@@ -12778,9 +12778,9 @@ pub const Flag = struct {
     /// Allows a flag to be divided into different categories like clinical, administrative etc. Intended to be used as a means of filtering which flags are displayed to particular user or in a given context.
     category: ?[]const CodeableConcept = null,
     /// The coded value or textual component of the flag to display to the user.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The patient, location, group, organization, or practitioner etc. this is about record this flag is associated with.
-    subject: Reference = null,
+    subject: Reference,
     /// The period of time from the activation of the flag to inactivation of the flag. If the flag is active, the end of the period should be unspecified.
     period: ?Period = null,
     /// This alert is only relevant during the encounter.
@@ -12837,9 +12837,9 @@ pub const Goal = struct {
     /// Identifies the mutually agreed level of importance associated with reaching/sustaining the goal.
     priority: ?CodeableConcept = null,
     /// Human-readable and/or coded description of a specific desired objective of care, such as "control blood pressure" or "negotiate an obstacle course" or "dance with child at wedding".
-    description: CodeableConcept = null,
+    description: CodeableConcept,
     /// Identifies the patient, group or organization for whom the goal is being established.
-    subject: Reference = null,
+    subject: Reference,
     /// The date or event after which the goal should begin being pursued.
     startDate: ?string = null,
     /// Extensions for startDate
@@ -13165,7 +13165,7 @@ pub const Group_Characteristic = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A code that identifies the kind of trait being asserted.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The value of the trait that holds (or does not hold - see 'exclude') for members of the group.
     valueCodeableConcept: ?CodeableConcept = null,
     /// The value of the trait that holds (or does not hold - see 'exclude') for members of the group.
@@ -13197,7 +13197,7 @@ pub const Group_Member = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A reference to the entity that is a member of the group. Must be consistent with Group.type. If the entity is another group, then the type must be the same.
-    entity: Reference = null,
+    entity: Reference,
     /// The period that the member was in the group, if known.
     period: ?Period = null,
     /// A flag to indicate that the member is no longer in the group, but previously may have been a member.
@@ -13481,7 +13481,7 @@ pub const ImagingStudy = struct {
     /// A list of all the series.modality values that are actual acquisition modalities, i.e. those in the DICOM Context Group 29 (value set OID 1.2.840.10008.6.1.19).
     modality: ?[]const Coding = null,
     /// The subject, typically a patient, of the imaging study.
-    subject: Reference = null,
+    subject: Reference,
     /// The healthcare event (e.g. a patient and healthcare provider interaction) during which this ImagingStudy is made.
     encounter: ?Reference = null,
     /// Date and time the study started.
@@ -13543,7 +13543,7 @@ pub const ImagingStudy_Series = struct {
     /// Extensions for number
     _number: ?Element = null,
     /// The modality of this series sequence.
-    modality: Coding = null,
+    modality: Coding,
     /// A description of the series.
     description: ?string = null,
     /// Extensions for description
@@ -13583,7 +13583,7 @@ pub const ImagingStudy_Performer = struct {
     /// Distinguishes the type of involvement of the performer in the series.
     function: ?CodeableConcept = null,
     /// Indicates who or what performed the series.
-    actor: Reference = null,
+    actor: Reference,
 };
 
 /// Representation of the content produced in a DICOM imaging study. A study comprises a set of series, each of which includes a set of Service-Object Pair Instances (SOP Instances - images or other data) acquired or produced in a common context.  A series is of only one modality (e.g. X-ray, CT, MR, ultrasound), but a study may have multiple series of different modalities.
@@ -13601,7 +13601,7 @@ pub const ImagingStudy_Instance = struct {
     /// Extensions for uid
     _uid: ?Element = null,
     /// DICOM instance  type.
-    sopClass: Coding = null,
+    sopClass: Coding,
     /// The number of instance in the series.
     number: ?unsignedInt = null,
     /// Extensions for number
@@ -13646,9 +13646,9 @@ pub const Immunization = struct {
     /// Indicates the reason the immunization event was not performed.
     statusReason: ?CodeableConcept = null,
     /// Vaccine that was administered or was to be administered.
-    vaccineCode: CodeableConcept = null,
+    vaccineCode: CodeableConcept,
     /// The patient who either received or did not receive the immunization.
-    patient: Reference = null,
+    patient: Reference,
     /// The visit or admission or other contact between patient and health care provider the immunization was performed as part of.
     encounter: ?Reference = null,
     /// Date vaccine administered or was to be administered.
@@ -13726,7 +13726,7 @@ pub const Immunization_Performer = struct {
     /// Describes the type of performance (e.g. ordering provider, administering provider, etc.).
     function: ?CodeableConcept = null,
     /// The practitioner or organization who performed the action.
-    actor: Reference = null,
+    actor: Reference,
 };
 
 /// Describes the event of a patient being administered a vaccine or a record of an immunization as reported by a patient, a clinician or another party.
@@ -13847,7 +13847,7 @@ pub const ImmunizationEvaluation = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// The individual for whom the evaluation is being done.
-    patient: Reference = null,
+    patient: Reference,
     /// The date the evaluation of the vaccine administration event was performed.
     date: ?dateTime = null,
     /// Extensions for date
@@ -13855,11 +13855,11 @@ pub const ImmunizationEvaluation = struct {
     /// Indicates the authority who published the protocol (e.g. ACIP).
     authority: ?Reference = null,
     /// The vaccine preventable disease the dose is being evaluated against.
-    targetDisease: CodeableConcept = null,
+    targetDisease: CodeableConcept,
     /// The vaccine administration event being evaluated.
-    immunizationEvent: Reference = null,
+    immunizationEvent: Reference,
     /// Indicates if the dose is valid or not valid with respect to the published recommendations.
-    doseStatus: CodeableConcept = null,
+    doseStatus: CodeableConcept,
     /// Provides an explanation as to why the vaccine administration event is valid or not relative to the published recommendations.
     doseStatusReason: ?[]const CodeableConcept = null,
     /// Additional information about the evaluation.
@@ -13916,7 +13916,7 @@ pub const ImmunizationRecommendation = struct {
     /// A unique identifier assigned to this particular recommendation record.
     identifier: ?[]const Identifier = null,
     /// The patient the recommendation(s) are for.
-    patient: Reference = null,
+    patient: Reference,
     /// The date the immunization recommendation(s) were created.
     date: ?dateTime = null,
     /// Extensions for date
@@ -13924,7 +13924,7 @@ pub const ImmunizationRecommendation = struct {
     /// Indicates the authority who published the protocol (e.g. ACIP).
     authority: ?Reference = null,
     /// Vaccine administration recommendations.
-    recommendation: []const ImmunizationRecommendation_Recommendation = null,
+    recommendation: []const ImmunizationRecommendation_Recommendation,
 };
 
 /// A patient's point-in-time set of recommendations (i.e. forecasting) according to a published schedule with optional supporting justification.
@@ -13944,7 +13944,7 @@ pub const ImmunizationRecommendation_Recommendation = struct {
     /// Vaccine(s) which should not be used to fulfill the recommendation.
     contraindicatedVaccineCode: ?[]const CodeableConcept = null,
     /// Indicates the patient status with respect to the path to immunity for the target disease.
-    forecastStatus: CodeableConcept = null,
+    forecastStatus: CodeableConcept,
     /// The reason for the assigned forecast status.
     forecastReason: ?[]const CodeableConcept = null,
     /// Vaccine date recommendations.  For example, earliest date to administer, latest date to administer, etc.
@@ -13990,7 +13990,7 @@ pub const ImmunizationRecommendation_DateCriterion = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Date classification of recommendation.  For example, earliest date to give, latest date to give, etc.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The date whose meaning is specified by dateCriterion.code.
     value: ?dateTime = null,
     /// Extensions for value
@@ -14476,7 +14476,7 @@ pub const ImplementationGuide_DependsOn = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A canonical reference to the Implementation guide for the dependency.
-    uri: canonical = null,
+    uri: canonical,
     /// The NPM package name for the Implementation Guide that this IG depends on.
     packageId: ?id = null,
     /// Extensions for packageId
@@ -14502,7 +14502,7 @@ pub const ImplementationGuide_Global = struct {
     /// Extensions for type
     _type: ?Element = null,
     /// A reference to the profile that all instances must conform to.
-    profile: canonical = null,
+    profile: canonical,
 };
 
 /// A set of rules of how a particular interoperability or standards problem is solved - typically through the use of FHIR resources. This resource is used to gather all the parts of an implementation guide into a logical whole and to publish a computable definition of all the parts.
@@ -14518,7 +14518,7 @@ pub const ImplementationGuide_Definition = struct {
     /// A logical group of resources. Logical groups can be used when building pages.
     grouping: ?[]const ImplementationGuide_Grouping = null,
     /// A resource that is part of the implementation guide. Conformance resources (value set, structure definition, capability statements etc.) are obvious candidates for inclusion, but any kind of resource can be included as an example resource.
-    resource: []const ImplementationGuide_Resource = null,
+    resource: []const ImplementationGuide_Resource,
     /// A page / section in the implementation guide. The root page is the implementation guide home page.
     page: ?ImplementationGuide_Page = null,
     /// Defines how IG is built by tools.
@@ -14558,7 +14558,7 @@ pub const ImplementationGuide_Resource = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Where this resource is found.
-    reference: Reference = null,
+    reference: Reference,
     /// Indicates the FHIR Version(s) this artifact is intended to apply to. If no versions are specified, the resource is assumed to apply to all the versions stated in ImplementationGuide.fhirVersion.
     fhirVersion: ?[]const enum {
         @"0.01",
@@ -14711,7 +14711,7 @@ pub const ImplementationGuide_Manifest = struct {
     /// Extensions for rendering
     _rendering: ?Element = null,
     /// A resource that is part of the implementation guide. Conformance resources (value set, structure definition, capability statements etc.) are obvious candidates for inclusion, but any kind of resource can be included as an example resource.
-    resource: []const ImplementationGuide_Resource1 = null,
+    resource: []const ImplementationGuide_Resource1,
     /// Information about a page within the IG.
     page: ?[]const ImplementationGuide_Page1 = null,
     /// Indicates a relative path to an image that exists within the IG.
@@ -14735,7 +14735,7 @@ pub const ImplementationGuide_Resource1 = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Where this resource is found.
-    reference: Reference = null,
+    reference: Reference,
     /// If true or a reference, indicates the resource is an example instance.  If a reference is present, indicates that the example is an example of the specified profile.
     exampleBoolean: ?boolean = null,
     /// Extensions for exampleBoolean
@@ -14871,11 +14871,11 @@ pub const InsurancePlan_Coverage = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Type of coverage  (Medical; Dental; Mental Health; Substance Abuse; Vision; Drug; Short Term; Long Term Care; Hospice; Home Health).
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Reference to the network that providing the type of coverage.
     network: ?[]const Reference = null,
     /// Specific benefits under this type of coverage.
-    benefit: []const InsurancePlan_Benefit = null,
+    benefit: []const InsurancePlan_Benefit,
 };
 
 /// Details of a Health Insurance product/plan provided by an organization.
@@ -14889,7 +14889,7 @@ pub const InsurancePlan_Benefit = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Type of benefit (primary care; speciality care; inpatient; outpatient).
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The referral requirements to have access/coverage for this benefit.
     requirement: ?string = null,
     /// Extensions for requirement
@@ -14973,7 +14973,7 @@ pub const InsurancePlan_SpecificCost = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// General category of benefit (Medical; Dental; Vision; Drug; Mental Health; Substance Abuse; Hospice, Home Health).
-    category: CodeableConcept = null,
+    category: CodeableConcept,
     /// List of the specific benefits under this category of benefit.
     benefit: ?[]const InsurancePlan_Benefit1 = null,
 };
@@ -14989,7 +14989,7 @@ pub const InsurancePlan_Benefit1 = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Type of specific benefit (preventative; primary care office visit; speciality office visit; hospitalization; emergency room; urgent care).
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// List of the costs associated with a specific benefit.
     cost: ?[]const InsurancePlan_Cost = null,
 };
@@ -15005,7 +15005,7 @@ pub const InsurancePlan_Cost = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Type of cost (copay; individual cap; family cap; coinsurance; deductible).
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Whether the cost applies to in-network or out-of-network providers (in-network; out-of-network; other).
     applicability: ?CodeableConcept = null,
     /// Additional information about the cost, such as information about funding sources (e.g. HSA, HRA, FSA, RRA).
@@ -15100,7 +15100,7 @@ pub const Invoice_Participant = struct {
     /// Describes the type of involvement (e.g. transcriptionist, creator etc.). If the invoice has been created automatically, the Participant may be a billing engine or another kind of device.
     role: ?CodeableConcept = null,
     /// The device, practitioner, etc. who performed or participated in the service.
-    actor: Reference = null,
+    actor: Reference,
 };
 
 /// Invoice containing collected ChargeItems from an Account with calculated individual and total price for Billing purpose.
@@ -15217,7 +15217,7 @@ pub const Library = struct {
     /// Extensions for experimental
     _experimental: ?Element = null,
     /// Identifies the type of library such as a Logic Library, Model Definition, Asset Collection, or Module Definition.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// A code or group definition that describes the intended subject of the contents of the library.
     subjectCodeableConcept: ?CodeableConcept = null,
     /// A code or group definition that describes the intended subject of the contents of the library.
@@ -15314,7 +15314,7 @@ pub const Linkage = struct {
     /// Identifies the user or organization responsible for asserting the linkages as well as the user or organization who establishes the context in which the nature of each linkage is evaluated.
     author: ?Reference = null,
     /// Identifies which record considered as the reference to the same real-world occurrence as well as how the items should be evaluated within the collection of linked items.
-    item: []const Linkage_Item = null,
+    item: []const Linkage_Item,
 };
 
 /// Identifies two or more records (resource instances) that refer to the same real-world "occurrence".
@@ -15336,7 +15336,7 @@ pub const Linkage_Item = struct {
     /// Extensions for type
     _type: ?Element = null,
     /// The resource instance being linked as part of the group.
-    resource: Reference = null,
+    resource: Reference,
 };
 
 /// A list is a curated collection of resources.
@@ -15429,7 +15429,7 @@ pub const List_Entry = struct {
     /// Extensions for date
     _date: ?Element = null,
     /// A reference to the actual resource from which data was derived.
-    item: Reference = null,
+    item: Reference,
 };
 
 /// Details and position information for a physical place where services are provided and resources and participants may be stored, found, contained, or accommodated.
@@ -15763,7 +15763,7 @@ pub const Measure_Population = struct {
     /// Extensions for description
     _description: ?Element = null,
     /// An expression that specifies the criteria for the population, typically the name of an expression in a library.
-    criteria: Expression = null,
+    criteria: Expression,
 };
 
 /// The Measure resource provides the definition of a quality measure.
@@ -15805,7 +15805,7 @@ pub const Measure_Component = struct {
     /// Extensions for description
     _description: ?Element = null,
     /// An expression that specifies the criteria for this component of the stratifier. This is typically the name of an expression defined within a referenced library, but it may also be a path to a stratifier element.
-    criteria: Expression = null,
+    criteria: Expression,
 };
 
 /// The Measure resource provides the definition of a quality measure.
@@ -15827,7 +15827,7 @@ pub const Measure_SupplementalData = struct {
     /// Extensions for description
     _description: ?Element = null,
     /// The criteria for the supplemental data. This is typically the name of a valid expression defined within a referenced library, but it may also be a path to a specific data element. The criteria defines the data to be returned for this element.
-    criteria: Expression = null,
+    criteria: Expression,
 };
 
 /// The MeasureReport resource contains the results of the calculation of a measure; and optionally a reference to the resources involved in that calculation.
@@ -15875,7 +15875,7 @@ pub const MeasureReport = struct {
     /// Extensions for type
     _type: ?Element = null,
     /// A reference to the Measure that was calculated to produce this report.
-    measure: canonical = null,
+    measure: canonical,
     /// Optional subject identifying the individual or individuals the report is for.
     subject: ?Reference = null,
     /// The date this measure report was generated.
@@ -15885,7 +15885,7 @@ pub const MeasureReport = struct {
     /// The individual, location, or organization that is reporting the data.
     reporter: ?Reference = null,
     /// The reporting period for which the report was calculated.
-    period: Period = null,
+    period: Period,
     /// Whether improvement in the measure is noted by an increase or decrease in the measure score.
     improvementNotation: ?CodeableConcept = null,
     /// The results of the calculation, one for each population group in the measure.
@@ -15981,9 +15981,9 @@ pub const MeasureReport_Component = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The code for the stratum component value.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The stratum component value.
-    value: CodeableConcept = null,
+    value: CodeableConcept,
 };
 
 /// The MeasureReport resource contains the results of the calculation of a measure; and optionally a reference to the resources involved in that calculation.
@@ -16090,7 +16090,7 @@ pub const Media = struct {
     /// Extensions for duration
     _duration: ?Element = null,
     /// The actual content of the media - inline or by direct reference to the media source file.
-    content: Attachment = null,
+    content: Attachment,
     /// Comments made about the media by the performer, subject or other participants.
     note: ?[]const Annotation = null,
 };
@@ -16228,7 +16228,7 @@ pub const MedicationAdministration = struct {
     /// Identifies the medication that was administered. This is either a link to a resource representing the details of the medication or a simple attribute carrying a code that identifies the medication from a known list of medications.
     medicationReference: ?Reference = null,
     /// The person or animal or group receiving the medication.
-    subject: Reference = null,
+    subject: Reference,
     /// The visit, admission, or other contact between patient and health care provider during which the medication administration was performed.
     context: ?Reference = null,
     /// Additional information (for example, patient height and weight) that supports the administration of the medication.
@@ -16270,7 +16270,7 @@ pub const MedicationAdministration_Performer = struct {
     /// Distinguishes the type of involvement of the performer in the medication administration.
     function: ?CodeableConcept = null,
     /// Indicates who or what performed the medication administration.
-    actor: Reference = null,
+    actor: Reference,
 };
 
 /// Describes the event of a patient consuming or otherwise being administered a medication.  This may be as simple as swallowing a tablet or it may be a long running infusion.  Related resources tie this event to the authorizing prescription, and the specific encounter between patient and health care practitioner.
@@ -16399,7 +16399,7 @@ pub const MedicationDispense_Performer = struct {
     /// Distinguishes the type of performer in the dispense.  For example, date enterer, packager, final checker.
     function: ?CodeableConcept = null,
     /// The device, practitioner, etc. who performed the action.  It should be assumed that the actor is the dispenser of the medication.
-    actor: Reference = null,
+    actor: Reference,
 };
 
 /// Indicates that a medication product is to be or has been dispensed for a named person/patient.  This includes a description of the medication product (supply) provided and the instructions for administering the medication.  The medication dispense is the result of a pharmacy system responding to a medication order.
@@ -16512,9 +16512,9 @@ pub const MedicationKnowledge_RelatedMedicationKnowledge = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The category of the associated medication knowledge reference.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Associated documentation about the associated medication knowledge.
-    reference: []const Reference = null,
+    reference: []const Reference,
 };
 
 /// Information about a medication that is used to support knowledge.
@@ -16566,13 +16566,13 @@ pub const MedicationKnowledge_Cost = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The category of the cost information.  For example, manufacturers' cost, patient cost, claim reimbursement cost, actual acquisition cost.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The source or owner that assigns the price to the medication.
     source: ?string = null,
     /// Extensions for source
     _source: ?Element = null,
     /// The price of the medication.
-    cost: Money = null,
+    cost: Money,
 };
 
 /// Information about a medication that is used to support knowledge.
@@ -16624,9 +16624,9 @@ pub const MedicationKnowledge_Dosage = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The type of dosage (for example, prophylaxis, maintenance, therapeutic, etc.).
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Dosage for the medication for the specific guidelines.
-    dosage: []const Dosage = null,
+    dosage: []const Dosage,
 };
 
 /// Information about a medication that is used to support knowledge.
@@ -16660,7 +16660,7 @@ pub const MedicationKnowledge_MedicineClassification = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The type of category for the medication (for example, therapeutic classification, therapeutic sub-classification).
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Specific category assigned to the medication (e.g. anti-infective, anti-hypertensive, antibiotic, etc.).
     classification: ?[]const CodeableConcept = null,
 };
@@ -16718,7 +16718,7 @@ pub const MedicationKnowledge_Regulatory = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The authority that is specifying the regulations.
-    regulatoryAuthority: Reference = null,
+    regulatoryAuthority: Reference,
     /// Specifies if changes are allowed when dispensing a medication from a regulatory perspective.
     substitution: ?[]const MedicationKnowledge_Substitution = null,
     /// Specifies the schedule of a medication in jurisdiction.
@@ -16738,7 +16738,7 @@ pub const MedicationKnowledge_Substitution = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Specifies the type of substitution allowed.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Specifies if regulation allows for changes in the medication when dispensing.
     allowed: ?boolean = null,
     /// Extensions for allowed
@@ -16756,7 +16756,7 @@ pub const MedicationKnowledge_Schedule = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Specifies the specific drug schedule.
-    schedule: CodeableConcept = null,
+    schedule: CodeableConcept,
 };
 
 /// Information about a medication that is used to support knowledge.
@@ -16770,7 +16770,7 @@ pub const MedicationKnowledge_MaxDispense = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The maximum number of units of the medication that can be dispensed.
-    quantity: Quantity = null,
+    quantity: Quantity,
     /// The period that applies to the maximum number of units.
     period: ?Duration = null,
 };
@@ -16851,7 +16851,7 @@ pub const MedicationRequest = struct {
     /// Identifies the medication being requested. This is a link to a resource that represents the medication which may be the details of the medication or simply an attribute carrying a code that identifies the medication from a known list of medications.
     medicationReference: ?Reference = null,
     /// A link to a resource representing the person or set of individuals to whom the medication will be given.
-    subject: Reference = null,
+    subject: Reference,
     /// The Encounter during which this [x] was created or to which the creation of this record is tightly associated.
     encounter: ?Reference = null,
     /// Include additional information (for example, patient height and weight) that supports the ordering of the medication.
@@ -17014,7 +17014,7 @@ pub const MedicationStatement = struct {
     /// Identifies the medication being administered. This is either a link to a resource representing the details of the medication or a simple attribute carrying a code that identifies the medication from a known list of medications.
     medicationReference: ?Reference = null,
     /// The person, animal or group who is/was taking the medication.
-    subject: Reference = null,
+    subject: Reference,
     /// The encounter or episode of care that establishes the context for this MedicationStatement.
     context: ?Reference = null,
     /// The interval of time during which it is being asserted that the patient is/was/will be taking the medication (or was not taking, when the MedicationStatement.taken element is No).
@@ -17101,7 +17101,7 @@ pub const MedicinalProduct = struct {
     /// Clinical trials or studies that this product is involved in.
     clinicalTrial: ?[]const Reference = null,
     /// The product's name, including full name and possibly coded parts.
-    name: []const MedicinalProduct_Name = null,
+    name: []const MedicinalProduct_Name,
     /// Reference to another product, e.g. for linking authorised to investigational product.
     crossReference: ?[]const Identifier = null,
     /// An operation applied to the product, for manufacturing or adminsitrative purpose.
@@ -17145,7 +17145,7 @@ pub const MedicinalProduct_NamePart = struct {
     /// Extensions for part
     _part: ?Element = null,
     /// Idenifying type for this part of the name (e.g. strength part).
-    type: Coding = null,
+    type: Coding,
 };
 
 /// Detailed definition of a medicinal product, typically for uses other than direct patient care (e.g. regulatory use).
@@ -17159,11 +17159,11 @@ pub const MedicinalProduct_CountryLanguage = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Country code for where this name applies.
-    country: CodeableConcept = null,
+    country: CodeableConcept,
     /// Jurisdiction code for where this name applies.
     jurisdiction: ?CodeableConcept = null,
     /// Language code for this name.
-    language: CodeableConcept = null,
+    language: CodeableConcept,
 };
 
 /// Detailed definition of a medicinal product, typically for uses other than direct patient care (e.g. regulatory use).
@@ -17324,7 +17324,7 @@ pub const MedicinalProductAuthorization_Procedure = struct {
     /// Identifier for this procedure.
     identifier: ?Identifier = null,
     /// Type of procedure.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// Date of procedure.
     datePeriod: ?Period = null,
     /// Date of procedure.
@@ -17387,7 +17387,7 @@ pub const MedicinalProductContraindication_OtherTherapy = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The type of relationship between the medicinal product indication or contraindication and another therapy.
-    therapyRelationshipType: CodeableConcept = null,
+    therapyRelationshipType: CodeableConcept,
     /// Reference to a specific medication (active substance, medicinal product or class of products) as part of an indication or contraindication.
     medicationCodeableConcept: ?CodeableConcept = null,
     /// Reference to a specific medication (active substance, medicinal product or class of products) as part of an indication or contraindication.
@@ -17450,7 +17450,7 @@ pub const MedicinalProductIndication_OtherTherapy = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The type of relationship between the medicinal product indication or contraindication and another therapy.
-    therapyRelationshipType: CodeableConcept = null,
+    therapyRelationshipType: CodeableConcept,
     /// Reference to a specific medication (active substance, medicinal product or class of products) as part of an indication or contraindication.
     medicationCodeableConcept: ?CodeableConcept = null,
     /// Reference to a specific medication (active substance, medicinal product or class of products) as part of an indication or contraindication.
@@ -17485,7 +17485,7 @@ pub const MedicinalProductIngredient = struct {
     /// The identifier(s) of this Ingredient that are assigned by business processes and/or used to refer to it when a direct URL reference to the resource itself is not appropriate.
     identifier: ?Identifier = null,
     /// Ingredient role e.g. Active ingredient, excipient.
-    role: CodeableConcept = null,
+    role: CodeableConcept,
     /// If the ingredient is a known or suspected allergen.
     allergenicIndicator: ?boolean = null,
     /// Extensions for allergenicIndicator
@@ -17509,9 +17509,9 @@ pub const MedicinalProductIngredient_SpecifiedSubstance = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The specified substance.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The group of specified substance, e.g. group 1 to 4.
-    group: CodeableConcept = null,
+    group: CodeableConcept,
     /// Confidentiality level of the specified substance as the ingredient.
     confidentiality: ?CodeableConcept = null,
     /// Quantity of the substance or specified substance present in the manufactured item or pharmaceutical product.
@@ -17529,7 +17529,7 @@ pub const MedicinalProductIngredient_Strength = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The quantity of substance in the unit of presentation, or in the volume (or mass) of the single pharmaceutical product or manufactured item.
-    presentation: Ratio = null,
+    presentation: Ratio,
     /// A lower limit for the quantity of substance in the unit of presentation. For use when there is a range of strengths, this is the lower limit, with the presentation attribute becoming the upper limit.
     presentationLowLimit: ?Ratio = null,
     /// The strength per unitary volume (or mass).
@@ -17559,7 +17559,7 @@ pub const MedicinalProductIngredient_ReferenceStrength = struct {
     /// Relevant reference substance.
     substance: ?CodeableConcept = null,
     /// Strength expressed in terms of a reference substance.
-    strength: Ratio = null,
+    strength: Ratio,
     /// Strength expressed in terms of a reference substance.
     strengthLowLimit: ?Ratio = null,
     /// For when strength is measured at a particular point or distance.
@@ -17581,7 +17581,7 @@ pub const MedicinalProductIngredient_Substance = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The ingredient substance.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// Quantity of the substance or specified substance present in the manufactured item or pharmaceutical product.
     strength: ?[]const MedicinalProductIngredient_Strength = null,
 };
@@ -17671,11 +17671,11 @@ pub const MedicinalProductManufactured = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Dose form as manufactured and before any transformation into the pharmaceutical product.
-    manufacturedDoseForm: CodeableConcept = null,
+    manufacturedDoseForm: CodeableConcept,
     /// The “real world” units in which the quantity of the manufactured item is described.
     unitOfPresentation: ?CodeableConcept = null,
     /// The quantity or "count number" of the manufactured item.
-    quantity: Quantity = null,
+    quantity: Quantity,
     /// Manufacturer of the item (Note that this should be named "manufacturer" but it currently causes technical issues).
     manufacturer: ?[]const Reference = null,
     /// Ingredient.
@@ -17730,7 +17730,7 @@ pub const MedicinalProductPackaged = struct {
     /// Batch numbering.
     batchIdentifier: ?[]const MedicinalProductPackaged_BatchIdentifier = null,
     /// A packaging item, as a contained for medicine, possibly with other packaging items within.
-    packageItem: []const MedicinalProductPackaged_PackageItem = null,
+    packageItem: []const MedicinalProductPackaged_PackageItem,
 };
 
 /// A medicinal product in a container or package.
@@ -17744,7 +17744,7 @@ pub const MedicinalProductPackaged_BatchIdentifier = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A number appearing on the outer packaging of a specific batch.
-    outerPackaging: Identifier = null,
+    outerPackaging: Identifier,
     /// A number appearing on the immediate packaging (and not the outer packaging).
     immediatePackaging: ?Identifier = null,
 };
@@ -17762,9 +17762,9 @@ pub const MedicinalProductPackaged_PackageItem = struct {
     /// Including possibly Data Carrier Identifier.
     identifier: ?[]const Identifier = null,
     /// The physical type of the container of the medicine.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The quantity of this package in the medicinal product, at the current level of packaging. The outermost is always 1.
-    quantity: Quantity = null,
+    quantity: Quantity,
     /// Material type of the package item.
     material: ?[]const CodeableConcept = null,
     /// A possible alternate material for the packaging.
@@ -17813,7 +17813,7 @@ pub const MedicinalProductPharmaceutical = struct {
     /// An identifier for the pharmaceutical medicinal product.
     identifier: ?[]const Identifier = null,
     /// The administrable dose form, after necessary reconstitution.
-    administrableDoseForm: CodeableConcept = null,
+    administrableDoseForm: CodeableConcept,
     /// Todo.
     unitOfPresentation: ?CodeableConcept = null,
     /// Ingredient.
@@ -17823,7 +17823,7 @@ pub const MedicinalProductPharmaceutical = struct {
     /// Characteristics e.g. a products onset of action.
     characteristics: ?[]const MedicinalProductPharmaceutical_Characteristics = null,
     /// The path by which the pharmaceutical product is taken into or makes contact with the body.
-    routeOfAdministration: []const MedicinalProductPharmaceutical_RouteOfAdministration = null,
+    routeOfAdministration: []const MedicinalProductPharmaceutical_RouteOfAdministration,
 };
 
 /// A pharmaceutical product described in terms of its composition and dose form.
@@ -17837,7 +17837,7 @@ pub const MedicinalProductPharmaceutical_Characteristics = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A coded characteristic.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The status of characteristic e.g. assigned or pending.
     status: ?CodeableConcept = null,
 };
@@ -17853,7 +17853,7 @@ pub const MedicinalProductPharmaceutical_RouteOfAdministration = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Coded expression for the route.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The first dose (dose quantity) administered in humans can be specified, for a product under investigation, using a numerical value and its unit of measurement.
     firstDose: ?Quantity = null,
     /// The maximum single dose that can be administered as per the protocol of a clinical trial can be specified using a numerical value and its unit of measurement.
@@ -17879,7 +17879,7 @@ pub const MedicinalProductPharmaceutical_TargetSpecies = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Coded expression for the species.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// A species specific time during which consumption of animal product is not appropriate.
     withdrawalPeriod: ?[]const MedicinalProductPharmaceutical_WithdrawalPeriod = null,
 };
@@ -17895,9 +17895,9 @@ pub const MedicinalProductPharmaceutical_WithdrawalPeriod = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Coded expression for the type of tissue for which the withdrawal period applues, e.g. meat, milk.
-    tissue: CodeableConcept = null,
+    tissue: CodeableConcept,
     /// A value for the time.
-    value: Quantity = null,
+    value: Quantity,
     /// Extra information about the withdrawal period.
     supportingInformation: ?string = null,
     /// Extensions for supportingInformation
@@ -18097,7 +18097,7 @@ pub const MessageDefinition_AllowedResponse = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A reference to the message definition that must be adhered to by this supported response.
-    message: canonical = null,
+    message: canonical,
     /// Provides a description of the circumstances in which this response should be used (as opposed to one of the alternative responses).
     situation: ?markdown = null,
     /// Extensions for situation
@@ -18144,7 +18144,7 @@ pub const MessageHeader = struct {
     /// The logical author of the message - the person or device that decided the described event should happen. When there is more than one candidate, pick the most proximal to the MessageHeader. Can provide other authors in extensions.
     author: ?Reference = null,
     /// The source application from which this message originated.
-    source: MessageHeader_Source = null,
+    source: MessageHeader_Source,
     /// The person or organization that accepts overall responsibility for the contents of the message. The implication is that the message event happened under the policies of the responsible party.
     responsible: ?Reference = null,
     /// Coded indication of the cause for the event - indicates  a reason for the occurrence of the event that is a focus of this message.
@@ -18681,7 +18681,7 @@ pub const NamingSystem = struct {
     /// Extensions for usage
     _usage: ?Element = null,
     /// Indicates how the system may be identified when referenced in electronic exchange.
-    uniqueId: []const NamingSystem_UniqueId = null,
+    uniqueId: []const NamingSystem_UniqueId,
 };
 
 /// A curated namespace that issues unique symbols within that namespace for the identification of concepts, people, devices, etc.  Represents a "System" used within the Identifier and Coding data types.
@@ -18765,7 +18765,7 @@ pub const NutritionOrder = struct {
     /// Extensions for intent
     _intent: ?Element = null,
     /// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
-    patient: Reference = null,
+    patient: Reference,
     /// An encounter that provides additional information about the healthcare context in which this request is made.
     encounter: ?Reference = null,
     /// The date and time that this nutrition order was requested.
@@ -18977,7 +18977,7 @@ pub const Observation = struct {
     /// A code that classifies the general type of observation being made.
     category: ?[]const CodeableConcept = null,
     /// Describes what was observed. Sometimes this is called the observation "name".
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The patient, or group of patients, location, or device this observation is about and into whose record the observation is placed. If the actual focus of the observation is different from the subject (or a sample of, part, or region of the subject), the `focus` element or the `code` itself specifies the actual focus of the observation.
     subject: ?Reference = null,
     /// The actual focus of an observation when it is not the patient of record representing something or someone associated with the patient such as a spouse, parent, fetus, or donor. For example, fetus observations in a mother's record.  The focus of an observation could also be an existing condition,  an intervention, the subject's diet,  another observation of the subject,  or a body structure such as tumor or implanted device.   An example use case would be using the Observation resource to capture whether the mother is trained to change her child's tracheostomy tube. In this example, the child is the patient of record and the mother is the focus.
@@ -19095,7 +19095,7 @@ pub const Observation_Component = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Describes what was observed. Sometimes this is called the observation "code".
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// The information determined as a result of making the observation, if the information has a simple value.
     valueQuantity: ?Quantity = null,
     /// The information determined as a result of making the observation, if the information has a simple value.
@@ -19164,7 +19164,7 @@ pub const ObservationDefinition = struct {
     /// A code that classifies the general type of observation.
     category: ?[]const CodeableConcept = null,
     /// Describes what will be observed. Sometimes this is called the observation "name".
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// A unique identifier assigned to this ObservationDefinition artifact.
     identifier: ?[]const Identifier = null,
     /// The data types allowed for the value element of the instance observations conforming to this ObservationDefinition.
@@ -19478,7 +19478,7 @@ pub const OperationDefinition_Binding = struct {
     /// Extensions for strength
     _strength: ?Element = null,
     /// Points to the value set or external definition (e.g. implicit value set) that identifies the set of codes to be used.
-    valueSet: canonical = null,
+    valueSet: canonical,
 };
 
 /// A formal computable definition of an operation (on the RESTful interface) or a named query (using the search interaction).
@@ -19547,7 +19547,7 @@ pub const OperationOutcome = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// An error, warning, or information message that results from a system action.
-    issue: []const OperationOutcome_Issue = null,
+    issue: []const OperationOutcome_Issue,
 };
 
 /// A collection of error, warning, or information messages that result from a system action.
@@ -20057,7 +20057,7 @@ pub const Patient_Communication = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The ISO-639-1 alpha 2 code in lower case for the language, optionally followed by a hyphen and the ISO-3166-1 alpha 2 code for the region in upper case; e.g. "en" for English, or "en-US" for American English versus "en-EN" for England English.
-    language: CodeableConcept = null,
+    language: CodeableConcept,
     /// Indicates whether or not the patient prefers this language (over other languages he masters up a certain level).
     preferred: ?boolean = null,
     /// Extensions for preferred
@@ -20075,7 +20075,7 @@ pub const Patient_Link = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The other patient resource that the link refers to.
-    other: Reference = null,
+    other: Reference,
     /// The type of link between this patient resource and another patient resource.
     type: ?enum {
         @"replaced-by",
@@ -20129,7 +20129,7 @@ pub const PaymentNotice = struct {
     /// The practitioner who is responsible for the services rendered to the patient.
     provider: ?Reference = null,
     /// A reference to the payment which is the subject of this notice.
-    payment: Reference = null,
+    payment: Reference,
     /// The date when the above payment action occurred.
     paymentDate: ?date = null,
     /// Extensions for paymentDate
@@ -20137,9 +20137,9 @@ pub const PaymentNotice = struct {
     /// The party who will receive or has received payment that is the subject of this notification.
     payee: ?Reference = null,
     /// The party who is notified of the payment status.
-    recipient: Reference = null,
+    recipient: Reference,
     /// The amount sent to the payee.
-    amount: Money = null,
+    amount: Money,
     /// A code indicating whether payment has been sent or cleared.
     paymentStatus: ?CodeableConcept = null,
 };
@@ -20205,7 +20205,7 @@ pub const PaymentReconciliation = struct {
     /// Extensions for paymentDate
     _paymentDate: ?Element = null,
     /// Total payment amount as indicated on the financial instrument.
-    paymentAmount: Money = null,
+    paymentAmount: Money,
     /// Issuer's unique identifier for the payment instrument.
     paymentIdentifier: ?Identifier = null,
     /// Distribution of the payment amount for a previously acknowledged payable.
@@ -20231,7 +20231,7 @@ pub const PaymentReconciliation_Detail = struct {
     /// Unique identifier for the prior payment item for the referenced payable.
     predecessor: ?Identifier = null,
     /// Code to indicate the nature of the payment.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// A resource, such as a Claim, the evaluation of which could lead to payment.
     request: ?Reference = null,
     /// The party which submitted the claim or financial transaction.
@@ -20343,7 +20343,7 @@ pub const Person_Link = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The resource to which this actual person is associated.
-    target: Reference = null,
+    target: Reference,
     /// Level of assurance that this link is associated with the target resource.
     assurance: ?enum {
         level1,
@@ -20494,7 +20494,7 @@ pub const PlanDefinition_Goal = struct {
     /// Indicates a category the goal falls within.
     category: ?CodeableConcept = null,
     /// Human-readable and/or coded description of a specific desired objective of care, such as "control blood pressure" or "negotiate an obstacle course" or "dance with child at wedding".
-    description: CodeableConcept = null,
+    description: CodeableConcept,
     /// Identifies the expected level of importance associated with reaching/sustaining the defined goal.
     priority: ?CodeableConcept = null,
     /// The event after which the goal should begin being pursued.
@@ -20826,7 +20826,7 @@ pub const Practitioner_Qualification = struct {
     /// An identifier that applies to this person's qualification in this role.
     identifier: ?[]const Identifier = null,
     /// Coded representation of the qualification.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// Period during which the qualification is valid.
     period: ?Period = null,
     /// Organization that regulates and issues the qualification.
@@ -20986,7 +20986,7 @@ pub const Procedure = struct {
     /// The specific procedure that is performed. Use text if the exact nature of the procedure cannot be coded (e.g. "Laparoscopic Appendectomy").
     code: ?CodeableConcept = null,
     /// The person, animal or group on which the procedure was performed.
-    subject: Reference = null,
+    subject: Reference,
     /// The Encounter during which this Procedure was created or performed or to which the creation of this record is tightly associated.
     encounter: ?Reference = null,
     /// Estimated or actual date, date-time, period, or age when the procedure was performed.  Allows a period to support complex procedures that span more than one date, and also allows for the length of the procedure to be captured.
@@ -21050,7 +21050,7 @@ pub const Procedure_Performer = struct {
     /// Distinguishes the type of involvement of the performer in the procedure. For example, surgeon, anaesthetist, endoscopist.
     function: ?CodeableConcept = null,
     /// The practitioner who was involved in the procedure.
-    actor: Reference = null,
+    actor: Reference,
     /// The organization the device or practitioner was acting on behalf of.
     onBehalfOf: ?Reference = null,
 };
@@ -21068,7 +21068,7 @@ pub const Procedure_FocalDevice = struct {
     /// The kind of change that happened to the device during the procedure.
     action: ?CodeableConcept = null,
     /// The device that was manipulated (changed) during the procedure.
-    manipulated: Reference = null,
+    manipulated: Reference,
 };
 
 /// Provenance of a resource is a record that describes entities and processes involved in producing and delivering or otherwise influencing that resource. Provenance provides a critical foundation for assessing authenticity, enabling trust, and allowing reproducibility. Provenance assertions are a form of contextual metadata and can themselves become important records with their own provenance. Provenance statement indicates clinical significance in terms of confidence in authenticity, reliability, and trustworthiness, integrity, and stage in lifecycle (e.g. Document Completion - has the artifact been legally authenticated), all of which may impact security, privacy, and trust policies.
@@ -21097,7 +21097,7 @@ pub const Provenance = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The Reference(s) that were generated or updated by  the activity described in this resource. A provenance can point to more than one target if multiple resources were created/updated by the same activity.
-    target: []const Reference = null,
+    target: []const Reference,
     /// The period during which the activity occurred.
     occurredPeriod: ?Period = null,
     /// The period during which the activity occurred.
@@ -21119,7 +21119,7 @@ pub const Provenance = struct {
     /// An activity is something that occurs over a period of time and acts upon or with entities; it may include consuming, processing, transforming, modifying, relocating, using, or generating entities.
     activity: ?CodeableConcept = null,
     /// An actor taking a role in an activity  for which it can be assigned some degree of responsibility for the activity taking place.
-    agent: []const Provenance_Agent = null,
+    agent: []const Provenance_Agent,
     /// An entity used in this activity.
     entity: ?[]const Provenance_Entity = null,
     /// A digital signature on the target Reference(s). The signer should match a Provenance.agent. The purpose of the signature is indicated.
@@ -21141,7 +21141,7 @@ pub const Provenance_Agent = struct {
     /// The function of the agent with respect to the activity. The security role enabling the agent with respect to the activity.
     role: ?[]const CodeableConcept = null,
     /// The individual, device or organization that participated in the event.
-    who: Reference = null,
+    who: Reference,
     /// The individual, device, or organization for whom the change was made.
     onBehalfOf: ?Reference = null,
 };
@@ -21167,7 +21167,7 @@ pub const Provenance_Entity = struct {
     /// Extensions for role
     _role: ?Element = null,
     /// Identity of the  Entity used. May be a logical or physical uri and maybe absolute or relative.
-    what: Reference = null,
+    what: Reference,
     /// The entity is attributed to an agent to express the agent's responsibility for that entity, possibly along with other agents. This description can be understood as shorthand for saying that the agent was responsible for the activity which generated the entity.
     agent: ?[]const Provenance_Agent = null,
 };
@@ -21691,7 +21691,7 @@ pub const RelatedPerson = struct {
     /// Extensions for active
     _active: ?Element = null,
     /// The patient this person is related to.
-    patient: Reference = null,
+    patient: Reference,
     /// The nature of the relationship between a patient and the related person.
     relationship: ?[]const CodeableConcept = null,
     /// A name associated with the person.
@@ -21732,7 +21732,7 @@ pub const RelatedPerson_Communication = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The ISO-639-1 alpha 2 code in lower case for the language, optionally followed by a hyphen and the ISO-3166-1 alpha 2 code for the region in upper case; e.g. "en" for English, or "en-US" for American English versus "en-EN" for England English.
-    language: CodeableConcept = null,
+    language: CodeableConcept,
     /// Indicates whether or not the patient prefers this language (over other languages he masters up a certain level).
     preferred: ?boolean = null,
     /// Extensions for preferred
@@ -22065,7 +22065,7 @@ pub const ResearchDefinition = struct {
     /// A reference to a Library resource containing the formal logic used by the ResearchDefinition.
     library: ?[]const canonical = null,
     /// A reference to a ResearchElementDefinition resource that defines the population for the research.
-    population: Reference = null,
+    population: Reference,
     /// A reference to a ResearchElementDefinition resource that defines the exposure for the research.
     exposure: ?Reference = null,
     /// A reference to a ResearchElementDefinition resource that defines the exposureAlternative for the research.
@@ -22217,7 +22217,7 @@ pub const ResearchElementDefinition = struct {
     /// Extensions for variableType
     _variableType: ?Element = null,
     /// A characteristic that defines the members of the research element. Multiple characteristics are applied with "and" semantics.
-    characteristic: []const ResearchElementDefinition_Characteristic = null,
+    characteristic: []const ResearchElementDefinition_Characteristic,
 };
 
 /// The ResearchElementDefinition resource describes a "PICO" element that knowledge (evidence, assertion, recommendation) is about.
@@ -22485,9 +22485,9 @@ pub const ResearchSubject = struct {
     /// The dates the subject began and ended their participation in the study.
     period: ?Period = null,
     /// Reference to the study the subject is participating in.
-    study: Reference = null,
+    study: Reference,
     /// The record of the person or animal who is involved in the study.
-    individual: Reference = null,
+    individual: Reference,
     /// The name of the arm in the study the subject is expected to follow as part of this study.
     assignedArm: ?string = null,
     /// Extensions for assignedArm
@@ -22540,7 +22540,7 @@ pub const RiskAssessment = struct {
     /// The type of the risk assessment performed.
     code: ?CodeableConcept = null,
     /// The patient or group the risk assessment applies to.
-    subject: Reference = null,
+    subject: Reference,
     /// The encounter where the assessment was performed.
     encounter: ?Reference = null,
     /// The date (and possibly time) the risk assessment was performed.
@@ -22706,11 +22706,11 @@ pub const RiskEvidenceSynthesis = struct {
     /// Type of study eg randomized trial.
     studyType: ?CodeableConcept = null,
     /// A reference to a EvidenceVariable resource that defines the population for the research.
-    population: Reference = null,
+    population: Reference,
     /// A reference to a EvidenceVariable resource that defines the exposure for the research.
     exposure: ?Reference = null,
     /// A reference to a EvidenceVariable resomece that defines the outcome for the research.
-    outcome: Reference = null,
+    outcome: Reference,
     /// A description of the size of the sample involved in the synthesis.
     sampleSize: ?RiskEvidenceSynthesis_SampleSize = null,
     /// The estimated risk of the outcome.
@@ -22877,7 +22877,7 @@ pub const Schedule = struct {
     /// The specialty of a practitioner that would be required to perform the service requested in this appointment.
     specialty: ?[]const CodeableConcept = null,
     /// Slots that reference this schedule resource provide the availability details to these referenced resource(s).
-    actor: []const Reference = null,
+    actor: []const Reference,
     /// The period of time that the slots that reference this Schedule resource cover (even if none exist). These  cover the amount of time that an organization's planning horizon; the interval for which they are currently accepting appointments. This does not define a "template" for planning outside these dates.
     planningHorizon: ?Period = null,
     /// Comments on the availability to describe any extended information. Such as custom constraints on the slots that may be associated.
@@ -23062,7 +23062,7 @@ pub const SearchParameter_Component = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The definition of the search parameter that describes this part.
-    definition: canonical = null,
+    definition: canonical,
     /// A sub-expression that defines how to extract values for this component from the output of the main SearchParameter.expression.
     expression: ?string = null,
     /// Extensions for expression
@@ -23137,7 +23137,7 @@ pub const ServiceRequest = struct {
     /// An amount of service being requested which can be a quantity ( for example $1,500 home modification), a ratio ( for example, 20 half day visits per month), or a range (2.0 to 1.8 Gy per fraction).
     quantityRange: ?Range = null,
     /// On whom or what the service is to be performed. This is usually a human patient, but can also be requested on animals, groups of humans or animals, devices such as dialysis machines, or even locations (typically for environmental scans).
-    subject: Reference = null,
+    subject: Reference,
     /// An encounter that provides additional information about the healthcare context in which this request is made.
     encounter: ?Reference = null,
     /// The date/time at which the requested service should occur.
@@ -23226,7 +23226,7 @@ pub const Slot = struct {
     /// The style of appointment or patient that may be booked in the slot (not service type).
     appointmentType: ?CodeableConcept = null,
     /// The schedule resource that this slot defines an interval of status information.
-    schedule: Reference = null,
+    schedule: Reference,
     /// busy | free | busy-unavailable | busy-tentative | entered-in-error.
     status: ?enum {
         busy,
@@ -23769,7 +23769,7 @@ pub const StructureDefinition_Snapshot = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Captures constraints on each element within the resource.
-    element: []const ElementDefinition = null,
+    element: []const ElementDefinition,
 };
 
 /// A definition of a FHIR structure. This resource is used to describe the underlying resources, data types defined in FHIR, and also for describing extensions and constraints on resources and data types.
@@ -23783,7 +23783,7 @@ pub const StructureDefinition_Differential = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Captures constraints on each element within the resource.
-    element: []const ElementDefinition = null,
+    element: []const ElementDefinition,
 };
 
 /// A Map of relationships between 2 structures that can be used to transform data.
@@ -23873,7 +23873,7 @@ pub const StructureMap = struct {
     /// Other maps used by this map (canonical URLs).
     import: ?[]const canonical = null,
     /// Organizes the mapping into manageable chunks for human review/ease of maintenance.
-    group: []const StructureMap_Group = null,
+    group: []const StructureMap_Group,
 };
 
 /// A Map of relationships between 2 structures that can be used to transform data.
@@ -23887,7 +23887,7 @@ pub const StructureMap_Structure = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The canonical reference to the structure.
-    url: canonical = null,
+    url: canonical,
     /// How the referenced structure is used in this mapping.
     mode: ?enum {
         source,
@@ -23938,9 +23938,9 @@ pub const StructureMap_Group = struct {
     /// Extensions for documentation
     _documentation: ?Element = null,
     /// A name assigned to an instance of data. The instance must be provided when the mapping is invoked.
-    input: []const StructureMap_Input = null,
+    input: []const StructureMap_Input,
     /// Transform Rule from source to target.
-    rule: []const StructureMap_Rule = null,
+    rule: []const StructureMap_Rule,
 };
 
 /// A Map of relationships between 2 structures that can be used to transform data.
@@ -23989,7 +23989,7 @@ pub const StructureMap_Rule = struct {
     /// Extensions for name
     _name: ?Element = null,
     /// Source inputs to the mapping.
-    source: []const StructureMap_Source = null,
+    source: []const StructureMap_Source,
     /// Content to create because of this mapping rule.
     target: ?[]const StructureMap_Target = null,
     /// Rules contained in this rule.
@@ -24371,7 +24371,7 @@ pub const Subscription = struct {
     /// Extensions for error
     _error: ?Element = null,
     /// Details where to send notifications when resources are received that meet the criteria.
-    channel: Subscription_Channel = null,
+    channel: Subscription_Channel,
 };
 
 /// The subscription resource is used to define a push-based subscription from a server to another system. Once a subscription is registered with the server, the server checks every resource that is created or updated, and if the resource matches the given criteria, it sends a message on the defined "channel" so that another system can take an appropriate action.
@@ -24446,7 +24446,7 @@ pub const Substance = struct {
     /// A code that classifies the general type of substance.  This is used  for searching, sorting and display purposes.
     category: ?[]const CodeableConcept = null,
     /// A code (or set of codes) that identify this substance.
-    code: CodeableConcept = null,
+    code: CodeableConcept,
     /// A description of the substance - its appearance, handling requirements, and other usage notes.
     description: ?string = null,
     /// Extensions for description
@@ -25655,7 +25655,7 @@ pub const SupplyRequest = struct {
     /// The item that is requested to be supplied. This is either a link to a resource representing the details of the item or a code that identifies the item from a known list.
     itemReference: ?Reference = null,
     /// The amount that is being ordered of the indicated item.
-    quantity: Quantity = null,
+    quantity: Quantity,
     /// Specific parameters for the ordered item.  For example, the size of the indicated item.
     parameter: ?[]const SupplyRequest_Parameter = null,
     /// When the request should be fulfilled.
@@ -25865,7 +25865,7 @@ pub const Task_Input = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// A code or description indicating how the input is intended to be used as part of the task execution.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The value of the input parameter as a basic type.
     valueBase64Binary: ?string = null,
     /// Extensions for valueBase64Binary
@@ -26017,7 +26017,7 @@ pub const Task_Output = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The name of the Output parameter.
-    type: CodeableConcept = null,
+    type: CodeableConcept,
     /// The value of the Output parameter as a basic type.
     valueBase64Binary: ?string = null,
     /// Extensions for valueBase64Binary
@@ -26523,7 +26523,7 @@ pub const TestReport = struct {
     /// Extensions for status
     _status: ?Element = null,
     /// Ideally this is an absolute URL that is used to identify the version-specific TestScript that was executed, matching the `TestScript.url`.
-    testScript: Reference = null,
+    testScript: Reference,
     /// The overall result from the execution of the TestScript.
     result: ?enum {
         pass,
@@ -26593,7 +26593,7 @@ pub const TestReport_Setup = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Action would contain either an operation or an assertion.
-    action: []const TestReport_Action = null,
+    action: []const TestReport_Action,
 };
 
 /// A summary of information based on the results of executing a TestScript.
@@ -26691,7 +26691,7 @@ pub const TestReport_Test = struct {
     /// Extensions for description
     _description: ?Element = null,
     /// Action would contain either an operation or an assertion.
-    action: []const TestReport_Action1 = null,
+    action: []const TestReport_Action1,
 };
 
 /// A summary of information based on the results of executing a TestScript.
@@ -26721,7 +26721,7 @@ pub const TestReport_Teardown = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The teardown action will only contain an operation.
-    action: []const TestReport_Action2 = null,
+    action: []const TestReport_Action2,
 };
 
 /// A summary of information based on the results of executing a TestScript.
@@ -26735,7 +26735,7 @@ pub const TestReport_Action2 = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// An operation would involve a REST request to a server.
-    operation: TestReport_Operation = null,
+    operation: TestReport_Operation,
 };
 
 /// A structured set of tests against a FHIR server or client implementation to determine compliance against the FHIR specification.
@@ -26855,7 +26855,7 @@ pub const TestScript_Origin = struct {
     /// Extensions for index
     _index: ?Element = null,
     /// The type of origin profile the test system supports.
-    profile: Coding = null,
+    profile: Coding,
 };
 
 /// A structured set of tests against a FHIR server or client implementation to determine compliance against the FHIR specification.
@@ -26873,7 +26873,7 @@ pub const TestScript_Destination = struct {
     /// Extensions for index
     _index: ?Element = null,
     /// The type of destination profile the test system supports.
-    profile: Coding = null,
+    profile: Coding,
 };
 
 /// A structured set of tests against a FHIR server or client implementation to determine compliance against the FHIR specification.
@@ -26889,7 +26889,7 @@ pub const TestScript_Metadata = struct {
     /// A link to the FHIR specification that this test is covering.
     link: ?[]const TestScript_Link = null,
     /// Capabilities that must exist and are assumed to function correctly on the FHIR server being tested.
-    capability: []const TestScript_Capability = null,
+    capability: []const TestScript_Capability,
 };
 
 /// A structured set of tests against a FHIR server or client implementation to determine compliance against the FHIR specification.
@@ -26947,7 +26947,7 @@ pub const TestScript_Capability = struct {
     /// Extensions for link
     _link: ?[]const Element = null,
     /// Minimum capabilities required of server for test script to execute successfully.   If server does not meet at a minimum the referenced capability statement, then all tests in this script are skipped.
-    capabilities: canonical = null,
+    capabilities: canonical,
 };
 
 /// A structured set of tests against a FHIR server or client implementation to determine compliance against the FHIR specification.
@@ -27027,7 +27027,7 @@ pub const TestScript_Setup = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Action would contain either an operation or an assertion.
-    action: []const TestScript_Action = null,
+    action: []const TestScript_Action,
 };
 
 /// A structured set of tests against a FHIR server or client implementation to determine compliance against the FHIR specification.
@@ -27305,7 +27305,7 @@ pub const TestScript_Test = struct {
     /// Extensions for description
     _description: ?Element = null,
     /// Action would contain either an operation or an assertion.
-    action: []const TestScript_Action1 = null,
+    action: []const TestScript_Action1,
 };
 
 /// A structured set of tests against a FHIR server or client implementation to determine compliance against the FHIR specification.
@@ -27335,7 +27335,7 @@ pub const TestScript_Teardown = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// The teardown action will only contain an operation.
-    action: []const TestScript_Action2 = null,
+    action: []const TestScript_Action2,
 };
 
 /// A structured set of tests against a FHIR server or client implementation to determine compliance against the FHIR specification.
@@ -27349,7 +27349,7 @@ pub const TestScript_Action2 = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// An operation would involve a REST request to a server.
-    operation: TestScript_Operation = null,
+    operation: TestScript_Operation,
 };
 
 /// A ValueSet resource instance specifies a set of codes drawn from one or more code systems, intended for use in a particular context. Value sets link between [[[CodeSystem]]] definitions and their use in [coded elements](terminologies.html).
@@ -27463,7 +27463,7 @@ pub const ValueSet_Compose = struct {
     /// Extensions for inactive
     _inactive: ?Element = null,
     /// Include one or more codes from a code system or other value set(s).
-    include: []const ValueSet_Include = null,
+    include: []const ValueSet_Include,
     /// Exclude one or more codes from the value set based on code system filters and/or other value sets.
     exclude: ?[]const ValueSet_Include = null,
 };
@@ -27826,7 +27826,7 @@ pub const VerificationResult_Validator = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Reference to the organization validating information.
-    organization: Reference = null,
+    organization: Reference,
     /// A digital identity certificate associated with the validator.
     identityCertificate: ?string = null,
     /// Extensions for identityCertificate
@@ -27871,7 +27871,7 @@ pub const VisionPrescription = struct {
     /// Extensions for created
     _created: ?Element = null,
     /// A resource reference to the person to whom the vision prescription applies.
-    patient: Reference = null,
+    patient: Reference,
     /// A reference to a resource that identifies the particular occurrence of contact between patient and health care provider during which the prescription was issued.
     encounter: ?Reference = null,
     /// The date (and perhaps time) when the prescription was written.
@@ -27879,9 +27879,9 @@ pub const VisionPrescription = struct {
     /// Extensions for dateWritten
     _dateWritten: ?Element = null,
     /// The healthcare professional responsible for authorizing the prescription.
-    prescriber: Reference = null,
+    prescriber: Reference,
     /// Contain the details of  the individual lens specifications and serves as the authorization for the fullfillment by certified professionals.
-    lensSpecification: []const VisionPrescription_LensSpecification = null,
+    lensSpecification: []const VisionPrescription_LensSpecification,
 };
 
 /// An authorization for the provision of glasses and/or contact lenses to a patient.
@@ -27895,7 +27895,7 @@ pub const VisionPrescription_LensSpecification = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[]const Extension = null,
     /// Identifies the type of vision correction product which is required for the patient.
-    product: CodeableConcept = null,
+    product: CodeableConcept,
     /// The eye for which the lens specification applies.
     eye: ?enum {
         right,

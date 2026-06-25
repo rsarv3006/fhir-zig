@@ -33,6 +33,7 @@ pub const FhirField = struct {
     type_ref: FieldType,
     is_optional: bool,
     is_slice: bool,
+    is_boxed: bool = false,
 };
 
 pub const FieldType = union(enum) {
@@ -54,15 +55,22 @@ pub const FhirIntermediateRepresentationError = error{
     OutOfMemory,
 };
 
+const boxedFields = std.StaticStringMap(void).initComptime(.{
+    .{ "Identifier.assigner", {} },
+});
+
 // TODO: All this garbage will panic as written (specifically the json unwrapping without checking)
 pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.json.Parsed(std.json.Value)) FhirIntermediateRepresentationError!std.ArrayList(FhirType) {
-    std.debug.print("Building Intermediate Representation\n", .{});
+    std.debug.print("Building Intermediate Representation...\n", .{});
     const obj = switch (parsed.value) {
         .object => |o| o,
         else => return FhirIntermediateRepresentationError.InvalidFormat,
     };
 
-    const definitions = switch (obj.get("definitions").?) {
+    const definitionsValue = obj.get("definitions") orelse
+        return FhirIntermediateRepresentationError.MissingDefinitions;
+
+    const definitions = switch (definitionsValue) {
         .object => |o| o,
         else => return FhirIntermediateRepresentationError.MissingDefinitions,
     };
@@ -76,13 +84,6 @@ pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.jso
     while (iter.next()) |entry| {
         const key = entry.key_ptr.*;
 
-        // if (std.mem.eql(u8, key, "xhtml")) {
-        //     std.debug.print("{s}\n", .{key});
-
-        //     const valueString = try std.json.Stringify.valueAlloc(arena, entry.value_ptr.*, .{ .whitespace = .indent_2 });
-        //     std.debug.print("{s}", .{valueString});
-        // }
-
         const fhirType = parseDefinitionObject(arena, key, entry.value_ptr.*) catch {
             std.debug.print("Error parsing definition for {s}\n", .{key});
             continue;
@@ -93,7 +94,7 @@ pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.jso
     return fhirTypes;
 }
 
-fn parseDefinitionObject(arena: std.mem.Allocator, key: []const u8, value: std.json.Value) !FhirType {
+fn parseDefinitionObject(arena: std.mem.Allocator, definitionsKey: []const u8, value: std.json.Value) !FhirType {
     const obj = switch (value) {
         .object => |o| o,
         else => return FhirIntermediateRepresentationError.InvalidFormat,
@@ -125,7 +126,7 @@ fn parseDefinitionObject(arena: std.mem.Allocator, key: []const u8, value: std.j
                         isResource = true;
                         continue;
                     }
-                    const parsedField = parseField(arena, field.key_ptr.*, field.value_ptr.*, requiredFields) catch {
+                    const parsedField = parseField(arena, definitionsKey, field.key_ptr.*, field.value_ptr.*, requiredFields) catch {
                         std.debug.print("Failed to parse field for {s}\n", .{field.key_ptr.*});
                         continue;
                     };
@@ -140,7 +141,7 @@ fn parseDefinitionObject(arena: std.mem.Allocator, key: []const u8, value: std.j
                     };
                 }
 
-                fhirType = .{ .structure = .{ .name = key, .fields = try fields.toOwnedSlice(arena), .is_resource = isResource, .description = description } };
+                fhirType = .{ .structure = .{ .name = definitionsKey, .fields = try fields.toOwnedSlice(arena), .is_resource = isResource, .description = description } };
             },
             else => {},
         }
@@ -150,7 +151,7 @@ fn parseDefinitionObject(arena: std.mem.Allocator, key: []const u8, value: std.j
             .string => |str| str,
             else => return error.FieldNotString,
         };
-        fhirType = .{ .primitive = .{ .name = key, .pattern = pattern, .type = typeString } };
+        fhirType = .{ .primitive = .{ .name = definitionsKey, .pattern = pattern, .type = typeString } };
     } else if (obj.get("oneOf")) |oneOf| {
         std.debug.print("Top of oneOf check...\n", .{});
         const oneOfArr = switch (oneOf) {
@@ -167,9 +168,13 @@ fn parseDefinitionObject(arena: std.mem.Allocator, key: []const u8, value: std.j
             }
         }
 
-        fhirType = .{ .oneOf = .{ .name = key, .refs = try cleanedRefArr.toOwnedSlice(arena) } };
-    } else if (std.mem.eql(u8, key, "xhtml")) {
-        fhirType = .{ .primitive = .{ .name = key, .pattern = null, .type = "string" } };
+        fhirType = .{ .oneOf = .{ .name = definitionsKey, .refs = try cleanedRefArr.toOwnedSlice(arena) } };
+    } else if (std.mem.eql(u8, definitionsKey, "xhtml")) {
+        fhirType = .{ .primitive = .{
+            .name = definitionsKey,
+            .pattern = null,
+            .type = "string",
+        } };
     } else {
         return error.UnknownDefinitionType;
     }
@@ -177,7 +182,7 @@ fn parseDefinitionObject(arena: std.mem.Allocator, key: []const u8, value: std.j
     return fhirType;
 }
 
-fn parseField(arena: std.mem.Allocator, key: []const u8, value: std.json.Value, requiredFields: ?std.json.Array) !FhirField {
+fn parseField(arena: std.mem.Allocator, definitionsKey: []const u8, key: []const u8, value: std.json.Value, requiredFields: ?std.json.Array) !FhirField {
     const obj = switch (value) {
         .object => |o| o,
         else => return error.FieldNotObject,
@@ -185,6 +190,9 @@ fn parseField(arena: std.mem.Allocator, key: []const u8, value: std.json.Value, 
 
     var fieldType: FieldType = .{ .primitive = "unknown" };
     var isSlice = false;
+
+    const compositeKey = try std.fmt.allocPrint(arena, "{s}.{s}", .{ definitionsKey, key });
+    const needsBox = boxedFields.has(compositeKey); // or .get(...) != null
 
     if (obj.get("$ref")) |refTypeField| {
         switch (refTypeField) {
@@ -252,7 +260,7 @@ fn parseField(arena: std.mem.Allocator, key: []const u8, value: std.json.Value, 
         };
     }
 
-    return FhirField{ .name = key, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice, .description = description };
+    return FhirField{ .name = key, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice, .description = description, .is_boxed = needsBox };
 }
 
 fn cleanRef(ref: []const u8) []const u8 {

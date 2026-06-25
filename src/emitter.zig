@@ -84,6 +84,10 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
             try buffer.appendSlice(arena, "[] const ");
         }
 
+        if (field.is_boxed) {
+            try buffer.appendSlice(arena, "*const ");
+        }
+
         switch (field.type_ref) {
             .primitive => |primitiveFieldType| {
                 try buffer.appendSlice(arena, primitiveFieldType);
@@ -102,7 +106,11 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
                 try buffer.appendSlice(arena, refFieldType);
             },
         }
-        try buffer.appendSlice(arena, " = null");
+
+        if (field.is_optional) {
+            try buffer.appendSlice(arena, " = null");
+        }
+
         try buffer.appendSlice(arena, ",\n");
     }
 
