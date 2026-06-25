@@ -5,8 +5,6 @@ const utils = @import("utils.zig");
 
 const SIZE_ESTIMATE: usize = 128;
 
-//TODO: optional fields should have = null; since we don't define a value
-
 pub fn emit(arena: std.mem.Allocator, fhirTypes: std.ArrayList(ir.FhirType)) ![]const u8 {
     std.debug.print("Emitting Fhir Types...\n", .{});
     var buffer = try std.ArrayList(u8).initCapacity(arena, fhirTypes.items.len * SIZE_ESTIMATE);
@@ -104,6 +102,7 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
                 try buffer.appendSlice(arena, refFieldType);
             },
         }
+        try buffer.appendSlice(arena, " = null");
         try buffer.appendSlice(arena, ",\n");
     }
 
