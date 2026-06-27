@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const ir = @import("intermediate_representation.zig");
+const ir = @import("ir.zig");
 const utils = @import("utils.zig");
 
 const SIZE_ESTIMATE: usize = 128;
@@ -104,6 +104,10 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
             },
             .ref => |refFieldType| {
                 try buffer.appendSlice(arena, refFieldType);
+            },
+            .choice => |choiceFieldType| {
+                _ = choiceFieldType;
+                unreachable;
             },
         }
 

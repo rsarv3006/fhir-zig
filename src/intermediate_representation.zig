@@ -1,84 +1,32 @@
 const std = @import("std");
 // TODO: this crap needs to stream at some point, file in, ir streamed out
-// TODO:: set description field on needed fields
-// TODO:: make sure pattern is set where it's available
 
-pub const FhirType_Primitive = struct {
-    pattern: ?[]const u8,
-    name: []const u8,
-    type: []const u8,
-};
-
-pub const FhirType_Structure = struct {
-    name: []const u8,
-    description: ?[]const u8,
-    fields: []FhirField,
-    is_resource: bool,
-};
-
-pub const FhirType_Enumeration = struct {
-    name: []const u8,
-    description: ?[]const u8,
-    variants: []const []const u8,
-};
-
-pub const FhirType_OneOf = struct {
-    name: []const u8,
-    refs: []const []const u8,
-};
-
-pub const FhirField = struct {
-    name: []const u8,
-    description: ?[]const u8,
-    type_ref: FieldType,
-    is_optional: bool,
-    is_slice: bool,
-    is_boxed: bool = false,
-};
-
-pub const FieldType = union(enum) {
-    ref: []const u8,
-    primitive: []const u8,
-    inline_enum: []const []const u8,
-};
-
-pub const FhirType = union(enum) {
-    primitive: FhirType_Primitive,
-    structure: FhirType_Structure,
-    enumeration: FhirType_Enumeration,
-    oneOf: FhirType_OneOf,
-};
-
-pub const FhirIntermediateRepresentationError = error{
-    MissingDefinitions,
-    InvalidFormat,
-    OutOfMemory,
-};
+const ir = @import("ir.zig");
 
 const boxedFields = std.StaticStringMap(void).initComptime(.{
     .{ "Identifier.assigner", {} },
 });
 
 // TODO: All this garbage will panic as written (specifically the json unwrapping without checking)
-pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.json.Parsed(std.json.Value)) FhirIntermediateRepresentationError!std.ArrayList(FhirType) {
+pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.json.Parsed(std.json.Value)) ir.FhirIntermediateRepresentationError!std.ArrayList(ir.FhirType) {
     std.debug.print("Building Intermediate Representation...\n", .{});
     const obj = switch (parsed.value) {
         .object => |o| o,
-        else => return FhirIntermediateRepresentationError.InvalidFormat,
+        else => return ir.FhirIntermediateRepresentationError.InvalidFormat,
     };
 
     const definitionsValue = obj.get("definitions") orelse
-        return FhirIntermediateRepresentationError.MissingDefinitions;
+        return ir.FhirIntermediateRepresentationError.MissingDefinitions;
 
     const definitions = switch (definitionsValue) {
         .object => |o| o,
-        else => return FhirIntermediateRepresentationError.MissingDefinitions,
+        else => return ir.FhirIntermediateRepresentationError.MissingDefinitions,
     };
 
     std.debug.print("definitions count: {d}\n", .{definitions.count()});
     const definitionsCount = definitions.count();
 
-    var fhirTypes = try std.ArrayList(FhirType).initCapacity(arena, definitionsCount);
+    var fhirTypes = try std.ArrayList(ir.FhirType).initCapacity(arena, definitionsCount);
 
     var iter = definitions.iterator();
     while (iter.next()) |entry| {
@@ -94,10 +42,10 @@ pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.jso
     return fhirTypes;
 }
 
-fn parseDefinitionObject(arena: std.mem.Allocator, definitionsKey: []const u8, value: std.json.Value) !FhirType {
+fn parseDefinitionObject(arena: std.mem.Allocator, definitionsKey: []const u8, value: std.json.Value) !ir.FhirType {
     const obj = switch (value) {
         .object => |o| o,
-        else => return FhirIntermediateRepresentationError.InvalidFormat,
+        else => return ir.FhirIntermediateRepresentationError.InvalidFormat,
     };
 
     var requiredFields: ?std.json.Array = null;
@@ -109,7 +57,7 @@ fn parseDefinitionObject(arena: std.mem.Allocator, definitionsKey: []const u8, v
         };
     }
 
-    var fhirType: FhirType = undefined;
+    var fhirType: ir.FhirType = undefined;
 
     if (obj.get("properties")) |props| {
         switch (props) {
@@ -117,7 +65,7 @@ fn parseDefinitionObject(arena: std.mem.Allocator, definitionsKey: []const u8, v
                 var itr = props_obj.iterator();
                 const propsLength = itr.len;
 
-                var fields = try std.ArrayList(FhirField).initCapacity(arena, propsLength);
+                var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, propsLength);
 
                 var isResource = false;
                 while (itr.next()) |field| {
@@ -182,13 +130,13 @@ fn parseDefinitionObject(arena: std.mem.Allocator, definitionsKey: []const u8, v
     return fhirType;
 }
 
-fn parseField(arena: std.mem.Allocator, definitionsKey: []const u8, key: []const u8, value: std.json.Value, requiredFields: ?std.json.Array) !FhirField {
+fn parseField(arena: std.mem.Allocator, definitionsKey: []const u8, key: []const u8, value: std.json.Value, requiredFields: ?std.json.Array) !ir.FhirField {
     const obj = switch (value) {
         .object => |o| o,
         else => return error.FieldNotObject,
     };
 
-    var fieldType: FieldType = .{ .primitive = "unknown" };
+    var fieldType: ir.FieldType = .{ .primitive = "unknown" };
     var isSlice = false;
 
     const compositeKey = try std.fmt.allocPrint(arena, "{s}.{s}", .{ definitionsKey, key });
@@ -260,7 +208,7 @@ fn parseField(arena: std.mem.Allocator, definitionsKey: []const u8, key: []const
         };
     }
 
-    return FhirField{ .name = key, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice, .description = description, .is_boxed = needsBox };
+    return ir.FhirField{ .name = key, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice, .description = description, .is_boxed = needsBox };
 }
 
 fn cleanRef(ref: []const u8) []const u8 {
@@ -272,7 +220,7 @@ fn cleanRef(ref: []const u8) []const u8 {
     }
 }
 
-fn getItemsRef(arena: std.mem.Allocator, value: std.json.Value) !FieldType {
+fn getItemsRef(arena: std.mem.Allocator, value: std.json.Value) !ir.FieldType {
     const obj = switch (value) {
         .object => |o| o,
         else => return error.FieldNotObject,
