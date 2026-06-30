@@ -9,8 +9,10 @@ const fhir_zig = @import("fhir_zig");
 pub fn main(init: std.process.Init) !void {
     const arena: std.mem.Allocator = init.arena.allocator();
 
-    try fhir_zig.emitFhirR4Types(arena, init.io);
-    try fhir_zig.emitFhirR5Types(arena, init.io);
+    // try fhir_zig.emitFhirR4Types(arena, init.io);
+    // try fhir_zig.emitFhirR5Types(arena, init.io);
+
+    try fhir_zig.testRepFromBundle(arena, init.io);
 
     // const name: generatedFhir.HumanName = .{
     //     .family = "Test",
