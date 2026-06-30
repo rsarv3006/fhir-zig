@@ -7,248 +7,169 @@ const boxedFields = std.StaticStringMap(void).initComptime(.{
     .{ "Identifier.assigner", {} },
 });
 
-// TODO: All this garbage will panic as written (specifically the json unwrapping without checking)
-pub fn buildIntermediateRepresentation(arena: std.mem.Allocator, parsed: std.json.Parsed(std.json.Value)) ir.FhirIntermediateRepresentationError!std.ArrayList(ir.FhirType) {
-    std.debug.print("Building Intermediate Representation...\n", .{});
-    const obj = switch (parsed.value) {
+// TODO: This dumpster does not handle bad json structure... at all
+pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, fhirTypesArr: *std.ArrayList(ir.FhirType), bundle: std.json.Parsed(std.json.Value)) !void {
+    std.debug.print("Building IR from bundle...\n", .{});
+
+    const obj = switch (bundle.value) {
         .object => |o| o,
         else => return ir.FhirIntermediateRepresentationError.InvalidFormat,
     };
 
-    const definitionsValue = obj.get("definitions") orelse
-        return ir.FhirIntermediateRepresentationError.MissingDefinitions;
+    const entryArrayValue = obj.get("entry") orelse
+        return ir.FhirIntermediateRepresentationError.MissingEntryJsonValue;
 
-    const definitions = switch (definitionsValue) {
-        .object => |o| o,
-        else => return ir.FhirIntermediateRepresentationError.MissingDefinitions,
+    const entryArray = switch (entryArrayValue) {
+        .array => |a| a,
+        else => return ir.FhirIntermediateRepresentationError.BundleEntryNotAnArray,
     };
 
-    std.debug.print("definitions count: {d}\n", .{definitions.count()});
-    const definitionsCount = definitions.count();
-
-    var fhirTypes = try std.ArrayList(ir.FhirType).initCapacity(arena, definitionsCount);
-
-    var iter = definitions.iterator();
-    while (iter.next()) |entry| {
-        const key = entry.key_ptr.*;
-
-        const fhirType = parseDefinitionObject(arena, key, entry.value_ptr.*) catch {
-            std.debug.print("Error parsing definition for {s}\n", .{key});
+    for (entryArray.items) |entry| {
+        const fhirType = parseEntryFromBundle(arena, entry) catch {
             continue;
         };
 
-        try fhirTypes.append(arena, fhirType);
+        if (fhirType) |t| {
+            try fhirTypesArr.append(arena, t);
+        }
     }
-    return fhirTypes;
 }
 
-fn parseDefinitionObject(arena: std.mem.Allocator, definitionsKey: []const u8, value: std.json.Value) !ir.FhirType {
-    const obj = switch (value) {
+fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.FhirType {
+    const entryObj = switch (entry) {
         .object => |o| o,
         else => return ir.FhirIntermediateRepresentationError.InvalidFormat,
     };
+    const resourceValue = entryObj.get("resource") orelse return ir.FhirIntermediateRepresentationError.NoResourceObjOnEntry;
 
-    var requiredFields: ?std.json.Array = null;
+    const resource = switch (resourceValue) {
+        .object => |o| o,
+        else => return ir.FhirIntermediateRepresentationError.EntryResourceNotAnObject,
+    };
 
-    if (obj.get("required")) |requiredSliceMaybe| {
-        requiredFields = switch (requiredSliceMaybe) {
-            .array => |a| a,
-            else => null,
-        };
-    }
+    var fhirType: ?ir.FhirType = null;
 
-    var fhirType: ir.FhirType = undefined;
+    const id = resource.get("id").?.string;
+    const resourceType = resource.get("resourceType").?.string;
 
-    if (obj.get("properties")) |props| {
-        switch (props) {
-            .object => |props_obj| {
-                var itr = props_obj.iterator();
-                const propsLength = itr.len;
+    const resourceKindValue = resource.get("kind") orelse return error.NoKindOnResource;
+    const kind = switch (resourceKindValue) {
+        .string => |o| o,
+        else => {
+            std.debug.print("Failed to parse kind for {s}\n", .{id});
+            return error.KindValueNotAString;
+        },
+    };
 
-                var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, propsLength);
+    const isResource = std.mem.eql(u8, kind, "resource");
+    const description = if (resource.get("description")) |d| d.string else "";
 
-                var isResource = false;
-                while (itr.next()) |field| {
-                    // resourceType is a discriminator constant, not a data field
-                    if (std.mem.eql(u8, field.key_ptr.*, "resourceType")) {
-                        isResource = true;
-                        continue;
-                    }
-                    const parsedField = parseField(arena, definitionsKey, field.key_ptr.*, field.value_ptr.*, requiredFields) catch {
-                        std.debug.print("Failed to parse field for {s}\n", .{field.key_ptr.*});
-                        continue;
-                    };
-                    try fields.append(arena, parsedField);
-                }
+    if (std.mem.eql(u8, resourceType, "StructureDefinition")) {
+        // std.debug.print("{s} - {s}\n", .{ id, resourceType });
 
-                var description: []const u8 = "";
-                if (obj.get("description")) |descriptionOnObj| {
-                    description = switch (descriptionOnObj) {
-                        .string => |descriptionString| descriptionString,
-                        else => "",
-                    };
-                }
+        const elementsArr = resource.get("snapshot").?.object.get("element").?.array;
+        var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, elementsArr.items.len);
+        for (elementsArr.items) |element| {
+            const path = element.object.get("path").?.string;
+            if (std.mem.eql(u8, path, id)) continue;
 
-                fhirType = .{ .structure = .{ .name = definitionsKey, .fields = try fields.toOwnedSlice(arena), .is_resource = isResource, .description = description } };
-            },
-            else => {},
-        }
-    } else if (obj.get("type")) |primitiveType| {
-        const pattern: ?[]const u8 = if (obj.get("pattern")) |p| p.string else null;
-        const typeString = switch (primitiveType) {
-            .string => |str| str,
-            else => return error.FieldNotString,
-        };
-        fhirType = .{ .primitive = .{ .name = definitionsKey, .pattern = pattern, .type = typeString } };
-    } else if (obj.get("oneOf")) |oneOf| {
-        std.debug.print("Top of oneOf check...\n", .{});
-        const oneOfArr = switch (oneOf) {
-            .array => |arr| arr,
-            else => return error.FieldNotArray,
-        };
-
-        var cleanedRefArr = try std.ArrayList([]const u8).initCapacity(arena, oneOfArr.items.len);
-
-        for (oneOfArr.items) |item| {
-            // TODO: Un bork this
-            if (item.object.get("$ref")) |val| {
-                try cleanedRefArr.append(arena, cleanRef(val.string));
-            }
+            const field = try parseFhirFieldFromSnapshotElement(arena, id, element);
+            try fields.append(arena, field);
         }
 
-        fhirType = .{ .oneOf = .{ .name = definitionsKey, .refs = try cleanedRefArr.toOwnedSlice(arena) } };
-    } else if (std.mem.eql(u8, definitionsKey, "xhtml")) {
-        fhirType = .{ .primitive = .{
-            .name = definitionsKey,
-            .pattern = null,
-            .type = "string",
-        } };
-    } else {
-        return error.UnknownDefinitionType;
+        fhirType = .{ .structure = .{ .name = id, .fields = try fields.toOwnedSlice(arena), .is_resource = isResource, .description = description } };
     }
 
     return fhirType;
 }
 
-fn parseField(arena: std.mem.Allocator, definitionsKey: []const u8, key: []const u8, value: std.json.Value, requiredFields: ?std.json.Array) !ir.FhirField {
-    const obj = switch (value) {
-        .object => |o| o,
-        else => return error.FieldNotObject,
-    };
+fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []const u8, element: std.json.Value) !ir.FhirField {
+    const path = element.object.get("path").?.string;
+    const id = stripTopLevelPrefix(path, topLevelId);
+    const minSigned = element.object.get("min").?.integer;
+    const maxStr = element.object.get("max").?.string;
+    const definition = element.object.get("definition").?.string;
+
+    var isSlice = false;
+    var max: ?u32 = null;
+
+    if (std.mem.eql(u8, maxStr, "*")) {
+        isSlice = true;
+    } else {
+        max = try std.fmt.parseUnsigned(u32, maxStr, 10);
+    }
+
+    const min: u32 = @intCast(minSigned);
+
+    const isOptional = if (min == 0) true else false;
 
     var fieldType: ir.FieldType = .{ .primitive = "unknown" };
-    var isSlice = false;
 
-    const compositeKey = try std.fmt.allocPrint(arena, "{s}.{s}", .{ definitionsKey, key });
-    const needsBox = boxedFields.has(compositeKey); // or .get(...) != null
+    if (element.object.get("contentReference")) |_| {
+        std.debug.print("has content reference value, figure it out - {s}\n ", .{id});
+    }
 
-    if (obj.get("$ref")) |refTypeField| {
-        switch (refTypeField) {
-            .string => |refThingy| {
-                fieldType = .{ .ref = cleanRef(refThingy) };
-            },
-            else => {},
-        }
-    } else if (obj.get("type")) |typeField| {
-        switch (typeField) {
-            .string => |typeName| {
-                if (std.mem.eql(u8, typeName, "array")) {
-                    isSlice = true;
-                    fieldType = try getItemsRef(arena, value);
-                } else if (std.mem.eql(u8, typeName, "number")) {
-                    const pattern = if (obj.get("pattern")) |p| switch (p) {
-                        .string => |s| s,
-                        else => null,
-                    } else null;
-
-                    if (pattern) |pat| {
-                        if (std.mem.indexOf(u8, pat, "\\.") != null) {
-                            fieldType = .{ .primitive = "decimal" };
-                        } else {
-                            fieldType = .{ .primitive = "integer" };
-                        }
-                    } else {
-                        return error.FailedToParsePatternForTypeNumber;
+    if (element.object.get("type")) |elementTypeValue| {
+        switch (elementTypeValue) {
+            .array => |typeArray| {
+                if (typeArray.items.len == 1) {
+                    const firstTypeValue = typeArray.items[0];
+                    switch (firstTypeValue) {
+                        .object => |firstType| {
+                            if (firstType.get("code")) |code| {
+                                fieldType = .{ .ref = code.string };
+                                if (std.mem.startsWith(u8, code.string, "http://hl7.org/fhirpath/System.")) {
+                                    if (firstType.get("extension")) |extension| {
+                                        if (try attemptToRetrieveValueUrlFromExtension(extension)) |valueStr| {
+                                            fieldType = .{ .primitive = valueStr };
+                                        }
+                                    }
+                                }
+                            } else {
+                                std.debug.print("Parsing the first type value something slipped through - {s}\n", .{id});
+                            }
+                        },
+                        else => {},
                     }
-                } else {
-                    fieldType = .{ .primitive = typeName };
                 }
             },
             else => {},
         }
-    } else if (obj.get("enum")) |enumField| {
-        switch (enumField) {
-            .array => |arr| {
-                const len = arr.items.len;
-                var enumItems = try std.ArrayList([]const u8).initCapacity(arena, len);
-                for (arr.items) |enumItem| {
-                    // TODO: This will probably blow up
-                    try enumItems.append(arena, enumItem.string);
-                }
-                fieldType = .{ .inline_enum = try enumItems.toOwnedSlice(arena) };
-            },
-            else => {},
-        }
     }
 
-    var isOptional = true;
-    if (requiredFields) |required| {
-        for (required.items) |requiredField| {
-            if (std.mem.eql(u8, requiredField.string, key)) {
-                isOptional = false;
-            }
-        }
-    }
+    const compositeKey = try std.fmt.allocPrint(arena, "{s}.{s}", .{ topLevelId, id });
+    const needsBox = boxedFields.has(compositeKey);
 
-    var description: []const u8 = "";
-    if (obj.get("description")) |descriptionOnObj| {
-        description = switch (descriptionOnObj) {
-            .string => |descriptionString| descriptionString,
-            else => "",
-        };
-    }
-
-    return ir.FhirField{ .name = key, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice, .description = description, .is_boxed = needsBox };
+    return ir.FhirField{ .name = id, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice, .description = definition, .is_boxed = needsBox, .min = min, .max = max };
 }
 
-fn cleanRef(ref: []const u8) []const u8 {
-    const prefix = "#/definitions/";
-    if (std.mem.startsWith(u8, ref, prefix)) {
-        return ref[prefix.len..];
-    } else {
-        return ref;
+fn stripTopLevelPrefix(path: []const u8, topLevelId: []const u8) []const u8 {
+    if (std.mem.startsWith(u8, path, topLevelId) and path.len > topLevelId.len and path[topLevelId.len] == '.') {
+        return path[topLevelId.len + 1 ..];
     }
+    return path;
 }
 
-fn getItemsRef(arena: std.mem.Allocator, value: std.json.Value) !ir.FieldType {
-    const obj = switch (value) {
-        .object => |o| o,
-        else => return error.FieldNotObject,
+fn attemptToRetrieveValueUrlFromExtension(extension: std.json.Value) !?[]const u8 {
+    const extensionArray = switch (extension) {
+        .array => |a| a,
+        else => return error.ExtensionIsNotAnArray,
     };
 
-    if (obj.get("items")) |items| {
-        const itemsObj = switch (items) {
-            .object => |o| o,
-            else => return error.FieldNotObject,
-        };
-
-        if (itemsObj.get("$ref")) |ref| {
-            switch (ref) {
-                .string => |s| return .{ .ref = cleanRef(s) },
-                else => {},
-            }
-        } else if (itemsObj.get("enum")) |enumField| {
-            switch (enumField) {
-                .array => |arr| {
-                    var enumItems = try std.ArrayList([]const u8).initCapacity(arena, arr.items.len);
-                    for (arr.items) |enumItem| {
-                        try enumItems.append(arena, enumItem.string);
-                    }
-                    return .{ .inline_enum = try enumItems.toOwnedSlice(arena) };
-                },
-                else => {},
-            }
-        }
+    if (extensionArray.items.len == 0) {
+        return error.ExtensionArrayLenZero;
     }
-    return error.MissingItemsRef;
+
+    const extensionFirstItemObj = switch (extensionArray.items[0]) {
+        .object => |o| o,
+        else => return error.ExtensionFirstItemIsNotAnObject,
+    };
+
+    const maybeValue = extensionFirstItemObj.get("valueUrl");
+    if (maybeValue) |value| {
+        return value.string;
+    }
+
+    std.debug.print("value url not on extension, GFL\n", .{});
+    return null;
 }

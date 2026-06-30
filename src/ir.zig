@@ -56,4 +56,8 @@ pub const FhirIntermediateRepresentationError = error{
     MissingDefinitions,
     InvalidFormat,
     OutOfMemory,
+    MissingEntryJsonValue,
+    BundleEntryNotAnArray,
+    NoResourceObjOnEntry,
+    EntryResourceNotAnObject,
 };
