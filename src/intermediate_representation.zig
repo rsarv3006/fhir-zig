@@ -2,11 +2,13 @@ const std = @import("std");
 // TODO: this crap needs to stream at some point, file in, ir streamed out
 
 const ir = @import("ir.zig");
+const utils = @import("utils.zig");
 
 const boxedFields = std.StaticStringMap(void).initComptime(.{
     .{ "Identifier.assigner", {} },
 });
 
+// TODO: Handle [x] fields...???
 // TODO: This dumpster does not handle bad json structure... at all
 pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, fhirTypesArr: *std.ArrayList(ir.FhirType), bundle: std.json.Parsed(std.json.Value)) !void {
     std.debug.print("Building IR from bundle...\n", .{});
@@ -30,7 +32,7 @@ pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, fhir
         };
 
         if (fhirType) |t| {
-            try fhirTypesArr.append(arena, t);
+            try parseBackbonelementsFromFhirTypes(arena, fhirTypesArr, t);
         }
     }
 }
@@ -50,6 +52,10 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     var fhirType: ?ir.FhirType = null;
 
     const id = resource.get("id").?.string;
+    // TODO: remove this, here for my sanity to focus on one thing at a time
+    if (!std.mem.containsAtLeast(u8, id, 1, "Patient")) {
+        return null;
+    }
     const resourceType = resource.get("resourceType").?.string;
 
     const resourceKindValue = resource.get("kind") orelse return error.NoKindOnResource;
@@ -65,8 +71,6 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     const description = if (resource.get("description")) |d| d.string else "";
 
     if (std.mem.eql(u8, resourceType, "StructureDefinition")) {
-        // std.debug.print("{s} - {s}\n", .{ id, resourceType });
-
         const elementsArr = resource.get("snapshot").?.object.get("element").?.array;
         var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, elementsArr.items.len);
         for (elementsArr.items) |element| {
@@ -131,6 +135,8 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
                         },
                         else => {},
                     }
+                } else if (typeArray.items.len > 1) {
+                    // TODO: handle this case
                 }
             },
             else => {},
@@ -150,26 +156,136 @@ fn stripTopLevelPrefix(path: []const u8, topLevelId: []const u8) []const u8 {
     return path;
 }
 
-fn attemptToRetrieveValueUrlFromExtension(extension: std.json.Value) !?[]const u8 {
-    const extensionArray = switch (extension) {
+fn attemptToRetrieveValueUrlFromExtension(extensionValue: std.json.Value) !?[]const u8 {
+    const extensionArray = switch (extensionValue) {
         .array => |a| a,
         else => return error.ExtensionIsNotAnArray,
     };
 
-    if (extensionArray.items.len == 0) {
-        return error.ExtensionArrayLenZero;
-    }
-
-    const extensionFirstItemObj = switch (extensionArray.items[0]) {
-        .object => |o| o,
-        else => return error.ExtensionFirstItemIsNotAnObject,
-    };
-
-    const maybeValue = extensionFirstItemObj.get("valueUrl");
-    if (maybeValue) |value| {
-        return value.string;
+    for (extensionArray.items) |extension| {
+        switch (extension) {
+            .object => |obj| {
+                if (obj.get("url")) |url| {
+                    if (std.mem.eql(u8, "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type", url.string)) {
+                        if (obj.get("valueUrl")) |value| {
+                            return value.string;
+                        }
+                    }
+                }
+            },
+            else => continue,
+        }
     }
 
     std.debug.print("value url not on extension, GFL\n", .{});
     return null;
+}
+
+fn parseBackbonelementsFromFhirTypes(
+    arena: std.mem.Allocator,
+    // Pointer to the fhirTypesArr that we're collecting all the fhir types into
+    fhirTypesArr: *std.ArrayList(ir.FhirType),
+    fhirType: ir.FhirType,
+) !void {
+    if (doesFhirTypeHaveBackboneElement(fhirType)) {
+        switch (fhirType) {
+            .structure => |fhirStruct| {
+                var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, fhirStruct.fields.len);
+                //
+                // DOD style crosswalk to index ref the fhirTypes
+                var fhirTypesLookup = try std.ArrayList([]const u8).initCapacity(arena, 5);
+                var fhirTypes = try std.ArrayList(ir.FhirType).initCapacity(arena, 5);
+
+                for (fhirStruct.fields) |field| {
+                    if (std.mem.containsAtLeast(u8, field.name, 1, ".")) {
+                        // TODO: Finish this impl
+                        for (fhirTypesLookup.items, 0..) |typeLookup, i| {
+                            if (std.mem.startsWith(u8, field.name, typeLookup)) {
+                                var fhirTypeToUpdate = fhirTypes.items[i];
+                                var typesArr = try std.ArrayList(ir.FhirField).initCapacity(arena, fhirTypeToUpdate.structure.fields.len);
+
+                                var updatedField = field;
+                                updatedField.name = field.name[typeLookup.len + 1 ..];
+
+                                try typesArr.appendSlice(arena, fhirTypeToUpdate.structure.fields);
+                                try typesArr.append(arena, updatedField);
+                                fhirTypeToUpdate.structure.fields = try typesArr.toOwnedSlice(arena);
+                                fhirTypes.items[i] = fhirTypeToUpdate;
+
+                                break;
+                            }
+                        }
+                    } else if (isFieldBackboneElement(field)) {
+                        var modField = field;
+                        try fhirTypesLookup.append(arena, modField.name);
+                        const newName = try buildBackboneElementStructName(arena, fhirStruct.name, modField.name);
+                        modField.type_ref = .{ .ref = newName };
+                        try fields.append(arena, modField);
+                        const newFhirType: ir.FhirType_Structure = .{
+                            .name = newName,
+                            .description = modField.description,
+                            .is_resource = false,
+                            .fields = &[_]ir.FhirField{},
+                        };
+                        try fhirTypes.append(arena, .{ .structure = newFhirType });
+                    } else {
+                        try fields.append(arena, field);
+                    }
+                }
+
+                var modFhirStruct = fhirStruct;
+                modFhirStruct.fields = try fields.toOwnedSlice(arena);
+                try fhirTypes.append(arena, .{ .structure = modFhirStruct });
+
+                try fhirTypesArr.appendSlice(arena, try fhirTypes.toOwnedSlice(arena));
+            },
+            else => {},
+        }
+
+        // TODO: We need to process the fhir type, rip out the backbone elements and add them as separate fhir types to the fhirTypesArr
+    } else {
+        try fhirTypesArr.append(arena, fhirType);
+    }
+}
+
+fn doesFhirTypeHaveBackboneElement(fhirType: ir.FhirType) bool {
+    switch (fhirType) {
+        .structure => |fhirStruct| {
+            for (fhirStruct.fields) |field| {
+                switch (field.type_ref) {
+                    .ref => |r| {
+                        if (std.mem.eql(u8, r, "BackboneElement")) {
+                            return true;
+                        }
+                    },
+                    else => {},
+                }
+            }
+        },
+        // TODO: Can anything else have BackboneElements?
+        else => {},
+    }
+
+    return false;
+}
+
+fn isFieldBackboneElement(fhirType: ir.FhirField) bool {
+    switch (fhirType.type_ref) {
+        .ref => |r| {
+            if (std.mem.eql(u8, r, "BackboneElement")) {
+                return true;
+            }
+        },
+        else => {},
+    }
+
+    return false;
+}
+
+fn buildBackboneElementStructName(arena: std.mem.Allocator, topLevelName: []const u8, elementName: []const u8) ![]const u8 {
+    const tln = try utils.capitalizeFirstLetter(arena, topLevelName);
+    const en = try utils.capitalizeFirstLetter(arena, elementName);
+
+    const parts = &[_][]const u8{ tln, "_", en };
+    return try std.mem.concat(arena, u8, parts);
 }
