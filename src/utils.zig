@@ -88,3 +88,10 @@ pub fn doesStartWithBadChar(name: []const u8) bool {
     }
     return false;
 }
+
+pub fn capitalizeFirstLetter(arena: std.mem.Allocator, s: []const u8) ![]const u8 {
+    if (s.len == 0) return s;
+    var capitalized = try arena.dupe(u8, s);
+    capitalized[0] = std.ascii.toUpper(s[0]);
+    return capitalized;
+}
