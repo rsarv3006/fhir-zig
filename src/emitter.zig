@@ -58,7 +58,7 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
     const name = try getSanitizedName(arena, fhirStruct.name);
     const parts = &[_][]const u8{ description, "\n", "pub const ", name, " = struct {\n" };
 
-    var buffer = try std.ArrayList(u8).initCapacity(arena, name.len + description.len + fhirStruct.fields.len * 20 + 20);
+    var buffer = try std.ArrayList(u8).initCapacity(arena, name.len + description.len + fhirStruct.fields.items.len * 20 + 20);
     try buffer.appendSlice(arena, try std.mem.concat(arena, u8, parts));
 
     if (fhirStruct.is_resource) {
@@ -66,7 +66,7 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
         try buffer.appendSlice(arena, try std.mem.concat(arena, u8, isResourceParts));
     }
 
-    for (fhirStruct.fields) |field| {
+    for (fhirStruct.fields.items) |field| {
         const sanitizedFieldName = try getSanitizedName(arena, field.name);
         const sanitizedFieldDescription = try getSanitizedDescription(arena, field.description);
 
@@ -181,10 +181,10 @@ fn getSanitizedDescription(arena: std.mem.Allocator, description: ?[]const u8) !
         return "";
     }
 
-    // 5 is a WAG here for extra space needed by the slashes
-    var sanitizedDescriptionBuffer = try std.ArrayList(u8).initCapacity(arena, nonNullDescription.len + 5);
+    // Hardcoded int is a WAG here for extra space needed by the slashes
+    var sanitizedDescriptionBuffer = try std.ArrayList(u8).initCapacity(arena, nonNullDescription.len + 16);
 
-    try sanitizedDescriptionBuffer.appendSlice(arena, "/// ");
+    try sanitizedDescriptionBuffer.appendSlice(arena, "    /// ");
     for (nonNullDescription) |descrByte| {
         if (descrByte == '\t' or descrByte == '\r') {
             try sanitizedDescriptionBuffer.appendSlice(arena, " ");
@@ -192,7 +192,7 @@ fn getSanitizedDescription(arena: std.mem.Allocator, description: ?[]const u8) !
             try sanitizedDescriptionBuffer.append(arena, descrByte);
         }
         if (descrByte == '\n') {
-            try sanitizedDescriptionBuffer.appendSlice(arena, "/// ");
+            try sanitizedDescriptionBuffer.appendSlice(arena, "    /// ");
         }
     }
 

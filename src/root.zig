@@ -50,7 +50,7 @@ const emitter = @import("emitter.zig");
 
 // pub fn emitFhirR4Types(arena: std.mem.Allocator, initIo: Io) !void {
 //     const inputPath = "schemas/schema-json-r4/fhir.schema.json/fhir.schema.json";
-//     try emitFhirTypes(arena, initIo, inputPath, "fhir_r4.zig");
+//     try emitFhirTypes(arena, initIo, inputPath, "fhir_r4-dont-trust.zig");
 // }
 
 // pub fn emitFhirR5Types(arena: std.mem.Allocator, initIo: Io) !void {
@@ -76,9 +76,8 @@ pub fn testRepFromBundle(arena: std.mem.Allocator, initIo: Io) !void {
 
     const resourcesParsed = try std.json.parseFromSlice(std.json.Value, arena, buffer, .{});
     // Ballpark number based on 680 * 2
-    var fhirTypesArr = try std.ArrayList(irTypes.FhirType).initCapacity(arena, 1360);
 
-    try ir.buildIntermediateRepresentationFromBundles(arena, &fhirTypesArr, resourcesParsed);
+    var fhirTypesArr = try ir.buildIntermediateRepresentationFromBundles(arena, resourcesParsed);
 
     const typesFile = try dir.openFile(initIo, "schemas/schema-json-r4/profiles-types.json", .{});
     defer typesFile.close(initIo);
@@ -90,7 +89,8 @@ pub fn testRepFromBundle(arena: std.mem.Allocator, initIo: Io) !void {
     try typesReader.readSliceAll(buffer);
 
     const typesParsed = try std.json.parseFromSlice(std.json.Value, arena, buffer, .{});
-    try ir.buildIntermediateRepresentationFromBundles(arena, &fhirTypesArr, typesParsed);
+    const typesIr = try ir.buildIntermediateRepresentationFromBundles(arena, typesParsed);
+    try fhirTypesArr.appendSlice(arena, typesIr.items);
 
     const out_file = try dir.createFile(initIo, "ir-rep.debug.json", .{});
     defer out_file.close(initIo);
@@ -101,4 +101,20 @@ pub fn testRepFromBundle(arena: std.mem.Allocator, initIo: Io) !void {
 
     try std.json.Stringify.value(fhirTypesArr.items, .{ .whitespace = .indent_2 }, writer);
     try writer.flush();
+
+    const emitted = try emitter.emit(arena, fhirTypesArr);
+
+    std.debug.print("emitted - {d}\n", .{emitted.len});
+
+    var output_dir: std.Io.Dir = try cwd.openDir(initIo, "output", .{});
+    defer output_dir.close(initIo);
+
+    const irFile: std.Io.File = try output_dir.createFile(initIo, "fhir_r4-dont-trust.zig", .{});
+    defer irFile.close(initIo);
+
+    var file_writer = irFile.writer(initIo, &.{});
+    const writerZigOut = &file_writer.interface;
+
+    const byte_written = try writerZigOut.write(emitted);
+    std.debug.print("Successfully wrote {d} bytes.\n", .{byte_written});
 }
