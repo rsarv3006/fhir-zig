@@ -1,6 +1,8 @@
 // TODO:: set description field on needed fields
 // TODO:: make sure pattern is set where it's available
 
+const std = @import("std");
+
 pub const FhirType_Primitive = struct {
     pattern: ?[]const u8,
     name: []const u8,
@@ -10,7 +12,7 @@ pub const FhirType_Primitive = struct {
 pub const FhirType_Structure = struct {
     name: []const u8,
     description: ?[]const u8,
-    fields: []FhirField,
+    fields: std.ArrayList(FhirField),
     is_resource: bool,
 };
 
