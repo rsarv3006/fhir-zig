@@ -30,7 +30,7 @@ pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, bund
 
     for (entryArray.items) |entry| {
         const fhirType = parseEntryFromBundle(arena, entry) catch {
-            std.debug.print("Error parsing entry from bundle", .{});
+            std.debug.print("Error parsing entry from bundle\n", .{});
             continue;
         };
 
@@ -42,10 +42,9 @@ pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, bund
     var proccessedCount: usize = 0;
 
     while (proccessedCount < fhirTypesArr.items.len) {
-        std.debug.print("while loop... {d}\n", .{proccessedCount});
+        std.debug.print("processing for backbone elements... {d}\n", .{proccessedCount});
         const end = fhirTypesArr.items.len;
         for (fhirTypesArr.items[proccessedCount..end], proccessedCount..) |_, index| {
-            std.debug.print("inside for loop - {d}\n", .{index});
             try parseBackbonelementsFromFhirTypes(arena, &fhirTypesArr, index);
         }
         proccessedCount = end;
@@ -123,12 +122,18 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
 
     var fieldType: ir.FieldType = .{ .primitive = "unknown" };
 
-    if (element.object.get("contentReference")) |_| {
-        // TODO: figure out content reference
-        std.debug.print("has content reference value, figure it out - {s}\n ", .{id});
-    }
+    if (element.object.get("contentReference")) |contentRef| {
+        switch (contentRef) {
+            .string => |contentReferenceString| {
+                const cleanedRefStr = cleanRef(contentReferenceString);
 
-    if (element.object.get("type")) |elementTypeValue| {
+                const structName = try contentReferenceStringToRefStructName(arena, cleanedRefStr);
+
+                fieldType = .{ .ref = structName };
+            },
+            else => {},
+        }
+    } else if (element.object.get("type")) |elementTypeValue| {
         switch (elementTypeValue) {
             .array => |typeArray| {
                 if (typeArray.items.len == 1) {
@@ -296,4 +301,26 @@ fn buildBackboneElementStructName(arena: std.mem.Allocator, topLevelName: []cons
 
     const parts = &[_][]const u8{ tln, "_", en };
     return try std.mem.concat(arena, u8, parts);
+}
+
+fn cleanRef(ref: []const u8) []const u8 {
+    const prefix = "#";
+    if (std.mem.startsWith(u8, ref, prefix)) {
+        return ref[prefix.len..];
+    } else {
+        return ref;
+    }
+}
+
+fn contentReferenceStringToRefStructName(arena: std.mem.Allocator, contentRefStr: []const u8) ![]const u8 {
+    var copy = try arena.dupe(u8, contentRefStr);
+    for (contentRefStr, 0..) |_, idx| {
+        const thing = contentRefStr[idx];
+        if (thing == '.') {
+            copy[idx] = '_';
+            if (idx + 1 >= contentRefStr.len) return error.MalformedContentReference;
+            copy[idx + 1] = std.ascii.toUpper(contentRefStr[idx + 1]);
+        }
+    }
+    return copy;
 }

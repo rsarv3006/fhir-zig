@@ -28,4 +28,4 @@ curl -o r5schemajson.zip https://hl7.org/fhir/R5/definitions.json.zip
 ## TODO
 
 - primitive sibling element fields are missing for everything
-- brute forcing our IR loop through nested Backbone Elements, using arraylists, a bit memory intensive I'm sure there's a more elegant way to handle that
+- this thing is about as robust as tissue paper in a hurricane, intermediate representation needs better json validation and error handling
