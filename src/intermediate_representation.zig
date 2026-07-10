@@ -39,19 +39,16 @@ pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, bund
         }
     }
 
-    // TODO: Not same len is not a good yardstick for changes long term
-    var notSameLen: bool = true;
-    var newFhirTypesArr = try std.ArrayList(ir.FhirType).initCapacity(arena, fhirTypesArr.items.len);
+    var proccessedCount: usize = 0;
 
-    while (notSameLen) {
-        for (fhirTypesArr.items) |item| {
-            try parseBackbonelementsFromFhirTypes(arena, &newFhirTypesArr, item);
+    while (proccessedCount < fhirTypesArr.items.len) {
+        std.debug.print("while loop... {d}\n", .{proccessedCount});
+        const end = fhirTypesArr.items.len;
+        for (fhirTypesArr.items[proccessedCount..end], proccessedCount..) |_, index| {
+            std.debug.print("inside for loop - {d}\n", .{index});
+            try parseBackbonelementsFromFhirTypes(arena, &fhirTypesArr, index);
         }
-        if (fhirTypesArr.items.len == newFhirTypesArr.items.len) {
-            notSameLen = false;
-        }
-        fhirTypesArr = newFhirTypesArr;
-        newFhirTypesArr = try std.ArrayList(ir.FhirType).initCapacity(arena, fhirTypesArr.items.len);
+        proccessedCount = end;
     }
 
     return fhirTypesArr;
@@ -72,10 +69,7 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     var fhirType: ?ir.FhirType = null;
 
     const id = resource.get("id").?.string;
-    // TODO: remove this, here for my sanity to focus on one thing at a time
-    if (!std.mem.startsWith(u8, id, "Claim") and !std.mem.startsWith(u8, id, "ElementDefinition")) {
-        return null;
-    }
+
     const resourceType = resource.get("resourceType").?.string;
 
     const resourceKindValue = resource.get("kind") orelse return error.NoKindOnResource;
@@ -206,8 +200,9 @@ fn parseBackbonelementsFromFhirTypes(
     arena: std.mem.Allocator,
     // Pointer to the fhirTypesArr that we're collecting all the fhir types into
     fhirTypesArr: *std.ArrayList(ir.FhirType),
-    fhirType: ir.FhirType,
+    fhirTypeIdx: usize,
 ) !void {
+    const fhirType = fhirTypesArr.items[fhirTypeIdx];
     if (doesFhirTypeHaveBackboneElement(fhirType)) {
         switch (fhirType) {
             .structure => |fhirStruct| {
@@ -219,8 +214,6 @@ fn parseBackbonelementsFromFhirTypes(
 
                 for (fhirStruct.fields.items) |field| {
                     if (std.mem.containsAtLeast(u8, field.name, 1, ".")) {
-                        // TODO: We need to handle if this sub thingy is also a Backbone Element cause apparently that's a thing... wat!
-                        // TODO: Finish this impl
                         for (fhirTypesLookup.items, 0..) |typeLookup, i| {
                             if (std.mem.startsWith(u8, field.name, typeLookup)) {
                                 var fhirTypeToUpdate = fhirTypes.items[i];
@@ -254,14 +247,12 @@ fn parseBackbonelementsFromFhirTypes(
 
                 var modFhirStruct = fhirStruct;
                 modFhirStruct.fields = fields;
-                try fhirTypes.append(arena, .{ .structure = modFhirStruct });
+                fhirTypesArr.items[fhirTypeIdx] = .{ .structure = modFhirStruct };
 
                 try fhirTypesArr.appendSlice(arena, try fhirTypes.toOwnedSlice(arena));
             },
             else => {},
         }
-    } else {
-        try fhirTypesArr.append(arena, fhirType);
     }
 }
 
