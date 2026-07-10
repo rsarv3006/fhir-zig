@@ -1145,7 +1145,7 @@ pub const ClaimResponse = struct {
         /// The first-tier service adjudications for payor added product or service lines.
     addItem: ?[] const ClaimResponse_AddItem = null,
         /// The adjudication results which are presented at the header level rather than at the line-item or add-item levels.
-    adjudication: ?[] const unknown = null,
+    adjudication: ?[] const ClaimResponse_Item_Adjudication = null,
         /// Categorized monetary totals for the adjudication.
     total: ?[] const ClaimResponse_Total = null,
         /// Payment details for the adjudication of the claim.
@@ -3239,7 +3239,7 @@ pub const ExplanationOfBenefit = struct {
         /// The first-tier service adjudications for payor added product or service lines.
     addItem: ?[] const ExplanationOfBenefit_AddItem = null,
         /// The adjudication results which are presented at the header level rather than at the line-item or add-item levels.
-    adjudication: ?[] const unknown = null,
+    adjudication: ?[] const ExplanationOfBenefit_Item_Adjudication = null,
         /// Categorized monetary totals for the adjudication.
     total: ?[] const ExplanationOfBenefit_Total = null,
         /// Payment details for the adjudication of the claim.
@@ -4025,7 +4025,7 @@ pub const Invoice = struct {
         /// Each line item represents one charge for goods and services rendered. Details such as date, code and amount are found in the referenced ChargeItem resource.
     lineItem: ?[] const Invoice_LineItem = null,
         /// The total amount for the Invoice may be calculated as the sum of the line items with surcharges/deductions that apply in certain conditions.  The priceComponent element can be used to offer transparency to the recipient of the Invoice of how the total price was calculated.
-    totalPriceComponent: ?[] const unknown = null,
+    totalPriceComponent: ?[] const Invoice_LineItem_PriceComponent = null,
         /// Invoice total , taxes excluded.
     totalNet: ?Money = null,
         /// Invoice total, tax included.
@@ -7870,7 +7870,7 @@ pub const SubstanceSpecification = struct {
         /// Names applicable to this substance.
     name: ?[] const SubstanceSpecification_Name = null,
         /// The molecular weight or weight range (for proteins, polymers or nucleic acids).
-    molecularWeight: ?[] const unknown = null,
+    molecularWeight: ?[] const SubstanceSpecification_Structure_Isotope_MolecularWeight = null,
         /// A link between this substance and another, with details of the relationship.
     relationship: ?[] const SubstanceSpecification_Relationship = null,
         /// Data items specific to nucleic acids.
@@ -8791,7 +8791,7 @@ pub const Bundle_Entry = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[] const Extension = null,
         /// A series of links that provide context to this entry.
-    link: ?[] const unknown = null,
+    link: ?[] const Bundle_Link = null,
         /// The Absolute URL for the resource.  The fullUrl SHALL NOT disagree with the id in the resource - i.e. if the fullUrl is not a urn:uuid, the URL shall be version-independent URL consistent with the Resource.id. The fullUrl is a version independent reference to the resource. The fullUrl element SHALL have a value except that: 
     /// * fullUrl can be empty on a POST (although it does not need to when specifying a temporary id for reference in the bundle)
     /// * Results from operations might involve resources that are not identified.
@@ -8866,9 +8866,9 @@ pub const CapabilityStatement_Rest = struct {
         /// A specification of restful operations supported by the system.
     interaction: ?[] const CapabilityStatement_Rest_Interaction = null,
         /// Search parameters that are supported for searching all resources for implementations to support and/or make use of - either references to ones defined in the specification, or additional ones defined for/by the implementation.
-    searchParam: ?[] const unknown = null,
+    searchParam: ?[] const CapabilityStatement_Rest_Resource_SearchParam = null,
         /// Definition of an operation or a named query together with its parameters and their meaning and type.
-    operation: ?[] const unknown = null,
+    operation: ?[] const CapabilityStatement_Rest_Resource_Operation = null,
         /// An absolute URI which is a reference to the definition of a compartment that the system supports. The reference is to a CompartmentDefinition resource by its canonical URL .
     compartment: ?[] const canonical = null,
 
@@ -9022,7 +9022,7 @@ pub const ChargeItemDefinition_PropertyGroup = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[] const Extension = null,
         /// Expressions that describe applicability criteria for the priceComponent.
-    applicability: ?[] const unknown = null,
+    applicability: ?[] const ChargeItemDefinition_Applicability = null,
         /// The price for a ChargeItem may be calculated as a base price with surcharges/deductions that apply in certain conditions. A ChargeItemDefinition resource that defines the prices, factors and conditions that apply to a billing code is currently under development. The priceComponent element can be used to offer transparency to the recipient of the Invoice of how the prices have been calculated.
     priceComponent: ?[] const ChargeItemDefinition_PropertyGroup_PriceComponent = null,
 
@@ -9323,7 +9323,7 @@ pub const ClaimResponse_AddItem = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: [] const unknown,
+    adjudication: [] const ClaimResponse_Item_Adjudication,
         /// The second-tier service adjudications for payor added services.
     detail: ?[] const ClaimResponse_AddItem_Detail = null,
 
@@ -9535,7 +9535,7 @@ pub const CodeSystem_Concept = struct {
         /// A property value for this concept.
     property: ?[] const CodeSystem_Concept_Property = null,
         /// Defines children of a concept to produce a hierarchy of concepts. The nature of the relationships is variable (is-a/contains/categorizes) - see hierarchyMeaning.
-    concept: ?[] const unknown = null,
+    concept: ?[] const CodeSystem_Concept = null,
 
 };
 
@@ -9672,7 +9672,7 @@ pub const Composition_Section = struct {
         /// If the section is empty, why the list is empty. An empty section typically has some text explaining the empty reason.
     emptyReason: ?CodeableConcept = null,
         /// A nested sub-section within this section.
-    section: ?[] const unknown = null,
+    section: ?[] const Composition_Section = null,
 
 };
 
@@ -9804,7 +9804,7 @@ pub const Consent_Provision = struct {
         /// The resources controlled by this rule if specific resources are referenced.
     data: ?[] const Consent_Provision_Data = null,
         /// Rules which provide exceptions to the base rule or subrules.
-    provision: ?[] const unknown = null,
+    provision: ?[] const Consent_Provision = null,
 
 };
 
@@ -9866,7 +9866,7 @@ pub const Contract_Term = struct {
         /// An actor taking a role in an activity for which it can be assigned some degree of responsibility for the activity taking place.
     action: ?[] const Contract_Term_Action = null,
         /// Nested group of Contract Provisions.
-    group: ?[] const unknown = null,
+    group: ?[] const Contract_Term = null,
 
 };
 
@@ -11071,7 +11071,7 @@ pub const ExplanationOfBenefit_AddItem = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: ?[] const unknown = null,
+    adjudication: ?[] const ExplanationOfBenefit_Item_Adjudication = null,
         /// The second-tier service adjudications for payor added services.
     detail: ?[] const ExplanationOfBenefit_AddItem_Detail = null,
 
@@ -12279,7 +12279,7 @@ pub const MedicinalProductAuthorization_Procedure = struct {
         /// Date of procedure.
     date[x]: ?unknown = null,
         /// Applcations submitted to obtain a marketing authorization.
-    application: ?[] const unknown = null,
+    application: ?[] const MedicinalProductAuthorization_Procedure = null,
 
 };
 
@@ -12351,7 +12351,7 @@ pub const MedicinalProductIngredient_Substance = struct {
         /// The ingredient substance.
     code: CodeableConcept,
         /// Quantity of the substance or specified substance present in the manufactured item or pharmaceutical product.
-    strength: ?[] const unknown = null,
+    strength: ?[] const MedicinalProductIngredient_SpecifiedSubstance_Strength = null,
 
 };
 
@@ -12412,7 +12412,7 @@ pub const MedicinalProductPackaged_PackageItem = struct {
         /// The manufactured item as contained in the packaged medicinal product.
     manufacturedItem: ?[] const Reference = null,
         /// Allows containers within containers.
-    packageItem: ?[] const unknown = null,
+    packageItem: ?[] const MedicinalProductPackaged_PackageItem = null,
         /// Dimensions, color etc.
     physicalCharacteristics: ?ProdCharacteristic = null,
         /// Other codeable characteristics.
@@ -12862,7 +12862,7 @@ pub const Observation_Component = struct {
         /// A categorical assessment of an observation value.  For example, high, low, normal.
     interpretation: ?[] const CodeableConcept = null,
         /// Guidance on how to interpret the value by comparison to a normal or recommended range.
-    referenceRange: ?[] const unknown = null,
+    referenceRange: ?[] const Observation_ReferenceRange = null,
 
 };
 
@@ -12947,7 +12947,7 @@ pub const OperationDefinition_Parameter = struct {
         /// Identifies other resource parameters within the operation invocation that are expected to resolve to this resource.
     referencedFrom: ?[] const OperationDefinition_Parameter_ReferencedFrom = null,
         /// The parts of a nested Parameter.
-    part: ?[] const unknown = null,
+    part: ?[] const OperationDefinition_Parameter = null,
 
 };
 
@@ -13033,7 +13033,7 @@ pub const Parameters_Parameter = struct {
         /// If the parameter is a whole resource.
     resource: ?Resource = null,
         /// A named part of a multi-part parameter.
-    part: ?[] const unknown = null,
+    part: ?[] const Parameters_Parameter = null,
 
 };
 
@@ -13255,7 +13255,7 @@ pub const PlanDefinition_Action = struct {
         /// Customizations that should be applied to the statically defined resource. For example, if the dosage of a medication must be computed based on the patient's weight, a customization would be used to specify an expression that calculated the weight, and the path on the resource that would contain the result.
     dynamicValue: ?[] const PlanDefinition_Action_DynamicValue = null,
         /// Sub actions that are contained within the action. The behavior of this action determines the functionality of the sub-actions. For example, a selection behavior of at-most-one indicates that of the sub-actions, at most one may be chosen as part of realizing the action definition.
-    action: ?[] const unknown = null,
+    action: ?[] const PlanDefinition_Action = null,
 
 };
 
@@ -13390,7 +13390,7 @@ pub const Provenance_Entity = struct {
         /// Identity of the  Entity used. May be a logical or physical uri and maybe absolute or relative.
     what: Reference,
         /// The entity is attributed to an agent to express the agent's responsibility for that entity, possibly along with other agents. This description can be understood as shorthand for saying that the agent was responsible for the activity which generated the entity.
-    agent: ?[] const unknown = null,
+    agent: ?[] const Provenance_Agent = null,
 
 };
 
@@ -13443,7 +13443,7 @@ pub const Questionnaire_Item = struct {
         /// One or more values that should be pre-populated in the answer when initially rendering the questionnaire for user input.
     initial: ?[] const Questionnaire_Item_Initial = null,
         /// Text, questions and other groups to be nested beneath a question or group.
-    item: ?[] const unknown = null,
+    item: ?[] const Questionnaire_Item = null,
 
 };
 
@@ -13466,7 +13466,7 @@ pub const QuestionnaireResponse_Item = struct {
         /// The respondent's answer(s) to the question.
     answer: ?[] const QuestionnaireResponse_Item_Answer = null,
         /// Questions or sub-groups nested beneath a question or group.
-    item: ?[] const unknown = null,
+    item: ?[] const QuestionnaireResponse_Item = null,
 
 };
 
@@ -13534,7 +13534,7 @@ pub const RequestGroup_Action = struct {
         /// The resource that is the target of the action (e.g. CommunicationRequest).
     resource: ?Reference = null,
         /// Sub actions.
-    action: ?[] const unknown = null,
+    action: ?[] const RequestGroup_Action = null,
 
 };
 
@@ -14309,7 +14309,7 @@ pub const SubstanceSpecification_Structure = struct {
         /// Applicable for single substances that contain a radionuclide or a non-natural isotopic ratio.
     isotope: ?[] const SubstanceSpecification_Structure_Isotope = null,
         /// The molecular weight or weight range (for proteins, polymers or nucleic acids).
-    molecularWeight: ?unknown = null,
+    molecularWeight: ?SubstanceSpecification_Structure_Isotope_MolecularWeight = null,
         /// Supporting literature.
     source: ?[] const Reference = null,
         /// Molecular structural representation.
@@ -14365,9 +14365,9 @@ pub const SubstanceSpecification_Name = struct {
         /// The jurisdiction where this name applies.
     jurisdiction: ?[] const CodeableConcept = null,
         /// A synonym of this name.
-    synonym: ?[] const unknown = null,
+    synonym: ?[] const SubstanceSpecification_Name = null,
         /// A translation for this name.
-    translation: ?[] const unknown = null,
+    translation: ?[] const SubstanceSpecification_Name = null,
         /// Details of the official nature of this name.
     official: ?[] const SubstanceSpecification_Name_Official = null,
         /// Supporting literature.
@@ -14843,7 +14843,7 @@ pub const ValueSet_Compose = struct {
         /// Include one or more codes from a code system or other value set(s).
     include: [] const ValueSet_Compose_Include,
         /// Exclude one or more codes from the value set based on code system filters and/or other value sets.
-    exclude: ?[] const unknown = null,
+    exclude: ?[] const ValueSet_Compose_Include = null,
 
 };
 
@@ -15366,7 +15366,7 @@ pub const ClaimResponse_Item_Detail = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: [] const unknown,
+    adjudication: [] const ClaimResponse_Item_Adjudication,
         /// A sub-detail adjudication of a simple product or service.
     subDetail: ?[] const ClaimResponse_Item_Detail_SubDetail = null,
 
@@ -15397,7 +15397,7 @@ pub const ClaimResponse_AddItem_Detail = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: [] const unknown,
+    adjudication: [] const ClaimResponse_Item_Adjudication,
         /// The third-tier service adjudications for payor added services.
     subDetail: ?[] const ClaimResponse_AddItem_Detail_SubDetail = null,
 
@@ -15602,7 +15602,7 @@ pub const Contract_Term_Asset = struct {
         /// Id [identifier??] of the clause or question text about the asset in the referenced form or QuestionnaireResponse.
     linkId: ?[] const string = null,
         /// Response to assets.
-    answer: ?[] const unknown = null,
+    answer: ?[] const Contract_Term_Offer_Answer = null,
         /// Security labels that protects the asset.
     securityLabelNumber: ?[] const unsignedInt = null,
         /// Contract Valued Item List.
@@ -15823,7 +15823,7 @@ pub const ExampleScenario_Process_Step = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[] const Extension = null,
         /// Nested process.
-    process: ?[] const unknown = null,
+    process: ?[] const ExampleScenario_Process = null,
         /// If there is a pause in the flow.
     pause: ?boolean = null,
         /// Each interaction or action.
@@ -15889,7 +15889,7 @@ pub const ExplanationOfBenefit_Item_Detail = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: ?[] const unknown = null,
+    adjudication: ?[] const ExplanationOfBenefit_Item_Adjudication = null,
         /// Third-tier of goods and services.
     subDetail: ?[] const ExplanationOfBenefit_Item_Detail_SubDetail = null,
 
@@ -15920,7 +15920,7 @@ pub const ExplanationOfBenefit_AddItem_Detail = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: ?[] const unknown = null,
+    adjudication: ?[] const ExplanationOfBenefit_Item_Adjudication = null,
         /// The third-tier service adjudications for payor added services.
     subDetail: ?[] const ExplanationOfBenefit_AddItem_Detail_SubDetail = null,
 
@@ -15964,7 +15964,7 @@ pub const GraphDefinition_Link_Target = struct {
         /// Compartment Consistency Rules.
     compartment: ?[] const GraphDefinition_Link_Target_Compartment = null,
         /// Additional links from target resource.
-    link: ?[] const unknown = null,
+    link: ?[] const GraphDefinition_Link = null,
 
 };
 
@@ -16082,7 +16082,7 @@ pub const ImplementationGuide_Definition_Page = struct {
         /// A code that indicates how the page is generated.
     generation: code,
         /// Nested Pages/Sections under this page.
-    page: ?[] const unknown = null,
+    page: ?[] const ImplementationGuide_Definition_Page = null,
 
 };
 
@@ -16795,7 +16795,7 @@ pub const QuestionnaireResponse_Item_Answer = struct {
         /// The answer (or one of the answers) provided by the respondent to the question.
     value[x]: ?unknown = null,
         /// Nested groups and/or questions found within this particular answer.
-    item: ?[] const unknown = null,
+    item: ?[] const QuestionnaireResponse_Item = null,
 
 };
 
@@ -16963,7 +16963,7 @@ pub const StructureMap_Group_Rule = struct {
         /// Content to create because of this mapping rule.
     target: ?[] const StructureMap_Group_Rule_Target = null,
         /// Rules contained in this rule.
-    rule: ?[] const unknown = null,
+    rule: ?[] const StructureMap_Group_Rule = null,
         /// Which other rules to apply in the context of this rule.
     dependent: ?[] const StructureMap_Group_Rule_Dependent = null,
         /// Documentation for this instance of data.
@@ -17247,9 +17247,9 @@ pub const TestReport_Test_Action = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[] const Extension = null,
         /// An operation would involve a REST request to a server.
-    operation: ?unknown = null,
+    operation: ?TestReport_Setup_Action_Operation = null,
         /// The results of the assertion performed on the previous operations.
-    assert: ?unknown = null,
+    assert: ?TestReport_Setup_Action_Assert = null,
 
 };
 
@@ -17264,7 +17264,7 @@ pub const TestReport_Teardown_Action = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[] const Extension = null,
         /// An operation would involve a REST request to a server.
-    operation: unknown,
+    operation: TestReport_Setup_Action_Operation,
 
 };
 
@@ -17340,9 +17340,9 @@ pub const TestScript_Test_Action = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[] const Extension = null,
         /// An operation would involve a REST request to a server.
-    operation: ?unknown = null,
+    operation: ?TestScript_Setup_Action_Operation = null,
         /// Evaluates the results of previous operations to determine if the server under test behaves appropriately.
-    assert: ?unknown = null,
+    assert: ?TestScript_Setup_Action_Assert = null,
 
 };
 
@@ -17357,7 +17357,7 @@ pub const TestScript_Teardown_Action = struct {
     /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
     modifierExtension: ?[] const Extension = null,
         /// An operation would involve a REST request to a server.
-    operation: unknown,
+    operation: TestScript_Setup_Action_Operation,
 
 };
 
@@ -17424,9 +17424,9 @@ pub const ValueSet_Expansion_Contains = struct {
         /// The recommended display for this item in the expansion.
     display: ?string = null,
         /// Additional representations for this item - other languages, aliases, specialized purposes, used for particular purposes, etc. These are relevant when the conditions of the expansion do not fix to a single correct representation.
-    designation: ?[] const unknown = null,
+    designation: ?[] const ValueSet_Compose_Include_Concept_Designation = null,
         /// Other codes and entries contained under this entry in the hierarchy.
-    contains: ?[] const unknown = null,
+    contains: ?[] const ValueSet_Expansion_Contains = null,
 
 };
 
@@ -17554,7 +17554,7 @@ pub const ClaimResponse_Item_Detail_SubDetail = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: ?[] const unknown = null,
+    adjudication: ?[] const ClaimResponse_Item_Adjudication = null,
 
 };
 
@@ -17583,7 +17583,7 @@ pub const ClaimResponse_AddItem_Detail_SubDetail = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: [] const unknown,
+    adjudication: [] const ClaimResponse_Item_Adjudication,
 
 };
 
@@ -17608,7 +17608,7 @@ pub const ConceptMap_Group_Element_Target = struct {
         /// A set of additional dependencies for this mapping to hold. This mapping is only applicable if the specified element can be resolved, and it has the specified value.
     dependsOn: ?[] const ConceptMap_Group_Element_Target_DependsOn = null,
         /// A set of additional outcomes from this mapping to other elements. To properly execute this mapping, the specified element must be mapped to some data element or source that is in context. The mapping may still be useful without a place for the additional data elements, but the equivalence cannot be relied on.
-    product: ?[] const unknown = null,
+    product: ?[] const ConceptMap_Group_Element_Target_DependsOn = null,
 
 };
 
@@ -17767,9 +17767,9 @@ pub const ExampleScenario_Process_Step_Operation = struct {
         /// Whether the receiver is deactivated right after the transaction.
     receiverActive: ?boolean = null,
         /// Each resource instance used by the initiator.
-    request: ?unknown = null,
+    request: ?ExampleScenario_Instance_ContainedInstance = null,
         /// Each resource instance used by the responder.
-    response: ?unknown = null,
+    response: ?ExampleScenario_Instance_ContainedInstance = null,
 
 };
 
@@ -17788,7 +17788,7 @@ pub const ExampleScenario_Process_Step_Alternative = struct {
         /// A human-readable description of the alternative explaining when the alternative should occur rather than the base step.
     description: ?markdown = null,
         /// What happens in each alternative option.
-    step: ?[] const unknown = null,
+    step: ?[] const ExampleScenario_Process_Step = null,
 
 };
 
@@ -17827,7 +17827,7 @@ pub const ExplanationOfBenefit_Item_Detail_SubDetail = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: ?[] const unknown = null,
+    adjudication: ?[] const ExplanationOfBenefit_Item_Adjudication = null,
 
 };
 
@@ -17856,7 +17856,7 @@ pub const ExplanationOfBenefit_AddItem_Detail_SubDetail = struct {
         /// The numbers associated with notes below which apply to the adjudication of this item.
     noteNumber: ?[] const positiveInt = null,
         /// The adjudication results.
-    adjudication: ?[] const unknown = null,
+    adjudication: ?[] const ExplanationOfBenefit_Item_Adjudication = null,
 
 };
 

@@ -6153,7 +6153,7 @@
             "name": "adjudication",
             "description": "The adjudication results which are presented at the header level rather than at the line-item or add-item levels.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ClaimResponse_Item_Adjudication"
             },
             "is_optional": true,
             "is_slice": true,
@@ -17493,7 +17493,7 @@
             "name": "adjudication",
             "description": "The adjudication results which are presented at the header level rather than at the line-item or add-item levels.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExplanationOfBenefit_Item_Adjudication"
             },
             "is_optional": true,
             "is_slice": true,
@@ -21705,7 +21705,7 @@
             "name": "totalPriceComponent",
             "description": "The total amount for the Invoice may be calculated as the sum of the line items with surcharges/deductions that apply in certain conditions.  The priceComponent element can be used to offer transparency to the recipient of the Invoice of how the total price was calculated.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Invoice_LineItem_PriceComponent"
             },
             "is_optional": true,
             "is_slice": true,
@@ -42225,7 +42225,7 @@
             "name": "molecularWeight",
             "description": "The molecular weight or weight range (for proteins, polymers or nucleic acids).",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "SubstanceSpecification_Structure_Isotope_MolecularWeight"
             },
             "is_optional": true,
             "is_slice": true,
@@ -46905,7 +46905,7 @@
             "name": "link",
             "description": "A series of links that provide context to this entry.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Bundle_Link"
             },
             "is_optional": true,
             "is_slice": true,
@@ -47253,7 +47253,7 @@
             "name": "searchParam",
             "description": "Search parameters that are supported for searching all resources for implementations to support and/or make use of - either references to ones defined in the specification, or additional ones defined for/by the implementation.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "CapabilityStatement_Rest_Resource_SearchParam"
             },
             "is_optional": true,
             "is_slice": true,
@@ -47265,7 +47265,7 @@
             "name": "operation",
             "description": "Definition of an operation or a named query together with its parameters and their meaning and type.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "CapabilityStatement_Rest_Resource_Operation"
             },
             "is_optional": true,
             "is_slice": true,
@@ -47949,7 +47949,7 @@
             "name": "applicability",
             "description": "Expressions that describe applicability criteria for the priceComponent.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ChargeItemDefinition_Applicability"
             },
             "is_optional": true,
             "is_slice": true,
@@ -49425,7 +49425,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ClaimResponse_Item_Adjudication"
             },
             "is_optional": false,
             "is_slice": true,
@@ -50397,7 +50397,7 @@
             "name": "concept",
             "description": "Defines children of a concept to produce a hierarchy of concepts. The nature of the relationships is variable (is-a/contains/categorizes) - see hierarchyMeaning.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "CodeSystem_Concept"
             },
             "is_optional": true,
             "is_slice": true,
@@ -51009,7 +51009,7 @@
             "name": "section",
             "description": "A nested sub-section within this section.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Composition_Section"
             },
             "is_optional": true,
             "is_slice": true,
@@ -51621,7 +51621,7 @@
             "name": "provision",
             "description": "Rules which provide exceptions to the base rule or subrules.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Consent_Provision"
             },
             "is_optional": true,
             "is_slice": true,
@@ -51933,7 +51933,7 @@
             "name": "group",
             "description": "Nested group of Contract Provisions.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Contract_Term"
             },
             "is_optional": true,
             "is_slice": true,
@@ -57393,7 +57393,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExplanationOfBenefit_Item_Adjudication"
             },
             "is_optional": true,
             "is_slice": true,
@@ -62901,7 +62901,7 @@
             "name": "application",
             "description": "Applcations submitted to obtain a marketing authorization.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "MedicinalProductAuthorization_Procedure"
             },
             "is_optional": true,
             "is_slice": true,
@@ -63213,7 +63213,7 @@
             "name": "strength",
             "description": "Quantity of the substance or specified substance present in the manufactured item or pharmaceutical product.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "MedicinalProductIngredient_SpecifiedSubstance_Strength"
             },
             "is_optional": true,
             "is_slice": true,
@@ -63489,7 +63489,7 @@
             "name": "packageItem",
             "description": "Allows containers within containers.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "MedicinalProductPackaged_PackageItem"
             },
             "is_optional": true,
             "is_slice": true,
@@ -65649,7 +65649,7 @@
             "name": "referenceRange",
             "description": "Guidance on how to interpret the value by comparison to a normal or recommended range.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Observation_ReferenceRange"
             },
             "is_optional": true,
             "is_slice": true,
@@ -66069,7 +66069,7 @@
             "name": "part",
             "description": "The parts of a nested Parameter.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "OperationDefinition_Parameter"
             },
             "is_optional": true,
             "is_slice": true,
@@ -66453,7 +66453,7 @@
             "name": "part",
             "description": "A named part of a multi-part parameter.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Parameters_Parameter"
             },
             "is_optional": true,
             "is_slice": true,
@@ -67545,7 +67545,7 @@
             "name": "action",
             "description": "Sub actions that are contained within the action. The behavior of this action determines the functionality of the sub-actions. For example, a selection behavior of at-most-one indicates that of the sub-actions, at most one may be chosen as part of realizing the action definition.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "PlanDefinition_Action"
             },
             "is_optional": true,
             "is_slice": true,
@@ -68145,7 +68145,7 @@
             "name": "agent",
             "description": "The entity is attributed to an agent to express the agent's responsibility for that entity, possibly along with other agents. This description can be understood as shorthand for saying that the agent was responsible for the activity which generated the entity.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Provenance_Agent"
             },
             "is_optional": true,
             "is_slice": true,
@@ -68385,7 +68385,7 @@
             "name": "item",
             "description": "Text, questions and other groups to be nested beneath a question or group.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Questionnaire_Item"
             },
             "is_optional": true,
             "is_slice": true,
@@ -68493,7 +68493,7 @@
             "name": "item",
             "description": "Questions or sub-groups nested beneath a question or group.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "QuestionnaireResponse_Item"
             },
             "is_optional": true,
             "is_slice": true,
@@ -68841,7 +68841,7 @@
             "name": "action",
             "description": "Sub actions.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "RequestGroup_Action"
             },
             "is_optional": true,
             "is_slice": true,
@@ -72440,7 +72440,7 @@
             "name": "molecularWeight",
             "description": "The molecular weight or weight range (for proteins, polymers or nucleic acids).",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "SubstanceSpecification_Structure_Isotope_MolecularWeight"
             },
             "is_optional": true,
             "is_slice": false,
@@ -72716,7 +72716,7 @@
             "name": "synonym",
             "description": "A synonym of this name.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "SubstanceSpecification_Name"
             },
             "is_optional": true,
             "is_slice": true,
@@ -72728,7 +72728,7 @@
             "name": "translation",
             "description": "A translation for this name.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "SubstanceSpecification_Name"
             },
             "is_optional": true,
             "is_slice": true,
@@ -74804,7 +74804,7 @@
             "name": "exclude",
             "description": "Exclude one or more codes from the value set based on code system filters and/or other value sets.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ValueSet_Compose_Include"
             },
             "is_optional": true,
             "is_slice": true,
@@ -77312,7 +77312,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ClaimResponse_Item_Adjudication"
             },
             "is_optional": false,
             "is_slice": true,
@@ -77468,7 +77468,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ClaimResponse_Item_Adjudication"
             },
             "is_optional": false,
             "is_slice": true,
@@ -78428,7 +78428,7 @@
             "name": "answer",
             "description": "Response to assets.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "Contract_Term_Offer_Answer"
             },
             "is_optional": true,
             "is_slice": true,
@@ -79484,7 +79484,7 @@
             "name": "process",
             "description": "Nested process.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExampleScenario_Process"
             },
             "is_optional": true,
             "is_slice": true,
@@ -79820,7 +79820,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExplanationOfBenefit_Item_Adjudication"
             },
             "is_optional": true,
             "is_slice": true,
@@ -79976,7 +79976,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExplanationOfBenefit_Item_Adjudication"
             },
             "is_optional": true,
             "is_slice": true,
@@ -80180,7 +80180,7 @@
             "name": "link",
             "description": "Additional links from target resource.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "GraphDefinition_Link"
             },
             "is_optional": true,
             "is_slice": true,
@@ -80708,7 +80708,7 @@
             "name": "page",
             "description": "Nested Pages/Sections under this page.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ImplementationGuide_Definition_Page"
             },
             "is_optional": true,
             "is_slice": true,
@@ -83816,7 +83816,7 @@
             "name": "item",
             "description": "Nested groups and/or questions found within this particular answer.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "QuestionnaireResponse_Item"
             },
             "is_optional": true,
             "is_slice": true,
@@ -84584,7 +84584,7 @@
             "name": "rule",
             "description": "Rules contained in this rule.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "StructureMap_Group_Rule"
             },
             "is_optional": true,
             "is_slice": true,
@@ -85868,7 +85868,7 @@
             "name": "operation",
             "description": "An operation would involve a REST request to a server.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "TestReport_Setup_Action_Operation"
             },
             "is_optional": true,
             "is_slice": false,
@@ -85880,7 +85880,7 @@
             "name": "assert",
             "description": "The results of the assertion performed on the previous operations.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "TestReport_Setup_Action_Assert"
             },
             "is_optional": true,
             "is_slice": false,
@@ -85940,7 +85940,7 @@
             "name": "operation",
             "description": "An operation would involve a REST request to a server.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "TestReport_Setup_Action_Operation"
             },
             "is_optional": false,
             "is_slice": false,
@@ -86276,7 +86276,7 @@
             "name": "operation",
             "description": "An operation would involve a REST request to a server.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "TestScript_Setup_Action_Operation"
             },
             "is_optional": true,
             "is_slice": false,
@@ -86288,7 +86288,7 @@
             "name": "assert",
             "description": "Evaluates the results of previous operations to determine if the server under test behaves appropriately.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "TestScript_Setup_Action_Assert"
             },
             "is_optional": true,
             "is_slice": false,
@@ -86348,7 +86348,7 @@
             "name": "operation",
             "description": "An operation would involve a REST request to a server.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "TestScript_Setup_Action_Operation"
             },
             "is_optional": false,
             "is_slice": false,
@@ -86660,7 +86660,7 @@
             "name": "designation",
             "description": "Additional representations for this item - other languages, aliases, specialized purposes, used for particular purposes, etc. These are relevant when the conditions of the expansion do not fix to a single correct representation.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ValueSet_Compose_Include_Concept_Designation"
             },
             "is_optional": true,
             "is_slice": true,
@@ -86672,7 +86672,7 @@
             "name": "contains",
             "description": "Other codes and entries contained under this entry in the hierarchy.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ValueSet_Expansion_Contains"
             },
             "is_optional": true,
             "is_slice": true,
@@ -87260,7 +87260,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ClaimResponse_Item_Adjudication"
             },
             "is_optional": true,
             "is_slice": true,
@@ -87404,7 +87404,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ClaimResponse_Item_Adjudication"
             },
             "is_optional": false,
             "is_slice": true,
@@ -87524,7 +87524,7 @@
             "name": "product",
             "description": "A set of additional outcomes from this mapping to other elements. To properly execute this mapping, the specified element must be mapped to some data element or source that is in context. The mapping may still be useful without a place for the additional data elements, but the equivalence cannot be relied on.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ConceptMap_Group_Element_Target_DependsOn"
             },
             "is_optional": true,
             "is_slice": true,
@@ -88268,7 +88268,7 @@
             "name": "request",
             "description": "Each resource instance used by the initiator.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExampleScenario_Instance_ContainedInstance"
             },
             "is_optional": true,
             "is_slice": false,
@@ -88280,7 +88280,7 @@
             "name": "response",
             "description": "Each resource instance used by the responder.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExampleScenario_Instance_ContainedInstance"
             },
             "is_optional": true,
             "is_slice": false,
@@ -88364,7 +88364,7 @@
             "name": "step",
             "description": "What happens in each alternative option.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExampleScenario_Process_Step"
             },
             "is_optional": true,
             "is_slice": true,
@@ -88568,7 +88568,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExplanationOfBenefit_Item_Adjudication"
             },
             "is_optional": true,
             "is_slice": true,
@@ -88712,7 +88712,7 @@
             "name": "adjudication",
             "description": "The adjudication results.",
             "type_ref": {
-              "primitive": "unknown"
+              "ref": "ExplanationOfBenefit_Item_Adjudication"
             },
             "is_optional": true,
             "is_slice": true,
