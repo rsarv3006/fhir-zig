@@ -59,6 +59,8 @@ const emitter = @import("emitter.zig");
 // }
 
 pub fn testRepFromBundle(arena: std.mem.Allocator, initIo: Io) !void {
+    const start = std.Io.Clock.now(.awake, initIo);
+
     const cwd = std.Io.Dir.cwd();
     const dir = try cwd.openDir(initIo, ".", .{ .iterate = true });
     defer dir.close(initIo);
@@ -117,4 +119,8 @@ pub fn testRepFromBundle(arena: std.mem.Allocator, initIo: Io) !void {
 
     const byte_written = try writerZigOut.write(emitted);
     std.debug.print("Successfully wrote {d} bytes.\n", .{byte_written});
+
+    const end = std.Io.Clock.now(.awake, initIo);
+    const duration = start.durationTo(end);
+    std.debug.print("Elapsed time: {} ms\n", .{duration.toMilliseconds()});
 }
