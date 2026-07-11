@@ -90,7 +90,7 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
 
         switch (field.type_ref) {
             .primitive => |primitiveFieldType| {
-                try buffer.appendSlice(arena, primitiveFieldType);
+                try buffer.appendSlice(arena, fhirPrimitiveToZigType(primitiveFieldType));
             },
             .inline_enum => |inlineEnumFieldType| {
                 try buffer.appendSlice(arena, "enum {\n");
@@ -106,8 +106,20 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
                 try buffer.appendSlice(arena, refFieldType);
             },
             .choice => |choiceFieldType| {
-                _ = choiceFieldType;
-                unreachable;
+                try buffer.appendSlice(arena, "union(enum) {\n");
+                for (choiceFieldType) |option| {
+                    const variantName = try getSanitizedName(arena, option.suffix);
+                    try buffer.appendSlice(arena, "        ");
+                    try buffer.appendSlice(arena, variantName);
+                    try buffer.appendSlice(arena, ": ");
+                    switch (option.typeRef) {
+                        .primitive => |p| try buffer.appendSlice(arena, fhirPrimitiveToZigType(p)),
+                        .ref => |r| try buffer.appendSlice(arena, r),
+                        .inline_enum, .choice => unreachable,
+                    }
+                    try buffer.appendSlice(arena, ",\n");
+                }
+                try buffer.appendSlice(arena, "    }");
             },
         }
 
