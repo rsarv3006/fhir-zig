@@ -26,7 +26,7 @@ Make sure the validator is on par w/ the standard benchmark and minimize memory 
 
 ## Output
 
-built schema files are in the output folder (just a heads up zls sometimes chokes on the huuuge files there)
+built schema files are in the output folder
 
 ## AI Policy
 
