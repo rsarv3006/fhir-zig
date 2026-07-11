@@ -8,7 +8,6 @@ const boxedFields = std.StaticStringMap(void).initComptime(.{
     .{ "Identifier.assigner", {} },
 });
 
-// TODO: Handle [x] fields...???
 // TODO: This dumpster does not handle bad json structure... at all
 pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, bundle: std.json.Parsed(std.json.Value)) !std.ArrayList(ir.FhirType) {
     std.debug.print("Building IR from bundle...\n", .{});
@@ -83,6 +82,15 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     const isResource = std.mem.eql(u8, kind, "resource");
     const description = if (resource.get("description")) |d| d.string else "";
 
+    if (std.mem.eql(u8, id, "xhtml")) {
+        var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, 2);
+        try fields.append(arena, .{ .name = "id", .description = null, .type_ref = .{ .primitive = "[]const u8" }, .is_optional = true, .is_slice = false });
+        try fields.append(arena, .{ .name = "extension", .description = null, .type_ref = .{ .ref = "Extension" }, .is_optional = true, .is_slice = true });
+        try fields.append(arena, .{ .name = "value", .description = "Actual xhtml", .type_ref = .{ .primitive = "[]const u8" }, .is_optional = false, .is_slice = false });
+        fhirType = .{ .structure = .{ .name = id, .fields = fields, .is_resource = false, .description = description } };
+        return fhirType;
+    }
+
     if (std.mem.eql(u8, resourceType, "StructureDefinition")) {
         const elementsArr = resource.get("snapshot").?.object.get("element").?.array;
         var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, elementsArr.items.len);
@@ -102,7 +110,7 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
 
 fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []const u8, element: std.json.Value) !ir.FhirField {
     const path = element.object.get("path").?.string;
-    const id = stripTopLevelPrefix(path, topLevelId);
+    var id = stripTopLevelPrefix(path, topLevelId);
     const minSigned = element.object.get("min").?.integer;
     const maxStr = element.object.get("max").?.string;
     const definition = element.object.get("definition").?.string;
@@ -122,7 +130,37 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
 
     var fieldType: ir.FieldType = .{ .primitive = "unknown" };
 
-    if (element.object.get("contentReference")) |contentRef| {
+    if (std.mem.containsAtLeast(u8, id, 1, "[x]")) {
+        if (std.mem.find(u8, id, "[")) |idSplitIdx| {
+            id = id[0..idSplitIdx];
+            if (element.object.get("type")) |elementTypeValue| {
+                switch (elementTypeValue) {
+                    .array => |typeArray| {
+                        var choices = try std.ArrayList(ir.ChoiceOption).initCapacity(arena, typeArray.items.len);
+
+                        for (typeArray.items) |typeArrayItem| {
+                            switch (typeArrayItem) {
+                                .object => |typeObj| {
+                                    const code = typeObj.get("code") orelse continue;
+                                    const codeString = switch (code) {
+                                        .string => |s| s,
+                                        else => continue,
+                                    };
+                                    const suffix = try utils.capitalizeFirstLetter(arena, codeString);
+                                    const typeRef = try resolveFieldTypeFromTypeObject(typeObj);
+                                    try choices.append(arena, .{ .suffix = suffix, .typeRef = typeRef });
+                                },
+                                else => {},
+                            }
+                        }
+
+                        fieldType = .{ .choice = try choices.toOwnedSlice(arena) };
+                    },
+                    else => {},
+                }
+            }
+        }
+    } else if (element.object.get("contentReference")) |contentRef| {
         switch (contentRef) {
             .string => |contentReferenceString| {
                 const cleanedRefStr = cleanRef(contentReferenceString);
@@ -140,23 +178,10 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
                     const firstTypeValue = typeArray.items[0];
                     switch (firstTypeValue) {
                         .object => |firstType| {
-                            if (firstType.get("code")) |code| {
-                                fieldType = .{ .ref = code.string };
-                                if (std.mem.startsWith(u8, code.string, "http://hl7.org/fhirpath/System.")) {
-                                    if (firstType.get("extension")) |extension| {
-                                        if (try attemptToRetrieveValueUrlFromExtension(extension)) |valueStr| {
-                                            fieldType = .{ .primitive = valueStr };
-                                        }
-                                    }
-                                }
-                            } else {
-                                std.debug.print("Parsing the first type value something slipped through - {s}\n", .{id});
-                            }
+                            fieldType = try resolveFieldTypeFromTypeObject(firstType);
                         },
                         else => {},
                     }
-                } else if (typeArray.items.len > 1) {
-                    // TODO: handle this case
                 }
             },
             else => {},
@@ -167,6 +192,26 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
     const needsBox = boxedFields.has(compositeKey);
 
     return ir.FhirField{ .name = id, .type_ref = fieldType, .is_optional = isOptional, .is_slice = isSlice, .description = definition, .is_boxed = needsBox, .min = min, .max = max };
+}
+
+fn resolveFieldTypeFromTypeObject(typeObj: std.json.ObjectMap) !ir.FieldType {
+    const code = typeObj.get("code") orelse return error.ExpectedCodeOnTypeObject;
+    const codeString = switch (code) {
+        .string => |s| s,
+        else => return error.CodeNotAString,
+    };
+
+    var fieldType: ir.FieldType = .{ .ref = codeString };
+
+    if (std.mem.startsWith(u8, code.string, "http://hl7.org/fhirpath/System.")) {
+        if (typeObj.get("extension")) |extension| {
+            if (try attemptToRetrieveValueUrlFromExtension(extension)) |valueStr| {
+                fieldType = .{ .primitive = valueStr };
+            }
+        }
+    }
+
+    return fieldType;
 }
 
 fn stripTopLevelPrefix(path: []const u8, topLevelId: []const u8) []const u8 {
