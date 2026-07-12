@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const ir = @import("intermediate_representation.zig");
+const ir = @import("ir.zig");
 const utils = @import("utils.zig");
 
 const SIZE_ESTIMATE: usize = 128;
@@ -58,7 +58,7 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
     const name = try getSanitizedName(arena, fhirStruct.name);
     const parts = &[_][]const u8{ description, "\n", "pub const ", name, " = struct {\n" };
 
-    var buffer = try std.ArrayList(u8).initCapacity(arena, name.len + description.len + fhirStruct.fields.len * 20 + 20);
+    var buffer = try std.ArrayList(u8).initCapacity(arena, name.len + description.len + fhirStruct.fields.items.len * 20 + 20);
     try buffer.appendSlice(arena, try std.mem.concat(arena, u8, parts));
 
     if (fhirStruct.is_resource) {
@@ -66,7 +66,7 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
         try buffer.appendSlice(arena, try std.mem.concat(arena, u8, isResourceParts));
     }
 
-    for (fhirStruct.fields) |field| {
+    for (fhirStruct.fields.items) |field| {
         const sanitizedFieldName = try getSanitizedName(arena, field.name);
         const sanitizedFieldDescription = try getSanitizedDescription(arena, field.description);
 
@@ -90,7 +90,7 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
 
         switch (field.type_ref) {
             .primitive => |primitiveFieldType| {
-                try buffer.appendSlice(arena, primitiveFieldType);
+                try buffer.appendSlice(arena, fhirPrimitiveToZigType(primitiveFieldType));
             },
             .inline_enum => |inlineEnumFieldType| {
                 try buffer.appendSlice(arena, "enum {\n");
@@ -104,6 +104,22 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
             },
             .ref => |refFieldType| {
                 try buffer.appendSlice(arena, refFieldType);
+            },
+            .choice => |choiceFieldType| {
+                try buffer.appendSlice(arena, "union(enum) {\n");
+                for (choiceFieldType) |option| {
+                    const variantName = try getSanitizedName(arena, option.suffix);
+                    try buffer.appendSlice(arena, "        ");
+                    try buffer.appendSlice(arena, variantName);
+                    try buffer.appendSlice(arena, ": ");
+                    switch (option.typeRef) {
+                        .primitive => |p| try buffer.appendSlice(arena, fhirPrimitiveToZigType(p)),
+                        .ref => |r| try buffer.appendSlice(arena, r),
+                        .inline_enum, .choice => unreachable,
+                    }
+                    try buffer.appendSlice(arena, ",\n");
+                }
+                try buffer.appendSlice(arena, "    }");
             },
         }
 
@@ -177,10 +193,10 @@ fn getSanitizedDescription(arena: std.mem.Allocator, description: ?[]const u8) !
         return "";
     }
 
-    // 5 is a WAG here for extra space needed by the slashes
-    var sanitizedDescriptionBuffer = try std.ArrayList(u8).initCapacity(arena, nonNullDescription.len + 5);
+    // Hardcoded int is a WAG here for extra space needed by the slashes
+    var sanitizedDescriptionBuffer = try std.ArrayList(u8).initCapacity(arena, nonNullDescription.len + 16);
 
-    try sanitizedDescriptionBuffer.appendSlice(arena, "/// ");
+    try sanitizedDescriptionBuffer.appendSlice(arena, "    /// ");
     for (nonNullDescription) |descrByte| {
         if (descrByte == '\t' or descrByte == '\r') {
             try sanitizedDescriptionBuffer.appendSlice(arena, " ");
@@ -188,7 +204,7 @@ fn getSanitizedDescription(arena: std.mem.Allocator, description: ?[]const u8) !
             try sanitizedDescriptionBuffer.append(arena, descrByte);
         }
         if (descrByte == '\n') {
-            try sanitizedDescriptionBuffer.appendSlice(arena, "/// ");
+            try sanitizedDescriptionBuffer.appendSlice(arena, "    /// ");
         }
     }
 
