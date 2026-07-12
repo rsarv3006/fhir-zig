@@ -19,6 +19,7 @@ Step One is to build valid, robust and most importantly working Codegen of FHIR 
 ### Step 2: Validator
 
 This is where the rubber meets the metaphorical road. To address the common complaints with the de facto standard (java) fhir validator. This validator will be written in zig to take advantage of the lower level access to make it faster and less memory intensive. ....At least that's the plan. Step 2 is to just get a working validator
+STREAMING VALIDATOR - absolute must, built from the ground up to stream
 
 ### Step 3: Validator Polish
 
@@ -43,6 +44,7 @@ curl -o r5schemajson.zip https://hl7.org/fhir/R5/definitions.json.zip
 
 ## TODO
 
+- Troubleshoot the 5 Error parsing entry from bundle messages we're seeing
 - codegen is about as robust as tissue paper in a hurricane, intermediate representation needs better json validation and error handling
 - write the generic comptime codec once, get every primitive wrapper type, (This is needed to serialize and deserialize the ?code (and other fields) to and from the expected json fields) (docs file on it so I don't forget)
 - emitter should dump resources into separate files for codegen (involves scafolding the iport/export file stuff too)
