@@ -43,5 +43,6 @@ curl -o r5schemajson.zip https://hl7.org/fhir/R5/definitions.json.zip
 
 ## TODO
 
-- primitive sibling element fields are missing for everything
 - codegen is about as robust as tissue paper in a hurricane, intermediate representation needs better json validation and error handling
+- write the generic comptime codec once, get every primitive wrapper type, (This is needed to serialize and deserialize the ?code (and other fields) to and from the expected json fields) (docs file on it so I don't forget)
+- emitter should dump resources into separate files for codegen (involves scafolding the iport/export file stuff too)
