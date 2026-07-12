@@ -8,8 +8,40 @@ const boxedFields = std.StaticStringMap(void).initComptime(.{
     .{ "Identifier.assigner", {} },
 });
 
+pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, bundles: []const std.json.Parsed(std.json.Value)) !std.ArrayList(ir.FhirType) {
+    var fhirTypesArr = try std.ArrayList(ir.FhirType).initCapacity(arena, 3000);
+
+    for (bundles) |bundle| {
+        const builtTypes = try buildFromBundle(arena, bundle);
+        try fhirTypesArr.appendSlice(arena, builtTypes.items);
+    }
+
+    var proccessedCount: usize = 0;
+
+    while (proccessedCount < fhirTypesArr.items.len) {
+        std.debug.print("processing for backbone elements... {d}\n", .{proccessedCount});
+        const end = fhirTypesArr.items.len;
+        for (fhirTypesArr.items[proccessedCount..end], proccessedCount..) |_, index| {
+            try parseBackbonelementsFromFhirTypes(arena, &fhirTypesArr, index);
+        }
+        proccessedCount = end;
+    }
+
+    // oneOf handling
+    var resourceNames = try std.ArrayList([]const u8).initCapacity(arena, 150);
+    for (fhirTypesArr.items) |t| {
+        switch (t) {
+            .structure => |s| if (s.is_resource) try resourceNames.append(arena, s.name),
+            else => {},
+        }
+    }
+    try fhirTypesArr.append(arena, .{ .oneOf = .{ .name = "Resource", .refs = try resourceNames.toOwnedSlice(arena) } });
+
+    return fhirTypesArr;
+}
+
 // TODO: This dumpster does not handle bad json structure... at all
-pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, bundle: std.json.Parsed(std.json.Value)) !std.ArrayList(ir.FhirType) {
+fn buildFromBundle(arena: std.mem.Allocator, bundle: std.json.Parsed(std.json.Value)) !std.ArrayList(ir.FhirType) {
     std.debug.print("Building IR from bundle...\n", .{});
 
     const obj = switch (bundle.value) {
@@ -38,17 +70,6 @@ pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, bund
         }
     }
 
-    var proccessedCount: usize = 0;
-
-    while (proccessedCount < fhirTypesArr.items.len) {
-        std.debug.print("processing for backbone elements... {d}\n", .{proccessedCount});
-        const end = fhirTypesArr.items.len;
-        for (fhirTypesArr.items[proccessedCount..end], proccessedCount..) |_, index| {
-            try parseBackbonelementsFromFhirTypes(arena, &fhirTypesArr, index);
-        }
-        proccessedCount = end;
-    }
-
     return fhirTypesArr;
 }
 
@@ -67,7 +88,6 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     var fhirType: ?ir.FhirType = null;
 
     const id = resource.get("id").?.string;
-
     const resourceType = resource.get("resourceType").?.string;
 
     const resourceKindValue = resource.get("kind") orelse return error.NoKindOnResource;
@@ -80,6 +100,9 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     };
 
     const isResource = std.mem.eql(u8, kind, "resource");
+    const isAbstract = if (resource.get("abstract")) |a| a.bool else false;
+    if (isAbstract and isResource) return null;
+
     const description = if (resource.get("description")) |d| d.string else "";
 
     if (std.mem.eql(u8, id, "xhtml")) {
@@ -92,13 +115,14 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     }
 
     if (std.mem.eql(u8, resourceType, "StructureDefinition")) {
+        const baseTypeName = resource.get("type").?.string;
         const elementsArr = resource.get("snapshot").?.object.get("element").?.array;
         var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, elementsArr.items.len);
         for (elementsArr.items) |element| {
             const path = element.object.get("path").?.string;
-            if (std.mem.eql(u8, path, id)) continue;
+            if (std.mem.eql(u8, path, baseTypeName)) continue;
 
-            const field = try parseFhirFieldFromSnapshotElement(arena, id, element);
+            const field = try parseFhirFieldFromSnapshotElement(arena, baseTypeName, element);
             try fields.append(arena, field);
         }
 

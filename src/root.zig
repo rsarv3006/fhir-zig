@@ -77,9 +77,6 @@ pub fn testRepFromBundle(arena: std.mem.Allocator, initIo: Io) !void {
     try reader.readSliceAll(buffer);
 
     const resourcesParsed = try std.json.parseFromSlice(std.json.Value, arena, buffer, .{});
-    // Ballpark number based on 680 * 2
-
-    var fhirTypesArr = try ir.buildIntermediateRepresentationFromBundles(arena, resourcesParsed);
 
     const typesFile = try dir.openFile(initIo, "schemas/schema-json-r4/profiles-types.json", .{});
     defer typesFile.close(initIo);
@@ -91,8 +88,8 @@ pub fn testRepFromBundle(arena: std.mem.Allocator, initIo: Io) !void {
     try typesReader.readSliceAll(buffer);
 
     const typesParsed = try std.json.parseFromSlice(std.json.Value, arena, buffer, .{});
-    const typesIr = try ir.buildIntermediateRepresentationFromBundles(arena, typesParsed);
-    try fhirTypesArr.appendSlice(arena, typesIr.items);
+
+    const fhirTypesArr = try ir.buildIntermediateRepresentationFromBundles(arena, &[_]std.json.Parsed(std.json.Value){ resourcesParsed, typesParsed });
 
     const out_file = try dir.createFile(initIo, "ir-rep.debug.json", .{});
     defer out_file.close(initIo);

@@ -1,16 +1,3 @@
-/// This is the base resource type for everything.
-pub const Resource = struct {
-    resourceType: []const u8 = "Resource",
-    /// The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.
-    id: ?[]const u8 = null,
-    /// The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content might not always be associated with version changes to the resource.
-    meta: ?Meta = null,
-    /// A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.
-    implicitRules: ?uri = null,
-    /// The base language in which the resource is written.
-    language: ?code = null,
-};
-
 /// A financial tool for tracking value accrued for a particular purpose.  In the healthcare field, used to track charges for a patient, cost centers, etc.
 pub const Account = struct {
     resourceType: []const u8 = "Account",
@@ -2535,29 +2522,6 @@ pub const DocumentReference = struct {
     content: []const DocumentReference_Content,
     /// The clinical context in which the document was prepared.
     context: ?DocumentReference_Context = null,
-};
-
-/// A resource that includes narrative, extensions, and contained resources.
-pub const DomainResource = struct {
-    resourceType: []const u8 = "DomainResource",
-    /// The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.
-    id: ?[]const u8 = null,
-    /// The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content might not always be associated with version changes to the resource.
-    meta: ?Meta = null,
-    /// A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.
-    implicitRules: ?uri = null,
-    /// The base language in which the resource is written.
-    language: ?code = null,
-    /// A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it "clinically safe" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.
-    text: ?Narrative = null,
-    /// These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.
-    contained: ?[]const Resource = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource and that modifies the understanding of the element that contains it and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
 };
 
 /// The EffectEvidenceSynthesis resource describes the difference in an outcome between exposures states in a population where the effect estimate is derived from a combination of research studies.
@@ -8533,6 +8497,1317 @@ pub const MetadataResource = struct {
     useContext: ?[]const UsageContext = null,
     /// A legal or geographic region in which the metadata resource is intended to be used.
     jurisdiction: ?[]const CodeableConcept = null,
+};
+
+/// Base StructureDefinition for Element Type: Base definition for all elements in a resource.
+pub const Element = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+};
+
+/// Base StructureDefinition for BackboneElement Type: Base definition for all elements that are defined inside a resource - but not those in a data type.
+pub const BackboneElement = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+};
+
+/// Base StructureDefinition for base64Binary Type: A stream of bytes
+pub const base64Binary = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for boolean Type: Value of "true" or "false"
+pub const boolean = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?bool = null,
+};
+
+/// Base StructureDefinition for canonical type: A URI that is a reference to a canonical URL on a FHIR resource
+pub const canonical = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for canonical
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for code type: A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents
+pub const code = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for code
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for date Type: A date or partial date (e.g. just year or year + month). There is no time zone. The format is a union of the schema types gYear, gYearMonth and date.  Dates SHALL be valid dates.
+pub const date = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for dateTime Type: A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.
+pub const dateTime = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for decimal Type: A rational number with implicit precision
+pub const decimal = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?f64 = null,
+};
+
+/// Base StructureDefinition for id type: Any combination of letters, numerals, "-" and ".", with a length limit of 64 characters.  (This might be an integer, an unprefixed OID, UUID or any other identifier pattern that meets these constraints.)  Ids are case-insensitive.
+pub const id = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for id
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for instant Type: An instant in time - known at least to the second
+pub const instant = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for integer Type: A whole number
+pub const integer = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?i32 = null,
+};
+
+/// Base StructureDefinition for markdown type: A string that may contain Github Flavored Markdown syntax for optional processing by a mark down presentation engine
+pub const markdown = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for markdown
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for oid type: An OID represented as a URI
+pub const oid = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for oid
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for positiveInt type: An integer with a value that is positive (e.g. >0)
+pub const positiveInt = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for positiveInt
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for string Type: A sequence of Unicode characters
+pub const string = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for time Type: A time during the day, with no date specified
+pub const time = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for unsignedInt type: An integer with a value that is not negative (e.g. >= 0)
+pub const unsignedInt = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for unsignedInt
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for uri Type: String of characters used to identify a name or a resource
+pub const uri = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The actual value
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for url type: A URI that is a literal reference
+pub const url = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for url
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for uuid type: A UUID, represented as a URI
+pub const uuid = struct {
+    /// unique id for the element within a resource (for internal references)
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Primitive value for uuid
+    value: ?[]const u8 = null,
+};
+
+/// Base StructureDefinition for xhtml Type
+pub const xhtml = struct {
+    id: ?[]const u8 = null,
+
+    extension: ?[]const Extension = null,
+    /// Actual xhtml
+    value: []const u8,
+};
+
+/// Base StructureDefinition for Address Type: An address expressed using postal conventions (as opposed to GPS or other location definition formats).  This data type may be used to convey addresses for use in delivering mail as well as for visiting locations which might not be valid for mail delivery.  There are a variety of postal address formats defined around the world.
+pub const Address = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The purpose of this address.
+    use: ?code = null,
+    /// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
+    type: ?code = null,
+    /// Specifies the entire address as it should be displayed e.g. on a postal label. This may be provided instead of or as well as the specific parts.
+    text: ?string = null,
+    /// This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.
+    line: ?[]const string = null,
+    /// The name of the city, town, suburb, village or other community or delivery center.
+    city: ?string = null,
+    /// The name of the administrative area (county).
+    district: ?string = null,
+    /// Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (e.g. US 2 letter state codes).
+    state: ?string = null,
+    /// A postal code designating a region defined by the postal service.
+    postalCode: ?string = null,
+    /// Country - a nation as commonly understood or generally accepted.
+    country: ?string = null,
+    /// Time period when address was/is in use.
+    period: ?Period = null,
+};
+
+/// Base StructureDefinition for Age Type: A duration of time during which an organism (or a process) has existed.
+pub const Age = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
+    value: ?decimal = null,
+    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
+    comparator: ?code = null,
+    /// A human-readable form of the unit.
+    unit: ?string = null,
+    /// The identification of the system that provides the coded form of the unit.
+    system: ?uri = null,
+    /// A computer processable form of the unit in some unit representation system.
+    code: ?code = null,
+};
+
+/// Base StructureDefinition for Annotation Type: A  text note which also  contains information about who made the statement and when.
+pub const Annotation = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The individual responsible for making the annotation.
+    author: ?union(enum) {
+        Reference: Reference,
+        String: string,
+    } = null,
+    /// Indicates when this particular annotation was made.
+    time: ?dateTime = null,
+    /// The text of the annotation in markdown format.
+    text: markdown,
+};
+
+/// Base StructureDefinition for Attachment Type: For referring to data content defined in other formats.
+pub const Attachment = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Identifies the type of the data in the attachment and allows a method to be chosen to interpret or render the data. Includes mime type parameters such as charset where appropriate.
+    contentType: ?code = null,
+    /// The human language of the content. The value can be any valid value according to BCP 47.
+    language: ?code = null,
+    /// The actual data of the attachment - a sequence of bytes, base64 encoded.
+    data: ?base64Binary = null,
+    /// A location where the data can be accessed.
+    url: ?url = null,
+    /// The number of bytes of data that make up this attachment (before base64 encoding, if that is done).
+    size: ?unsignedInt = null,
+    /// The calculated hash of the data using SHA-1. Represented using base64.
+    hash: ?base64Binary = null,
+    /// A label or set of text to display in place of the data.
+    title: ?string = null,
+    /// The date that the attachment was first created.
+    creation: ?dateTime = null,
+};
+
+/// Base StructureDefinition for CodeableConcept Type: A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.
+pub const CodeableConcept = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// A reference to a code defined by a terminology system.
+    coding: ?[]const Coding = null,
+    /// A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.
+    text: ?string = null,
+};
+
+/// Base StructureDefinition for Coding Type: A reference to a code defined by a terminology system.
+pub const Coding = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The identification of the code system that defines the meaning of the symbol in the code.
+    system: ?uri = null,
+    /// The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.
+    version: ?string = null,
+    /// A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).
+    code: ?code = null,
+    /// A representation of the meaning of the code in the system, following the rules of the system.
+    display: ?string = null,
+    /// Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).
+    userSelected: ?boolean = null,
+};
+
+/// Base StructureDefinition for ContactDetail Type: Specifies contact information for a person or organization.
+pub const ContactDetail = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The name of an individual to contact.
+    name: ?string = null,
+    /// The contact details for the individual (if a name was provided) or the organization.
+    telecom: ?[]const ContactPoint = null,
+};
+
+/// Base StructureDefinition for ContactPoint Type: Details for all kinds of technology mediated contact points for a person or organization, including telephone, email, etc.
+pub const ContactPoint = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Telecommunications form for contact point - what communications system is required to make use of the contact.
+    system: ?code = null,
+    /// The actual contact point details, in a form that is meaningful to the designated communication system (i.e. phone number or email address).
+    value: ?string = null,
+    /// Identifies the purpose for the contact point.
+    use: ?code = null,
+    /// Specifies a preferred order in which to use a set of contacts. ContactPoints with lower rank values are more preferred than those with higher rank values.
+    rank: ?positiveInt = null,
+    /// Time period when the contact point was/is in use.
+    period: ?Period = null,
+};
+
+/// Base StructureDefinition for Contributor Type: A contributor to the content of a knowledge asset, including authors, editors, reviewers, and endorsers.
+pub const Contributor = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The type of contributor.
+    type: code,
+    /// The name of the individual or organization responsible for the contribution.
+    name: string,
+    /// Contact details to assist a user in finding and communicating with the contributor.
+    contact: ?[]const ContactDetail = null,
+};
+
+/// Base StructureDefinition for Count Type: A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.
+pub const Count = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
+    value: ?decimal = null,
+    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
+    comparator: ?code = null,
+    /// A human-readable form of the unit.
+    unit: ?string = null,
+    /// The identification of the system that provides the coded form of the unit.
+    system: ?uri = null,
+    /// A computer processable form of the unit in some unit representation system.
+    code: ?code = null,
+};
+
+/// Base StructureDefinition for DataRequirement Type: Describes a required data item for evaluation in terms of the type of data, and optional code or date-based filters of the data.
+pub const DataRequirement = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The type of the required data, specified as the type name of a resource. For profiles, this value is set to the type of the base resource of the profile.
+    type: code,
+    /// The profile of the required data, specified as the uri of the profile definition.
+    profile: ?[]const canonical = null,
+    /// The intended subjects of the data requirement. If this element is not provided, a Patient subject is assumed.
+    subject: ?union(enum) {
+        CodeableConcept: CodeableConcept,
+        Reference: Reference,
+    } = null,
+    /// Indicates that specific elements of the type are referenced by the knowledge module and must be supported by the consumer in order to obtain an effective evaluation. This does not mean that a value is required for this element, only that the consuming system must understand the element and be able to provide values for it if they are available.
+    ///
+    /// The value of mustSupport SHALL be a FHIRPath resolveable on the type of the DataRequirement. The path SHALL consist only of identifiers, constant indexers, and .resolve() (see the [Simple FHIRPath Profile](fhirpath.html#simple) for full details).
+    mustSupport: ?[]const string = null,
+    /// Code filters specify additional constraints on the data, specifying the value set of interest for a particular element of the data. Each code filter defines an additional constraint on the data, i.e. code filters are AND'ed, not OR'ed.
+    codeFilter: ?[]const DataRequirement_CodeFilter = null,
+    /// Date filters specify additional constraints on the data in terms of the applicable date range for specific elements. Each date filter specifies an additional constraint on the data, i.e. date filters are AND'ed, not OR'ed.
+    dateFilter: ?[]const DataRequirement_DateFilter = null,
+    /// Specifies a maximum number of results that are required (uses the _count search parameter).
+    limit: ?positiveInt = null,
+    /// Specifies the order of the results to be returned.
+    sort: ?[]const DataRequirement_Sort = null,
+};
+
+/// Base StructureDefinition for Distance Type: A length - a value with a unit that is a physical distance.
+pub const Distance = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
+    value: ?decimal = null,
+    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
+    comparator: ?code = null,
+    /// A human-readable form of the unit.
+    unit: ?string = null,
+    /// The identification of the system that provides the coded form of the unit.
+    system: ?uri = null,
+    /// A computer processable form of the unit in some unit representation system.
+    code: ?code = null,
+};
+
+/// Base StructureDefinition for Dosage Type: Indicates how the medication is/was taken or should be taken by the patient.
+pub const Dosage = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+    /// Indicates the order in which the dosage instructions should be applied or interpreted.
+    sequence: ?integer = null,
+    /// Free text dosage instructions e.g. SIG.
+    text: ?string = null,
+    /// Supplemental instructions to the patient on how to take the medication  (e.g. "with meals" or"take half to one hour before food") or warnings for the patient about the medication (e.g. "may cause drowsiness" or "avoid exposure of skin to direct sunlight or sunlamps").
+    additionalInstruction: ?[]const CodeableConcept = null,
+    /// Instructions in terms that are understood by the patient or consumer.
+    patientInstruction: ?string = null,
+    /// When medication should be administered.
+    timing: ?Timing = null,
+    /// Indicates whether the Medication is only taken when needed within a specific dosing schedule (Boolean option), or it indicates the precondition for taking the Medication (CodeableConcept).
+    asNeeded: ?union(enum) {
+        Boolean: boolean,
+        CodeableConcept: CodeableConcept,
+    } = null,
+    /// Body site to administer to.
+    site: ?CodeableConcept = null,
+    /// How drug should enter body.
+    route: ?CodeableConcept = null,
+    /// Technique for administering medication.
+    method: ?CodeableConcept = null,
+    /// The amount of medication administered.
+    doseAndRate: ?[]const Dosage_DoseAndRate = null,
+    /// Upper limit on medication per unit of time.
+    maxDosePerPeriod: ?Ratio = null,
+    /// Upper limit on medication per administration.
+    maxDosePerAdministration: ?Quantity = null,
+    /// Upper limit on medication per lifetime of the patient.
+    maxDosePerLifetime: ?Quantity = null,
+};
+
+/// Base StructureDefinition for Duration Type: A length of time.
+pub const Duration = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
+    value: ?decimal = null,
+    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
+    comparator: ?code = null,
+    /// A human-readable form of the unit.
+    unit: ?string = null,
+    /// The identification of the system that provides the coded form of the unit.
+    system: ?uri = null,
+    /// A computer processable form of the unit in some unit representation system.
+    code: ?code = null,
+};
+
+/// Base StructureDefinition for ElementDefinition Type: Captures constraints on each element within the resource, profile, or extension.
+pub const ElementDefinition = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+    /// The path identifies the element and is expressed as a "."-separated list of ancestor elements, beginning with the name of the resource or extension.
+    path: string,
+    /// Codes that define how this element is represented in instances, when the deviation varies from the normal case.
+    representation: ?[]const code = null,
+    /// The name of this element definition slice, when slicing is working. The name must be a token with no dots or spaces. This is a unique name referring to a specific set of constraints applied to this element, used to provide a name to different slices of the same element.
+    sliceName: ?string = null,
+    /// If true, indicates that this slice definition is constraining a slice definition with the same name in an inherited profile. If false, the slice is not overriding any slice in an inherited profile. If missing, the slice might or might not be overriding a slice in an inherited profile, depending on the sliceName.
+    sliceIsConstraining: ?boolean = null,
+    /// A single preferred label which is the text to display beside the element indicating its meaning or to use to prompt for the element in a user display or form.
+    label: ?string = null,
+    /// A code that has the same meaning as the element in a particular terminology.
+    code: ?[]const Coding = null,
+    /// Indicates that the element is sliced into a set of alternative definitions (i.e. in a structure definition, there are multiple different constraints on a single element in the base resource). Slicing can be used in any resource that has cardinality ..* on the base resource, or any resource with a choice of types. The set of slices is any elements that come after this in the element sequence that have the same path, until a shorter path occurs (the shorter path terminates the set).
+    slicing: ?ElementDefinition_Slicing = null,
+    /// A concise description of what this element means (e.g. for use in autogenerated summaries).
+    short: ?string = null,
+    /// Provides a complete explanation of the meaning of the data element for human readability.  For the case of elements derived from existing elements (e.g. constraints), the definition SHALL be consistent with the base definition, but convey the meaning of the element in the particular context of use of the resource. (Note: The text you are reading is specified in ElementDefinition.definition).
+    definition: ?markdown = null,
+    /// Explanatory notes and implementation guidance about the data element, including notes about how to use the data properly, exceptions to proper use, etc. (Note: The text you are reading is specified in ElementDefinition.comment).
+    comment: ?markdown = null,
+    /// This element is for traceability of why the element was created and why the constraints exist as they do. This may be used to point to source materials or specifications that drove the structure of this element.
+    requirements: ?markdown = null,
+    /// Identifies additional names by which this element might also be known.
+    alias: ?[]const string = null,
+    /// The minimum number of times this element SHALL appear in the instance.
+    min: ?unsignedInt = null,
+    /// The maximum number of times this element is permitted to appear in the instance.
+    max: ?string = null,
+    /// Information about the base definition of the element, provided to make it unnecessary for tools to trace the deviation of the element through the derived and related profiles. When the element definition is not the original definition of an element - i.g. either in a constraint on another type, or for elements from a super type in a snap shot - then the information in provided in the element definition may be different to the base definition. On the original definition of the element, it will be same.
+    base: ?ElementDefinition_Base = null,
+    /// Identifies an element defined elsewhere in the definition whose content rules should be applied to the current element. ContentReferences bring across all the rules that are in the ElementDefinition for the element, including definitions, cardinality constraints, bindings, invariants etc.
+    contentReference: ?uri = null,
+    /// The data type or resource that the value of this element is permitted to be.
+    type: ?[]const ElementDefinition_Type = null,
+    /// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
+    defaultValue: ?union(enum) {
+        Base64Binary: base64Binary,
+        Boolean: boolean,
+        Canonical: canonical,
+        Code: code,
+        Date: date,
+        DateTime: dateTime,
+        Decimal: decimal,
+        Id: id,
+        Instant: instant,
+        Integer: integer,
+        Markdown: markdown,
+        Oid: oid,
+        PositiveInt: positiveInt,
+        String: string,
+        Time: time,
+        UnsignedInt: unsignedInt,
+        Uri: uri,
+        Url: url,
+        Uuid: uuid,
+        Address: Address,
+        Age: Age,
+        Annotation: Annotation,
+        Attachment: Attachment,
+        CodeableConcept: CodeableConcept,
+        Coding: Coding,
+        ContactPoint: ContactPoint,
+        Count: Count,
+        Distance: Distance,
+        Duration: Duration,
+        HumanName: HumanName,
+        Identifier: Identifier,
+        Money: Money,
+        Period: Period,
+        Quantity: Quantity,
+        Range: Range,
+        Ratio: Ratio,
+        Reference: Reference,
+        SampledData: SampledData,
+        Signature: Signature,
+        Timing: Timing,
+        ContactDetail: ContactDetail,
+        Contributor: Contributor,
+        DataRequirement: DataRequirement,
+        Expression: Expression,
+        ParameterDefinition: ParameterDefinition,
+        RelatedArtifact: RelatedArtifact,
+        TriggerDefinition: TriggerDefinition,
+        UsageContext: UsageContext,
+        Dosage: Dosage,
+        Meta: Meta,
+    } = null,
+    /// The Implicit meaning that is to be understood when this element is missing (e.g. 'when this element is missing, the period is ongoing').
+    meaningWhenMissing: ?markdown = null,
+    /// If present, indicates that the order of the repeating element has meaning and describes what that meaning is.  If absent, it means that the order of the element has no meaning.
+    orderMeaning: ?string = null,
+    /// Specifies a value that SHALL be exactly the value  for this element in the instance. For purposes of comparison, non-significant whitespace is ignored, and all values must be an exact match (case and accent sensitive). Missing elements/attributes must also be missing.
+    fixed: ?union(enum) {
+        Base64Binary: base64Binary,
+        Boolean: boolean,
+        Canonical: canonical,
+        Code: code,
+        Date: date,
+        DateTime: dateTime,
+        Decimal: decimal,
+        Id: id,
+        Instant: instant,
+        Integer: integer,
+        Markdown: markdown,
+        Oid: oid,
+        PositiveInt: positiveInt,
+        String: string,
+        Time: time,
+        UnsignedInt: unsignedInt,
+        Uri: uri,
+        Url: url,
+        Uuid: uuid,
+        Address: Address,
+        Age: Age,
+        Annotation: Annotation,
+        Attachment: Attachment,
+        CodeableConcept: CodeableConcept,
+        Coding: Coding,
+        ContactPoint: ContactPoint,
+        Count: Count,
+        Distance: Distance,
+        Duration: Duration,
+        HumanName: HumanName,
+        Identifier: Identifier,
+        Money: Money,
+        Period: Period,
+        Quantity: Quantity,
+        Range: Range,
+        Ratio: Ratio,
+        Reference: Reference,
+        SampledData: SampledData,
+        Signature: Signature,
+        Timing: Timing,
+        ContactDetail: ContactDetail,
+        Contributor: Contributor,
+        DataRequirement: DataRequirement,
+        Expression: Expression,
+        ParameterDefinition: ParameterDefinition,
+        RelatedArtifact: RelatedArtifact,
+        TriggerDefinition: TriggerDefinition,
+        UsageContext: UsageContext,
+        Dosage: Dosage,
+        Meta: Meta,
+    } = null,
+    /// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.
+    ///
+    /// When pattern[x] is used to constrain a primitive, it means that the value provided in the pattern[x] must match the instance value exactly.
+    ///
+    /// When pattern[x] is used to constrain an array, it means that each element provided in the pattern[x] array must (recursively) match at least one element from the instance array.
+    ///
+    /// When pattern[x] is used to constrain a complex object, it means that each property in the pattern must be present in the complex object, and its value must recursively match -- i.e.,
+    ///
+    /// 1. If primitive: it must match exactly the pattern value
+    /// 2. If a complex object: it must match (recursively) the pattern value
+    /// 3. If an array: it must match (recursively) the pattern value.
+    pattern: ?union(enum) {
+        Base64Binary: base64Binary,
+        Boolean: boolean,
+        Canonical: canonical,
+        Code: code,
+        Date: date,
+        DateTime: dateTime,
+        Decimal: decimal,
+        Id: id,
+        Instant: instant,
+        Integer: integer,
+        Markdown: markdown,
+        Oid: oid,
+        PositiveInt: positiveInt,
+        String: string,
+        Time: time,
+        UnsignedInt: unsignedInt,
+        Uri: uri,
+        Url: url,
+        Uuid: uuid,
+        Address: Address,
+        Age: Age,
+        Annotation: Annotation,
+        Attachment: Attachment,
+        CodeableConcept: CodeableConcept,
+        Coding: Coding,
+        ContactPoint: ContactPoint,
+        Count: Count,
+        Distance: Distance,
+        Duration: Duration,
+        HumanName: HumanName,
+        Identifier: Identifier,
+        Money: Money,
+        Period: Period,
+        Quantity: Quantity,
+        Range: Range,
+        Ratio: Ratio,
+        Reference: Reference,
+        SampledData: SampledData,
+        Signature: Signature,
+        Timing: Timing,
+        ContactDetail: ContactDetail,
+        Contributor: Contributor,
+        DataRequirement: DataRequirement,
+        Expression: Expression,
+        ParameterDefinition: ParameterDefinition,
+        RelatedArtifact: RelatedArtifact,
+        TriggerDefinition: TriggerDefinition,
+        UsageContext: UsageContext,
+        Dosage: Dosage,
+        Meta: Meta,
+    } = null,
+    /// A sample value for this element demonstrating the type of information that would typically be found in the element.
+    example: ?[]const ElementDefinition_Example = null,
+    /// The minimum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
+    minValue: ?union(enum) {
+        Date: date,
+        DateTime: dateTime,
+        Instant: instant,
+        Time: time,
+        Decimal: decimal,
+        Integer: integer,
+        PositiveInt: positiveInt,
+        UnsignedInt: unsignedInt,
+        Quantity: Quantity,
+    } = null,
+    /// The maximum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
+    maxValue: ?union(enum) {
+        Date: date,
+        DateTime: dateTime,
+        Instant: instant,
+        Time: time,
+        Decimal: decimal,
+        Integer: integer,
+        PositiveInt: positiveInt,
+        UnsignedInt: unsignedInt,
+        Quantity: Quantity,
+    } = null,
+    /// Indicates the maximum length in characters that is permitted to be present in conformant instances and which is expected to be supported by conformant consumers that support the element.
+    maxLength: ?integer = null,
+    /// A reference to an invariant that may make additional statements about the cardinality or value in the instance.
+    condition: ?[]const id = null,
+    /// Formal constraints such as co-occurrence and other constraints that can be computationally evaluated within the context of the instance.
+    constraint: ?[]const ElementDefinition_Constraint = null,
+    /// If true, implementations that produce or consume resources SHALL provide "support" for the element in some meaningful way.  If false, the element may be ignored and not supported. If false, whether to populate or use the data element in any way is at the discretion of the implementation.
+    mustSupport: ?boolean = null,
+    /// If true, the value of this element affects the interpretation of the element or resource that contains it, and the value of the element cannot be ignored. Typically, this is used for status, negation and qualification codes. The effect of this is that the element cannot be ignored by systems: they SHALL either recognize the element and process it, and/or a pre-determination has been made that it is not relevant to their particular system.
+    isModifier: ?boolean = null,
+    /// Explains how that element affects the interpretation of the resource or element that contains it.
+    isModifierReason: ?string = null,
+    /// Whether the element should be included if a client requests a search with the parameter _summary=true.
+    isSummary: ?boolean = null,
+    /// Binds to a value set if this element is coded (code, Coding, CodeableConcept, Quantity), or the data types (string, uri).
+    binding: ?ElementDefinition_Binding = null,
+    /// Identifies a concept from an external specification that roughly corresponds to this element.
+    mapping: ?[]const ElementDefinition_Mapping = null,
+};
+
+/// Base StructureDefinition for Expression Type: A expression that is evaluated in a specified context and returns a value. The context of use of the expression must specify the context in which the expression is evaluated, and how the result of the expression is used.
+pub const Expression = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// A brief, natural language description of the condition that effectively communicates the intended semantics.
+    description: ?string = null,
+    /// A short name assigned to the expression to allow for multiple reuse of the expression in the context where it is defined.
+    name: ?id = null,
+    /// The media type of the language for the expression.
+    language: code,
+    /// An expression in the specified language that returns a value.
+    expression: ?string = null,
+    /// A URI that defines where the expression is found.
+    reference: ?uri = null,
+};
+
+/// Base StructureDefinition for Extension Type: Optional Extension Element - found in all resources.
+pub const Extension = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Source of the definition for the extension code - a logical name or a URL.
+    url: []const u8,
+    /// Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).
+    value: ?union(enum) {
+        Base64Binary: base64Binary,
+        Boolean: boolean,
+        Canonical: canonical,
+        Code: code,
+        Date: date,
+        DateTime: dateTime,
+        Decimal: decimal,
+        Id: id,
+        Instant: instant,
+        Integer: integer,
+        Markdown: markdown,
+        Oid: oid,
+        PositiveInt: positiveInt,
+        String: string,
+        Time: time,
+        UnsignedInt: unsignedInt,
+        Uri: uri,
+        Url: url,
+        Uuid: uuid,
+        Address: Address,
+        Age: Age,
+        Annotation: Annotation,
+        Attachment: Attachment,
+        CodeableConcept: CodeableConcept,
+        Coding: Coding,
+        ContactPoint: ContactPoint,
+        Count: Count,
+        Distance: Distance,
+        Duration: Duration,
+        HumanName: HumanName,
+        Identifier: Identifier,
+        Money: Money,
+        Period: Period,
+        Quantity: Quantity,
+        Range: Range,
+        Ratio: Ratio,
+        Reference: Reference,
+        SampledData: SampledData,
+        Signature: Signature,
+        Timing: Timing,
+        ContactDetail: ContactDetail,
+        Contributor: Contributor,
+        DataRequirement: DataRequirement,
+        Expression: Expression,
+        ParameterDefinition: ParameterDefinition,
+        RelatedArtifact: RelatedArtifact,
+        TriggerDefinition: TriggerDefinition,
+        UsageContext: UsageContext,
+        Dosage: Dosage,
+        Meta: Meta,
+    } = null,
+};
+
+/// Base StructureDefinition for HumanName Type: A human's name with the ability to identify parts and usage.
+pub const HumanName = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Identifies the purpose for this name.
+    use: ?code = null,
+    /// Specifies the entire name as it should be displayed e.g. on an application UI. This may be provided instead of or as well as the specific parts.
+    text: ?string = null,
+    /// The part of a name that links to the genealogy. In some cultures (e.g. Eritrea) the family name of a son is the first name of his father.
+    family: ?string = null,
+    /// Given name.
+    given: ?[]const string = null,
+    /// Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the start of the name.
+    prefix: ?[]const string = null,
+    /// Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the end of the name.
+    suffix: ?[]const string = null,
+    /// Indicates the period of time when this name was valid for the named person.
+    period: ?Period = null,
+};
+
+/// Base StructureDefinition for Identifier Type: An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.
+pub const Identifier = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The purpose of this identifier.
+    use: ?code = null,
+    /// A coded type for the identifier that can be used to determine which identifier to use for a specific purpose.
+    type: ?CodeableConcept = null,
+    /// Establishes the namespace for the value - that is, a URL that describes a set values that are unique.
+    system: ?uri = null,
+    /// The portion of the identifier typically relevant to the user and which is unique within the context of the system.
+    value: ?string = null,
+    /// Time period during which identifier is/was valid for use.
+    period: ?Period = null,
+    /// Organization that issued/manages the identifier.
+    assigner: ?*const Reference = null,
+};
+
+/// Base StructureDefinition for MarketingStatus Type: The marketing status describes the date when a medicinal product is actually put on the market or the date as of which it is no longer available.
+pub const MarketingStatus = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+    /// The country in which the marketing authorisation has been granted shall be specified It should be specified using the ISO 3166 ‑ 1 alpha-2 code elements.
+    country: CodeableConcept,
+    /// Where a Medicines Regulatory Agency has granted a marketing authorisation for which specific provisions within a jurisdiction apply, the jurisdiction can be specified using an appropriate controlled terminology The controlled term and the controlled term identifier shall be specified.
+    jurisdiction: ?CodeableConcept = null,
+    /// This attribute provides information on the status of the marketing of the medicinal product See ISO/TS 20443 for more information and examples.
+    status: CodeableConcept,
+    /// The date when the Medicinal Product is placed on the market by the Marketing Authorisation Holder (or where applicable, the manufacturer/distributor) in a country and/or jurisdiction shall be provided A complete date consisting of day, month and year shall be specified using the ISO 8601 date format NOTE “Placed on the market” refers to the release of the Medicinal Product into the distribution chain.
+    dateRange: Period,
+    /// The date when the Medicinal Product is placed on the market by the Marketing Authorisation Holder (or where applicable, the manufacturer/distributor) in a country and/or jurisdiction shall be provided A complete date consisting of day, month and year shall be specified using the ISO 8601 date format NOTE “Placed on the market” refers to the release of the Medicinal Product into the distribution chain.
+    restoreDate: ?dateTime = null,
+};
+
+/// Base StructureDefinition for Meta Type: The metadata about a resource. This is content in the resource that is maintained by the infrastructure. Changes to the content might not always be associated with version changes to the resource.
+pub const Meta = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The version specific identifier, as it appears in the version portion of the URL. This value changes when the resource is created, updated, or deleted.
+    versionId: ?id = null,
+    /// When the resource last changed - e.g. when the version changed.
+    lastUpdated: ?instant = null,
+    /// A uri that identifies the source system of the resource. This provides a minimal amount of [Provenance](provenance.html#) information that can be used to track or differentiate the source of information in the resource. The source may identify another FHIR server, document, message, database, etc.
+    source: ?uri = null,
+    /// A list of profiles (references to [StructureDefinition](structuredefinition.html#) resources) that this resource claims to conform to. The URL is a reference to [StructureDefinition.url](structuredefinition-definitions.html#StructureDefinition.url).
+    profile: ?[]const canonical = null,
+    /// Security labels applied to this resource. These tags connect specific resources to the overall security policy and infrastructure.
+    security: ?[]const Coding = null,
+    /// Tags applied to this resource. Tags are intended to be used to identify and relate resources to process and workflow, and applications are not required to consider the tags when interpreting the meaning of a resource.
+    tag: ?[]const Coding = null,
+};
+
+/// Base StructureDefinition for Money Type: An amount of economic utility in some recognized currency.
+pub const Money = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Numerical value (with implicit precision).
+    value: ?decimal = null,
+    /// ISO 4217 Currency Code.
+    currency: ?code = null,
+};
+
+/// Base StructureDefinition for Narrative Type: A human-readable summary of the resource conveying the essential clinical and business information for the resource.
+pub const Narrative = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The status of the narrative - whether it's entirely generated (from just the defined data or the extensions too), or whether a human authored it and it may contain additional data.
+    status: code,
+    /// The actual narrative content, a stripped down version of XHTML.
+    div: xhtml,
+};
+
+/// Base StructureDefinition for ParameterDefinition Type: The parameters to the module. This collection specifies both the input and output parameters. Input parameters are provided by the caller as part of the $evaluate operation. Output parameters are included in the GuidanceResponse.
+pub const ParameterDefinition = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The name of the parameter used to allow access to the value of the parameter in evaluation contexts.
+    name: ?code = null,
+    /// Whether the parameter is input or output for the module.
+    use: code,
+    /// The minimum number of times this parameter SHALL appear in the request or response.
+    min: ?integer = null,
+    /// The maximum number of times this element is permitted to appear in the request or response.
+    max: ?string = null,
+    /// A brief discussion of what the parameter is for and how it is used by the module.
+    documentation: ?string = null,
+    /// The type of the parameter.
+    type: code,
+    /// If specified, this indicates a profile that the input data must conform to, or that the output data will conform to.
+    profile: ?canonical = null,
+};
+
+/// Base StructureDefinition for Period Type: A time period defined by a start and end date and optionally time.
+pub const Period = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The start of the period. The boundary is inclusive.
+    start: ?dateTime = null,
+    /// The end of the period. If the end of the period is missing, it means no end was known or planned at the time the instance was created. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.
+    end: ?dateTime = null,
+};
+
+/// Base StructureDefinition for Population Type: A populatioof people with some set of grouping criteria.
+pub const Population = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+    /// The age of the specific population.
+    age: ?union(enum) {
+        Range: Range,
+        CodeableConcept: CodeableConcept,
+    } = null,
+    /// The gender of the specific population.
+    gender: ?CodeableConcept = null,
+    /// Race of the specific population.
+    race: ?CodeableConcept = null,
+    /// The existing physiological conditions of the specific population to which this applies.
+    physiologicalCondition: ?CodeableConcept = null,
+};
+
+/// Base StructureDefinition for ProdCharacteristic Type: The marketing status describes the date when a medicinal product is actually put on the market or the date as of which it is no longer available.
+pub const ProdCharacteristic = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+    /// Where applicable, the height can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
+    height: ?Quantity = null,
+    /// Where applicable, the width can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
+    width: ?Quantity = null,
+    /// Where applicable, the depth can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
+    depth: ?Quantity = null,
+    /// Where applicable, the weight can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
+    weight: ?Quantity = null,
+    /// Where applicable, the nominal volume can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
+    nominalVolume: ?Quantity = null,
+    /// Where applicable, the external diameter can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
+    externalDiameter: ?Quantity = null,
+    /// Where applicable, the shape can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used.
+    shape: ?string = null,
+    /// Where applicable, the color can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used.
+    color: ?[]const string = null,
+    /// Where applicable, the imprint can be specified as text.
+    imprint: ?[]const string = null,
+    /// Where applicable, the image can be provided The format of the image attachment shall be specified by regional implementations.
+    image: ?[]const Attachment = null,
+    /// Where applicable, the scoring can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used.
+    scoring: ?CodeableConcept = null,
+};
+
+/// Base StructureDefinition for ProductShelfLife Type: The shelf-life and storage information for a medicinal product item or container can be described using this class.
+pub const ProductShelfLife = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+    /// Unique identifier for the packaged Medicinal Product.
+    identifier: ?Identifier = null,
+    /// This describes the shelf life, taking into account various scenarios such as shelf life of the packaged Medicinal Product itself, shelf life after transformation where necessary and shelf life after the first opening of a bottle, etc. The shelf life type shall be specified using an appropriate controlled vocabulary The controlled term and the controlled term identifier shall be specified.
+    type: CodeableConcept,
+    /// The shelf life time period can be specified using a numerical value for the period of time and its unit of time measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
+    period: Quantity,
+    /// Special precautions for storage, if any, can be specified using an appropriate controlled vocabulary The controlled term and the controlled term identifier shall be specified.
+    specialPrecautionsForStorage: ?[]const CodeableConcept = null,
+};
+
+/// Base StructureDefinition for Quantity Type: A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.
+pub const Quantity = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
+    value: ?decimal = null,
+    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
+    comparator: ?code = null,
+    /// A human-readable form of the unit.
+    unit: ?string = null,
+    /// The identification of the system that provides the coded form of the unit.
+    system: ?uri = null,
+    /// A computer processable form of the unit in some unit representation system.
+    code: ?code = null,
+};
+
+/// Base StructureDefinition for Range Type: A set of ordered Quantities defined by a low and high limit.
+pub const Range = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The low limit. The boundary is inclusive.
+    low: ?Quantity = null,
+    /// The high limit. The boundary is inclusive.
+    high: ?Quantity = null,
+};
+
+/// Base StructureDefinition for Ratio Type: A relationship of two Quantity values - expressed as a numerator and a denominator.
+pub const Ratio = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The value of the numerator.
+    numerator: ?Quantity = null,
+    /// The value of the denominator.
+    denominator: ?Quantity = null,
+};
+
+/// Base StructureDefinition for Reference Type: A reference from one resource to another.
+pub const Reference = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to the service base URL, or an absolute URL that resolves to the location where the resource is found. The reference may be version specific or not. If the reference is not to a FHIR RESTful server, then it should be assumed to be version specific. Internal fragment references (start with '#') refer to contained resources.
+    reference: ?string = null,
+    /// The expected type of the target of the reference. If both Reference.type and Reference.reference are populated and Reference.reference is a FHIR URL, both SHALL be consistent.
+    ///
+    /// The type is the Canonical URL of Resource Definition that is the type this reference refers to. References are URLs that are relative to http://hl7.org/fhir/StructureDefinition/ e.g. "Patient" is a reference to http://hl7.org/fhir/StructureDefinition/Patient. Absolute URLs are only allowed for logical models (and can only be used in references in logical models, not resources).
+    type: ?uri = null,
+    /// An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.
+    identifier: ?Identifier = null,
+    /// Plain text narrative that identifies the resource in addition to the resource reference.
+    display: ?string = null,
+};
+
+/// Base StructureDefinition for RelatedArtifact Type: Related artifacts such as additional documentation, justification, or bibliographic references.
+pub const RelatedArtifact = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The type of relationship to the related artifact.
+    type: code,
+    /// A short label that can be used to reference the citation from elsewhere in the containing artifact, such as a footnote index.
+    label: ?string = null,
+    /// A brief description of the document or knowledge resource being referenced, suitable for display to a consumer.
+    display: ?string = null,
+    /// A bibliographic citation for the related artifact. This text SHOULD be formatted according to an accepted citation format.
+    citation: ?markdown = null,
+    /// A url for the artifact that can be followed to access the actual content.
+    url: ?url = null,
+    /// The document being referenced, represented as an attachment. This is exclusive with the resource element.
+    document: ?Attachment = null,
+    /// The related resource, such as a library, value set, profile, or other knowledge resource.
+    resource: ?canonical = null,
+};
+
+/// Base StructureDefinition for SampledData Type: A series of measurements taken by a device, with upper and lower limits. There may be more than one dimension in the data.
+pub const SampledData = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The base quantity that a measured value of zero represents. In addition, this provides the units of the entire measurement series.
+    origin: Quantity,
+    /// The length of time between sampling times, measured in milliseconds.
+    period: decimal,
+    /// A correction factor that is applied to the sampled data points before they are added to the origin.
+    factor: ?decimal = null,
+    /// The lower limit of detection of the measured points. This is needed if any of the data points have the value "L" (lower than detection limit).
+    lowerLimit: ?decimal = null,
+    /// The upper limit of detection of the measured points. This is needed if any of the data points have the value "U" (higher than detection limit).
+    upperLimit: ?decimal = null,
+    /// The number of sample points at each time point. If this value is greater than one, then the dimensions will be interlaced - all the sample points for a point in time will be recorded at once.
+    dimensions: positiveInt,
+    /// A series of data points which are decimal values separated by a single space (character u20). The special values "E" (error), "L" (below detection limit) and "U" (above detection limit) can also be used in place of a decimal value.
+    data: ?string = null,
+};
+
+/// Base StructureDefinition for Signature Type: A signature along with supporting context. The signature may be a digital signature that is cryptographic in nature, or some other signature acceptable to the domain. This other signature may be as simple as a graphical image representing a hand-written signature, or a signature ceremony Different signature approaches have different utilities.
+pub const Signature = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// An indication of the reason that the entity signed this document. This may be explicitly included as part of the signature information and can be used when determining accountability for various actions concerning the document.
+    type: []const Coding,
+    /// When the digital signature was signed.
+    when: instant,
+    /// A reference to an application-usable description of the identity that signed  (e.g. the signature used their private key).
+    who: Reference,
+    /// A reference to an application-usable description of the identity that is represented by the signature.
+    onBehalfOf: ?Reference = null,
+    /// A mime type that indicates the technical format of the target resources signed by the signature.
+    targetFormat: ?code = null,
+    /// A mime type that indicates the technical format of the signature. Important mime types are application/signature+xml for X ML DigSig, application/jose for JWS, and image/* for a graphical image of a signature, etc.
+    sigFormat: ?code = null,
+    /// The base64 encoding of the Signature content. When signature is not recorded electronically this element would be empty.
+    data: ?base64Binary = null,
+};
+
+/// Base StructureDefinition for SubstanceAmount Type: Chemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.
+pub const SubstanceAmount = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+    /// Used to capture quantitative values for a variety of elements. If only limits are given, the arithmetic mean would be the average. If only a single definite value for a given element is given, it would be captured in this field.
+    amount: ?union(enum) {
+        Quantity: Quantity,
+        Range: Range,
+        String: string,
+    } = null,
+    /// Most elements that require a quantitative value will also have a field called amount type. Amount type should always be specified because the actual value of the amount is often dependent on it. EXAMPLE: In capturing the actual relative amounts of substances or molecular fragments it is essential to indicate whether the amount refers to a mole ratio or weight ratio. For any given element an effort should be made to use same the amount type for all related definitional elements.
+    amountType: ?CodeableConcept = null,
+    /// A textual comment on a numeric value.
+    amountText: ?string = null,
+    /// Reference range of possible or expected values.
+    referenceRange: ?SubstanceAmount_ReferenceRange = null,
+};
+
+/// Base StructureDefinition for Timing Type: Specifies an event that may occur multiple times. Timing schedules are used to record when things are planned, expected or requested to occur. The most common usage is in dosage instructions for medications. They are also used when planning care of various kinds, and may be used for reporting the schedule to which past regular activities were carried out.
+pub const Timing = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
+    ///
+    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+    modifierExtension: ?[]const Extension = null,
+    /// Identifies specific times when the event occurs.
+    event: ?[]const dateTime = null,
+    /// A set of rules that describe when the event is scheduled.
+    repeat: ?Timing_Repeat = null,
+    /// A code for the timing schedule (or just text in code.text). Some codes such as BID are ubiquitous, but many institutions define their own additional codes. If a code is provided, the code is understood to be a complete statement of whatever is specified in the structured timing data, and either the code or the data may be used to interpret the Timing, with the exception that .repeat.bounds still applies over the code (and is not contained in the code).
+    code: ?CodeableConcept = null,
+};
+
+/// Base StructureDefinition for TriggerDefinition Type: A description of a triggering event. Triggering events can be named events, data events, or periodic, as determined by the type element.
+pub const TriggerDefinition = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The type of triggering event.
+    type: code,
+    /// A formal name for the event. This may be an absolute URI that identifies the event formally (e.g. from a trigger registry), or a simple relative URI that identifies the event in a local context.
+    name: ?string = null,
+    /// The timing of the event (if this is a periodic trigger).
+    timing: ?union(enum) {
+        Timing: Timing,
+        Reference: Reference,
+        Date: date,
+        DateTime: dateTime,
+    } = null,
+    /// The triggering data of the event (if this is a data trigger). If more than one data is requirement is specified, then all the data requirements must be true.
+    data: ?[]const DataRequirement = null,
+    /// A boolean-valued expression that is evaluated in the context of the container of the trigger definition and returns whether or not the trigger fires.
+    condition: ?Expression = null,
+};
+
+/// Base StructureDefinition for UsageContext Type: Specifies clinical/business/etc. metadata that can be used to retrieve, index and/or categorize an artifact. This metadata can either be specific to the applicable population (e.g., age category, DRG) or the specific context of care (e.g., venue, care setting, provider of care).
+pub const UsageContext = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// A code that identifies the type of context being specified by this usage context.
+    code: Coding,
+    /// A value that defines the context specified in this context of use. The interpretation of the value is defined by the code.
+    value: union(enum) {
+        CodeableConcept: CodeableConcept,
+        Quantity: Quantity,
+        Range: Range,
+        Reference: Reference,
+    },
+};
+
+/// An amount of money. With regard to precision, see [Decimal Precision](datatypes.html#precision)
+pub const MoneyQuantity = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
+    value: ?decimal = null,
+    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
+    comparator: ?code = null,
+    /// A human-readable form of the unit.
+    unit: ?string = null,
+    /// The identification of the system that provides the coded form of the unit.
+    system: ?uri = null,
+    /// A computer processable form of the unit in some unit representation system.
+    code: ?code = null,
+};
+
+/// A fixed quantity (no comparator)
+pub const SimpleQuantity = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
+    value: ?decimal = null,
+    /// Not allowed to be used in this context
+    comparator: ?code = null,
+    /// A human-readable form of the unit.
+    unit: ?string = null,
+    /// The identification of the system that provides the coded form of the unit.
+    system: ?uri = null,
+    /// A computer processable form of the unit in some unit representation system.
+    code: ?code = null,
 };
 
 /// The party(s) that are responsible for covering the payment of this account, and what order should they be applied to the account.
@@ -15202,6 +16477,290 @@ pub const VisionPrescription_LensSpecification = struct {
     note: ?[]const Annotation = null,
 };
 
+/// Code filters specify additional constraints on the data, specifying the value set of interest for a particular element of the data. Each code filter defines an additional constraint on the data, i.e. code filters are AND'ed, not OR'ed.
+pub const DataRequirement_CodeFilter = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The code-valued attribute of the filter. The specified path SHALL be a FHIRPath resolveable on the specified type of the DataRequirement, and SHALL consist only of identifiers, constant indexers, and .resolve(). The path is allowed to contain qualifiers (.) to traverse sub-elements, as well as indexers ([x]) to traverse multiple-cardinality sub-elements (see the [Simple FHIRPath Profile](fhirpath.html#simple) for full details). Note that the index must be an integer constant. The path must resolve to an element of type code, Coding, or CodeableConcept.
+    path: ?string = null,
+    /// A token parameter that refers to a search parameter defined on the specified type of the DataRequirement, and which searches on elements of type code, Coding, or CodeableConcept.
+    searchParam: ?string = null,
+    /// The valueset for the code filter. The valueSet and code elements are additive. If valueSet is specified, the filter will return only those data items for which the value of the code-valued element specified in the path is a member of the specified valueset.
+    valueSet: ?canonical = null,
+    /// The codes for the code filter. If values are given, the filter will return only those data items for which the code-valued attribute specified by the path has a value that is one of the specified codes. If codes are specified in addition to a value set, the filter returns items matching a code in the value set or one of the specified codes.
+    code: ?[]const Coding = null,
+};
+
+/// Date filters specify additional constraints on the data in terms of the applicable date range for specific elements. Each date filter specifies an additional constraint on the data, i.e. date filters are AND'ed, not OR'ed.
+pub const DataRequirement_DateFilter = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The date-valued attribute of the filter. The specified path SHALL be a FHIRPath resolveable on the specified type of the DataRequirement, and SHALL consist only of identifiers, constant indexers, and .resolve(). The path is allowed to contain qualifiers (.) to traverse sub-elements, as well as indexers ([x]) to traverse multiple-cardinality sub-elements (see the [Simple FHIRPath Profile](fhirpath.html#simple) for full details). Note that the index must be an integer constant. The path must resolve to an element of type date, dateTime, Period, Schedule, or Timing.
+    path: ?string = null,
+    /// A date parameter that refers to a search parameter defined on the specified type of the DataRequirement, and which searches on elements of type date, dateTime, Period, Schedule, or Timing.
+    searchParam: ?string = null,
+    /// The value of the filter. If period is specified, the filter will return only those data items that fall within the bounds determined by the Period, inclusive of the period boundaries. If dateTime is specified, the filter will return only those data items that are equal to the specified dateTime. If a Duration is specified, the filter will return only those data items that fall within Duration before now.
+    value: ?union(enum) {
+        DateTime: dateTime,
+        Period: Period,
+        Duration: Duration,
+    } = null,
+};
+
+/// Specifies the order of the results to be returned.
+pub const DataRequirement_Sort = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The attribute of the sort. The specified path must be resolvable from the type of the required data. The path is allowed to contain qualifiers (.) to traverse sub-elements, as well as indexers ([x]) to traverse multiple-cardinality sub-elements. Note that the index must be an integer constant.
+    path: string,
+    /// The direction of the sort, ascending or descending.
+    direction: code,
+};
+
+/// The amount of medication administered.
+pub const Dosage_DoseAndRate = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The kind of dose or rate specified, for example, ordered or calculated.
+    type: ?CodeableConcept = null,
+    /// Amount of medication per dose.
+    dose: ?union(enum) {
+        Range: Range,
+        Quantity: Quantity,
+    } = null,
+    /// Amount of medication per unit of time.
+    rate: ?union(enum) {
+        Ratio: Ratio,
+        Range: Range,
+        Quantity: Quantity,
+    } = null,
+};
+
+/// Indicates that the element is sliced into a set of alternative definitions (i.e. in a structure definition, there are multiple different constraints on a single element in the base resource). Slicing can be used in any resource that has cardinality ..* on the base resource, or any resource with a choice of types. The set of slices is any elements that come after this in the element sequence that have the same path, until a shorter path occurs (the shorter path terminates the set).
+pub const ElementDefinition_Slicing = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Designates which child elements are used to discriminate between the slices when processing an instance. If one or more discriminators are provided, the value of the child elements in the instance data SHALL completely distinguish which slice the element in the resource matches based on the allowed values for those elements in each of the slices.
+    discriminator: ?[]const ElementDefinition_Slicing_Discriminator = null,
+    /// A human-readable text description of how the slicing works. If there is no discriminator, this is required to be present to provide whatever information is possible about how the slices can be differentiated.
+    description: ?string = null,
+    /// If the matching elements have to occur in the same order as defined in the profile.
+    ordered: ?boolean = null,
+    /// Whether additional slices are allowed or not. When the slices are ordered, profile authors can also say that additional slices are only allowed at the end.
+    rules: code,
+};
+
+/// Information about the base definition of the element, provided to make it unnecessary for tools to trace the deviation of the element through the derived and related profiles. When the element definition is not the original definition of an element - i.g. either in a constraint on another type, or for elements from a super type in a snap shot - then the information in provided in the element definition may be different to the base definition. On the original definition of the element, it will be same.
+pub const ElementDefinition_Base = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// The Path that identifies the base element - this matches the ElementDefinition.path for that element. Across FHIR, there is only one base definition of any element - that is, an element definition on a [StructureDefinition](structuredefinition.html#) without a StructureDefinition.base.
+    path: string,
+    /// Minimum cardinality of the base element identified by the path.
+    min: unsignedInt,
+    /// Maximum cardinality of the base element identified by the path.
+    max: string,
+};
+
+/// The data type or resource that the value of this element is permitted to be.
+pub const ElementDefinition_Type = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// URL of Data type or Resource that is a(or the) type used for this element. References are URLs that are relative to http://hl7.org/fhir/StructureDefinition e.g. "string" is a reference to http://hl7.org/fhir/StructureDefinition/string. Absolute URLs are only allowed in logical models.
+    code: uri,
+    /// Identifies a profile structure or implementation Guide that applies to the datatype this element refers to. If any profiles are specified, then the content must conform to at least one of them. The URL can be a local reference - to a contained StructureDefinition, or a reference to another StructureDefinition or Implementation Guide by a canonical URL. When an implementation guide is specified, the type SHALL conform to at least one profile defined in the implementation guide.
+    profile: ?[]const canonical = null,
+    /// Used when the type is "Reference" or "canonical", and identifies a profile structure or implementation Guide that applies to the target of the reference this element refers to. If any profiles are specified, then the content must conform to at least one of them. The URL can be a local reference - to a contained StructureDefinition, or a reference to another StructureDefinition or Implementation Guide by a canonical URL. When an implementation guide is specified, the target resource SHALL conform to at least one profile defined in the implementation guide.
+    targetProfile: ?[]const canonical = null,
+    /// If the type is a reference to another resource, how the resource is or can be aggregated - is it a contained resource, or a reference, and if the context is a bundle, is it included in the bundle.
+    aggregation: ?[]const code = null,
+    /// Whether this reference needs to be version specific or version independent, or whether either can be used.
+    versioning: ?code = null,
+};
+
+/// A sample value for this element demonstrating the type of information that would typically be found in the element.
+pub const ElementDefinition_Example = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Describes the purpose of this example amoung the set of examples.
+    label: string,
+    /// The actual value for the element, which must be one of the types allowed for this element.
+    value: union(enum) {
+        Base64Binary: base64Binary,
+        Boolean: boolean,
+        Canonical: canonical,
+        Code: code,
+        Date: date,
+        DateTime: dateTime,
+        Decimal: decimal,
+        Id: id,
+        Instant: instant,
+        Integer: integer,
+        Markdown: markdown,
+        Oid: oid,
+        PositiveInt: positiveInt,
+        String: string,
+        Time: time,
+        UnsignedInt: unsignedInt,
+        Uri: uri,
+        Url: url,
+        Uuid: uuid,
+        Address: Address,
+        Age: Age,
+        Annotation: Annotation,
+        Attachment: Attachment,
+        CodeableConcept: CodeableConcept,
+        Coding: Coding,
+        ContactPoint: ContactPoint,
+        Count: Count,
+        Distance: Distance,
+        Duration: Duration,
+        HumanName: HumanName,
+        Identifier: Identifier,
+        Money: Money,
+        Period: Period,
+        Quantity: Quantity,
+        Range: Range,
+        Ratio: Ratio,
+        Reference: Reference,
+        SampledData: SampledData,
+        Signature: Signature,
+        Timing: Timing,
+        ContactDetail: ContactDetail,
+        Contributor: Contributor,
+        DataRequirement: DataRequirement,
+        Expression: Expression,
+        ParameterDefinition: ParameterDefinition,
+        RelatedArtifact: RelatedArtifact,
+        TriggerDefinition: TriggerDefinition,
+        UsageContext: UsageContext,
+        Dosage: Dosage,
+        Meta: Meta,
+    },
+};
+
+/// Formal constraints such as co-occurrence and other constraints that can be computationally evaluated within the context of the instance.
+pub const ElementDefinition_Constraint = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Allows identification of which elements have their cardinalities impacted by the constraint.  Will not be referenced for constraints that do not affect cardinality.
+    key: id,
+    /// Description of why this constraint is necessary or appropriate.
+    requirements: ?string = null,
+    /// Identifies the impact constraint violation has on the conformance of the instance.
+    severity: code,
+    /// Text that can be used to describe the constraint in messages identifying that the constraint has been violated.
+    human: string,
+    /// A [FHIRPath](fhirpath.html) expression of constraint that can be executed to see if this constraint is met.
+    expression: ?string = null,
+    /// An XPath expression of constraint that can be executed to see if this constraint is met.
+    xpath: ?string = null,
+    /// A reference to the original source of the constraint, for traceability purposes.
+    source: ?canonical = null,
+};
+
+/// Binds to a value set if this element is coded (code, Coding, CodeableConcept, Quantity), or the data types (string, uri).
+pub const ElementDefinition_Binding = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Indicates the degree of conformance expectations associated with this binding - that is, the degree to which the provided value set must be adhered to in the instances.
+    strength: code,
+    /// Describes the intended use of this particular set of codes.
+    description: ?string = null,
+    /// Refers to the value set that identifies the set of codes the binding refers to.
+    valueSet: ?canonical = null,
+};
+
+/// Identifies a concept from an external specification that roughly corresponds to this element.
+pub const ElementDefinition_Mapping = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// An internal reference to the definition of a mapping.
+    identity: id,
+    /// Identifies the computable language in which mapping.map is expressed.
+    language: ?code = null,
+    /// Expresses what part of the target specification corresponds to this element.
+    map: string,
+    /// Comments that provide information about the mapping or its use.
+    comment: ?string = null,
+};
+
+/// Reference range of possible or expected values.
+pub const SubstanceAmount_ReferenceRange = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Lower limit possible or expected.
+    lowLimit: ?Quantity = null,
+    /// Upper limit possible or expected.
+    highLimit: ?Quantity = null,
+};
+
+/// A set of rules that describe when the event is scheduled.
+pub const Timing_Repeat = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// Either a duration for the length of the timing schedule, a range of possible length, or outer bounds for start and/or end limits of the timing schedule.
+    bounds: ?union(enum) {
+        Duration: Duration,
+        Range: Range,
+        Period: Period,
+    } = null,
+    /// A total count of the desired number of repetitions across the duration of the entire timing specification. If countMax is present, this element indicates the lower bound of the allowed range of count values.
+    count: ?positiveInt = null,
+    /// If present, indicates that the count is a range - so to perform the action between [count] and [countMax] times.
+    countMax: ?positiveInt = null,
+    /// How long this thing happens for when it happens. If durationMax is present, this element indicates the lower bound of the allowed range of the duration.
+    duration: ?decimal = null,
+    /// If present, indicates that the duration is a range - so to perform the action between [duration] and [durationMax] time length.
+    durationMax: ?decimal = null,
+    /// The units of time for the duration, in UCUM units.
+    durationUnit: ?code = null,
+    /// The number of times to repeat the action within the specified period. If frequencyMax is present, this element indicates the lower bound of the allowed range of the frequency.
+    frequency: ?positiveInt = null,
+    /// If present, indicates that the frequency is a range - so to repeat between [frequency] and [frequencyMax] times within the period or period range.
+    frequencyMax: ?positiveInt = null,
+    /// Indicates the duration of time over which repetitions are to occur; e.g. to express "3 times per day", 3 would be the frequency and "1 day" would be the period. If periodMax is present, this element indicates the lower bound of the allowed range of the period length.
+    period: ?decimal = null,
+    /// If present, indicates that the period is a range from [period] to [periodMax], allowing expressing concepts such as "do this once every 3-5 days.
+    periodMax: ?decimal = null,
+    /// The units of time for the period in UCUM units.
+    periodUnit: ?code = null,
+    /// If one or more days of week is provided, then the action happens only on the specified day(s).
+    dayOfWeek: ?[]const code = null,
+    /// Specified time of day for action to take place.
+    timeOfDay: ?[]const time = null,
+    /// An approximate time period during the day, potentially linked to an event of daily living that indicates when the action should occur.
+    when: ?[]const code = null,
+    /// The number of minutes from the event. If the event code does not indicate whether the minutes is before or after the event, then the offset is assumed to be after the event.
+    offset: ?unsignedInt = null,
+};
+
 /// Information on the possible cause of the event.
 pub const AdverseEvent_SuspectEntity_Causality = struct {
     /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
@@ -17656,6 +19215,18 @@ pub const VisionPrescription_LensSpecification_Prism = struct {
     base: code,
 };
 
+/// Designates which child elements are used to discriminate between the slices when processing an instance. If one or more discriminators are provided, the value of the child elements in the instance data SHALL completely distinguish which slice the element in the resource matches based on the allowed values for those elements in each of the slices.
+pub const ElementDefinition_Slicing_Discriminator = struct {
+    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+    id: ?[]const u8 = null,
+    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+    extension: ?[]const Extension = null,
+    /// How the element value is interpreted when discrimination is evaluated.
+    type: code,
+    /// A FHIRPath expression, using [the simple subset of FHIRPath](fhirpath.html#simple), that is used to identify the element on which discrimination is based.
+    path: string,
+};
+
 /// Identifies a restful operation supported by the solution.
 pub const CapabilityStatement_Rest_Resource_Interaction = struct {
     /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
@@ -18724,1613 +20295,151 @@ pub const ValueSet_Compose_Include_Concept_Designation = struct {
     value: string,
 };
 
-/// Base StructureDefinition for Element Type: Base definition for all elements in a resource.
-pub const Element = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-};
-
-/// Base StructureDefinition for BackboneElement Type: Base definition for all elements that are defined inside a resource - but not those in a data type.
-pub const BackboneElement = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-};
-
-/// Base StructureDefinition for base64Binary Type: A stream of bytes
-pub const base64Binary = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for boolean Type: Value of "true" or "false"
-pub const boolean = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?bool = null,
-};
-
-/// Base StructureDefinition for canonical type: A URI that is a reference to a canonical URL on a FHIR resource
-pub const canonical = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for canonical
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for code type: A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents
-pub const code = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for code
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for date Type: A date or partial date (e.g. just year or year + month). There is no time zone. The format is a union of the schema types gYear, gYearMonth and date.  Dates SHALL be valid dates.
-pub const date = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for dateTime Type: A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.
-pub const dateTime = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for decimal Type: A rational number with implicit precision
-pub const decimal = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?f64 = null,
-};
-
-/// Base StructureDefinition for id type: Any combination of letters, numerals, "-" and ".", with a length limit of 64 characters.  (This might be an integer, an unprefixed OID, UUID or any other identifier pattern that meets these constraints.)  Ids are case-insensitive.
-pub const id = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for id
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for instant Type: An instant in time - known at least to the second
-pub const instant = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for integer Type: A whole number
-pub const integer = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?i32 = null,
-};
-
-/// Base StructureDefinition for markdown type: A string that may contain Github Flavored Markdown syntax for optional processing by a mark down presentation engine
-pub const markdown = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for markdown
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for oid type: An OID represented as a URI
-pub const oid = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for oid
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for positiveInt type: An integer with a value that is positive (e.g. >0)
-pub const positiveInt = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for positiveInt
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for string Type: A sequence of Unicode characters
-pub const string = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for time Type: A time during the day, with no date specified
-pub const time = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for unsignedInt type: An integer with a value that is not negative (e.g. >= 0)
-pub const unsignedInt = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for unsignedInt
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for uri Type: String of characters used to identify a name or a resource
-pub const uri = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The actual value
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for url type: A URI that is a literal reference
-pub const url = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for url
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for uuid type: A UUID, represented as a URI
-pub const uuid = struct {
-    /// unique id for the element within a resource (for internal references)
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Primitive value for uuid
-    value: ?[]const u8 = null,
-};
-
-/// Base StructureDefinition for xhtml Type
-pub const xhtml = struct {
-    id: ?[]const u8 = null,
-
-    extension: ?[]const Extension = null,
-    /// Actual xhtml
-    value: []const u8,
-};
-
-/// Base StructureDefinition for Address Type: An address expressed using postal conventions (as opposed to GPS or other location definition formats).  This data type may be used to convey addresses for use in delivering mail as well as for visiting locations which might not be valid for mail delivery.  There are a variety of postal address formats defined around the world.
-pub const Address = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The purpose of this address.
-    use: ?code = null,
-    /// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
-    type: ?code = null,
-    /// Specifies the entire address as it should be displayed e.g. on a postal label. This may be provided instead of or as well as the specific parts.
-    text: ?string = null,
-    /// This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.
-    line: ?[]const string = null,
-    /// The name of the city, town, suburb, village or other community or delivery center.
-    city: ?string = null,
-    /// The name of the administrative area (county).
-    district: ?string = null,
-    /// Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (e.g. US 2 letter state codes).
-    state: ?string = null,
-    /// A postal code designating a region defined by the postal service.
-    postalCode: ?string = null,
-    /// Country - a nation as commonly understood or generally accepted.
-    country: ?string = null,
-    /// Time period when address was/is in use.
-    period: ?Period = null,
-};
-
-/// Base StructureDefinition for Age Type: A duration of time during which an organism (or a process) has existed.
-pub const Age = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
-    value: ?decimal = null,
-    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
-    comparator: ?code = null,
-    /// A human-readable form of the unit.
-    unit: ?string = null,
-    /// The identification of the system that provides the coded form of the unit.
-    system: ?uri = null,
-    /// A computer processable form of the unit in some unit representation system.
-    code: ?code = null,
-};
-
-/// Base StructureDefinition for Annotation Type: A  text note which also  contains information about who made the statement and when.
-pub const Annotation = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The individual responsible for making the annotation.
-    author: ?union(enum) {
-        Reference: Reference,
-        String: string,
-    } = null,
-    /// Indicates when this particular annotation was made.
-    time: ?dateTime = null,
-    /// The text of the annotation in markdown format.
-    text: markdown,
-};
-
-/// Base StructureDefinition for Attachment Type: For referring to data content defined in other formats.
-pub const Attachment = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Identifies the type of the data in the attachment and allows a method to be chosen to interpret or render the data. Includes mime type parameters such as charset where appropriate.
-    contentType: ?code = null,
-    /// The human language of the content. The value can be any valid value according to BCP 47.
-    language: ?code = null,
-    /// The actual data of the attachment - a sequence of bytes, base64 encoded.
-    data: ?base64Binary = null,
-    /// A location where the data can be accessed.
-    url: ?url = null,
-    /// The number of bytes of data that make up this attachment (before base64 encoding, if that is done).
-    size: ?unsignedInt = null,
-    /// The calculated hash of the data using SHA-1. Represented using base64.
-    hash: ?base64Binary = null,
-    /// A label or set of text to display in place of the data.
-    title: ?string = null,
-    /// The date that the attachment was first created.
-    creation: ?dateTime = null,
-};
-
-/// Base StructureDefinition for CodeableConcept Type: A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.
-pub const CodeableConcept = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// A reference to a code defined by a terminology system.
-    coding: ?[]const Coding = null,
-    /// A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.
-    text: ?string = null,
-};
-
-/// Base StructureDefinition for Coding Type: A reference to a code defined by a terminology system.
-pub const Coding = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The identification of the code system that defines the meaning of the symbol in the code.
-    system: ?uri = null,
-    /// The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.
-    version: ?string = null,
-    /// A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).
-    code: ?code = null,
-    /// A representation of the meaning of the code in the system, following the rules of the system.
-    display: ?string = null,
-    /// Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).
-    userSelected: ?boolean = null,
-};
-
-/// Base StructureDefinition for ContactDetail Type: Specifies contact information for a person or organization.
-pub const ContactDetail = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The name of an individual to contact.
-    name: ?string = null,
-    /// The contact details for the individual (if a name was provided) or the organization.
-    telecom: ?[]const ContactPoint = null,
-};
-
-/// Base StructureDefinition for ContactPoint Type: Details for all kinds of technology mediated contact points for a person or organization, including telephone, email, etc.
-pub const ContactPoint = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Telecommunications form for contact point - what communications system is required to make use of the contact.
-    system: ?code = null,
-    /// The actual contact point details, in a form that is meaningful to the designated communication system (i.e. phone number or email address).
-    value: ?string = null,
-    /// Identifies the purpose for the contact point.
-    use: ?code = null,
-    /// Specifies a preferred order in which to use a set of contacts. ContactPoints with lower rank values are more preferred than those with higher rank values.
-    rank: ?positiveInt = null,
-    /// Time period when the contact point was/is in use.
-    period: ?Period = null,
-};
-
-/// Base StructureDefinition for Contributor Type: A contributor to the content of a knowledge asset, including authors, editors, reviewers, and endorsers.
-pub const Contributor = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The type of contributor.
-    type: code,
-    /// The name of the individual or organization responsible for the contribution.
-    name: string,
-    /// Contact details to assist a user in finding and communicating with the contributor.
-    contact: ?[]const ContactDetail = null,
-};
-
-/// Base StructureDefinition for Count Type: A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.
-pub const Count = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
-    value: ?decimal = null,
-    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
-    comparator: ?code = null,
-    /// A human-readable form of the unit.
-    unit: ?string = null,
-    /// The identification of the system that provides the coded form of the unit.
-    system: ?uri = null,
-    /// A computer processable form of the unit in some unit representation system.
-    code: ?code = null,
-};
-
-/// Base StructureDefinition for DataRequirement Type: Describes a required data item for evaluation in terms of the type of data, and optional code or date-based filters of the data.
-pub const DataRequirement = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The type of the required data, specified as the type name of a resource. For profiles, this value is set to the type of the base resource of the profile.
-    type: code,
-    /// The profile of the required data, specified as the uri of the profile definition.
-    profile: ?[]const canonical = null,
-    /// The intended subjects of the data requirement. If this element is not provided, a Patient subject is assumed.
-    subject: ?union(enum) {
-        CodeableConcept: CodeableConcept,
-        Reference: Reference,
-    } = null,
-    /// Indicates that specific elements of the type are referenced by the knowledge module and must be supported by the consumer in order to obtain an effective evaluation. This does not mean that a value is required for this element, only that the consuming system must understand the element and be able to provide values for it if they are available.
-    ///
-    /// The value of mustSupport SHALL be a FHIRPath resolveable on the type of the DataRequirement. The path SHALL consist only of identifiers, constant indexers, and .resolve() (see the [Simple FHIRPath Profile](fhirpath.html#simple) for full details).
-    mustSupport: ?[]const string = null,
-    /// Code filters specify additional constraints on the data, specifying the value set of interest for a particular element of the data. Each code filter defines an additional constraint on the data, i.e. code filters are AND'ed, not OR'ed.
-    codeFilter: ?[]const DataRequirement_CodeFilter = null,
-    /// Date filters specify additional constraints on the data in terms of the applicable date range for specific elements. Each date filter specifies an additional constraint on the data, i.e. date filters are AND'ed, not OR'ed.
-    dateFilter: ?[]const DataRequirement_DateFilter = null,
-    /// Specifies a maximum number of results that are required (uses the _count search parameter).
-    limit: ?positiveInt = null,
-    /// Specifies the order of the results to be returned.
-    sort: ?[]const DataRequirement_Sort = null,
-};
-
-/// Base StructureDefinition for Distance Type: A length - a value with a unit that is a physical distance.
-pub const Distance = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
-    value: ?decimal = null,
-    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
-    comparator: ?code = null,
-    /// A human-readable form of the unit.
-    unit: ?string = null,
-    /// The identification of the system that provides the coded form of the unit.
-    system: ?uri = null,
-    /// A computer processable form of the unit in some unit representation system.
-    code: ?code = null,
-};
-
-/// Base StructureDefinition for Dosage Type: Indicates how the medication is/was taken or should be taken by the patient.
-pub const Dosage = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-    /// Indicates the order in which the dosage instructions should be applied or interpreted.
-    sequence: ?integer = null,
-    /// Free text dosage instructions e.g. SIG.
-    text: ?string = null,
-    /// Supplemental instructions to the patient on how to take the medication  (e.g. "with meals" or"take half to one hour before food") or warnings for the patient about the medication (e.g. "may cause drowsiness" or "avoid exposure of skin to direct sunlight or sunlamps").
-    additionalInstruction: ?[]const CodeableConcept = null,
-    /// Instructions in terms that are understood by the patient or consumer.
-    patientInstruction: ?string = null,
-    /// When medication should be administered.
-    timing: ?Timing = null,
-    /// Indicates whether the Medication is only taken when needed within a specific dosing schedule (Boolean option), or it indicates the precondition for taking the Medication (CodeableConcept).
-    asNeeded: ?union(enum) {
-        Boolean: boolean,
-        CodeableConcept: CodeableConcept,
-    } = null,
-    /// Body site to administer to.
-    site: ?CodeableConcept = null,
-    /// How drug should enter body.
-    route: ?CodeableConcept = null,
-    /// Technique for administering medication.
-    method: ?CodeableConcept = null,
-    /// The amount of medication administered.
-    doseAndRate: ?[]const Dosage_DoseAndRate = null,
-    /// Upper limit on medication per unit of time.
-    maxDosePerPeriod: ?Ratio = null,
-    /// Upper limit on medication per administration.
-    maxDosePerAdministration: ?Quantity = null,
-    /// Upper limit on medication per lifetime of the patient.
-    maxDosePerLifetime: ?Quantity = null,
-};
-
-/// Base StructureDefinition for Duration Type: A length of time.
-pub const Duration = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
-    value: ?decimal = null,
-    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
-    comparator: ?code = null,
-    /// A human-readable form of the unit.
-    unit: ?string = null,
-    /// The identification of the system that provides the coded form of the unit.
-    system: ?uri = null,
-    /// A computer processable form of the unit in some unit representation system.
-    code: ?code = null,
-};
-
-/// Base StructureDefinition for ElementDefinition Type: Captures constraints on each element within the resource, profile, or extension.
-pub const ElementDefinition = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-    /// The path identifies the element and is expressed as a "."-separated list of ancestor elements, beginning with the name of the resource or extension.
-    path: string,
-    /// Codes that define how this element is represented in instances, when the deviation varies from the normal case.
-    representation: ?[]const code = null,
-    /// The name of this element definition slice, when slicing is working. The name must be a token with no dots or spaces. This is a unique name referring to a specific set of constraints applied to this element, used to provide a name to different slices of the same element.
-    sliceName: ?string = null,
-    /// If true, indicates that this slice definition is constraining a slice definition with the same name in an inherited profile. If false, the slice is not overriding any slice in an inherited profile. If missing, the slice might or might not be overriding a slice in an inherited profile, depending on the sliceName.
-    sliceIsConstraining: ?boolean = null,
-    /// A single preferred label which is the text to display beside the element indicating its meaning or to use to prompt for the element in a user display or form.
-    label: ?string = null,
-    /// A code that has the same meaning as the element in a particular terminology.
-    code: ?[]const Coding = null,
-    /// Indicates that the element is sliced into a set of alternative definitions (i.e. in a structure definition, there are multiple different constraints on a single element in the base resource). Slicing can be used in any resource that has cardinality ..* on the base resource, or any resource with a choice of types. The set of slices is any elements that come after this in the element sequence that have the same path, until a shorter path occurs (the shorter path terminates the set).
-    slicing: ?ElementDefinition_Slicing = null,
-    /// A concise description of what this element means (e.g. for use in autogenerated summaries).
-    short: ?string = null,
-    /// Provides a complete explanation of the meaning of the data element for human readability.  For the case of elements derived from existing elements (e.g. constraints), the definition SHALL be consistent with the base definition, but convey the meaning of the element in the particular context of use of the resource. (Note: The text you are reading is specified in ElementDefinition.definition).
-    definition: ?markdown = null,
-    /// Explanatory notes and implementation guidance about the data element, including notes about how to use the data properly, exceptions to proper use, etc. (Note: The text you are reading is specified in ElementDefinition.comment).
-    comment: ?markdown = null,
-    /// This element is for traceability of why the element was created and why the constraints exist as they do. This may be used to point to source materials or specifications that drove the structure of this element.
-    requirements: ?markdown = null,
-    /// Identifies additional names by which this element might also be known.
-    alias: ?[]const string = null,
-    /// The minimum number of times this element SHALL appear in the instance.
-    min: ?unsignedInt = null,
-    /// The maximum number of times this element is permitted to appear in the instance.
-    max: ?string = null,
-    /// Information about the base definition of the element, provided to make it unnecessary for tools to trace the deviation of the element through the derived and related profiles. When the element definition is not the original definition of an element - i.g. either in a constraint on another type, or for elements from a super type in a snap shot - then the information in provided in the element definition may be different to the base definition. On the original definition of the element, it will be same.
-    base: ?ElementDefinition_Base = null,
-    /// Identifies an element defined elsewhere in the definition whose content rules should be applied to the current element. ContentReferences bring across all the rules that are in the ElementDefinition for the element, including definitions, cardinality constraints, bindings, invariants etc.
-    contentReference: ?uri = null,
-    /// The data type or resource that the value of this element is permitted to be.
-    type: ?[]const ElementDefinition_Type = null,
-    /// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
-    defaultValue: ?union(enum) {
-        Base64Binary: base64Binary,
-        Boolean: boolean,
-        Canonical: canonical,
-        Code: code,
-        Date: date,
-        DateTime: dateTime,
-        Decimal: decimal,
-        Id: id,
-        Instant: instant,
-        Integer: integer,
-        Markdown: markdown,
-        Oid: oid,
-        PositiveInt: positiveInt,
-        String: string,
-        Time: time,
-        UnsignedInt: unsignedInt,
-        Uri: uri,
-        Url: url,
-        Uuid: uuid,
-        Address: Address,
-        Age: Age,
-        Annotation: Annotation,
-        Attachment: Attachment,
-        CodeableConcept: CodeableConcept,
-        Coding: Coding,
-        ContactPoint: ContactPoint,
-        Count: Count,
-        Distance: Distance,
-        Duration: Duration,
-        HumanName: HumanName,
-        Identifier: Identifier,
-        Money: Money,
-        Period: Period,
-        Quantity: Quantity,
-        Range: Range,
-        Ratio: Ratio,
-        Reference: Reference,
-        SampledData: SampledData,
-        Signature: Signature,
-        Timing: Timing,
-        ContactDetail: ContactDetail,
-        Contributor: Contributor,
-        DataRequirement: DataRequirement,
-        Expression: Expression,
-        ParameterDefinition: ParameterDefinition,
-        RelatedArtifact: RelatedArtifact,
-        TriggerDefinition: TriggerDefinition,
-        UsageContext: UsageContext,
-        Dosage: Dosage,
-        Meta: Meta,
-    } = null,
-    /// The Implicit meaning that is to be understood when this element is missing (e.g. 'when this element is missing, the period is ongoing').
-    meaningWhenMissing: ?markdown = null,
-    /// If present, indicates that the order of the repeating element has meaning and describes what that meaning is.  If absent, it means that the order of the element has no meaning.
-    orderMeaning: ?string = null,
-    /// Specifies a value that SHALL be exactly the value  for this element in the instance. For purposes of comparison, non-significant whitespace is ignored, and all values must be an exact match (case and accent sensitive). Missing elements/attributes must also be missing.
-    fixed: ?union(enum) {
-        Base64Binary: base64Binary,
-        Boolean: boolean,
-        Canonical: canonical,
-        Code: code,
-        Date: date,
-        DateTime: dateTime,
-        Decimal: decimal,
-        Id: id,
-        Instant: instant,
-        Integer: integer,
-        Markdown: markdown,
-        Oid: oid,
-        PositiveInt: positiveInt,
-        String: string,
-        Time: time,
-        UnsignedInt: unsignedInt,
-        Uri: uri,
-        Url: url,
-        Uuid: uuid,
-        Address: Address,
-        Age: Age,
-        Annotation: Annotation,
-        Attachment: Attachment,
-        CodeableConcept: CodeableConcept,
-        Coding: Coding,
-        ContactPoint: ContactPoint,
-        Count: Count,
-        Distance: Distance,
-        Duration: Duration,
-        HumanName: HumanName,
-        Identifier: Identifier,
-        Money: Money,
-        Period: Period,
-        Quantity: Quantity,
-        Range: Range,
-        Ratio: Ratio,
-        Reference: Reference,
-        SampledData: SampledData,
-        Signature: Signature,
-        Timing: Timing,
-        ContactDetail: ContactDetail,
-        Contributor: Contributor,
-        DataRequirement: DataRequirement,
-        Expression: Expression,
-        ParameterDefinition: ParameterDefinition,
-        RelatedArtifact: RelatedArtifact,
-        TriggerDefinition: TriggerDefinition,
-        UsageContext: UsageContext,
-        Dosage: Dosage,
-        Meta: Meta,
-    } = null,
-    /// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.
-    ///
-    /// When pattern[x] is used to constrain a primitive, it means that the value provided in the pattern[x] must match the instance value exactly.
-    ///
-    /// When pattern[x] is used to constrain an array, it means that each element provided in the pattern[x] array must (recursively) match at least one element from the instance array.
-    ///
-    /// When pattern[x] is used to constrain a complex object, it means that each property in the pattern must be present in the complex object, and its value must recursively match -- i.e.,
-    ///
-    /// 1. If primitive: it must match exactly the pattern value
-    /// 2. If a complex object: it must match (recursively) the pattern value
-    /// 3. If an array: it must match (recursively) the pattern value.
-    pattern: ?union(enum) {
-        Base64Binary: base64Binary,
-        Boolean: boolean,
-        Canonical: canonical,
-        Code: code,
-        Date: date,
-        DateTime: dateTime,
-        Decimal: decimal,
-        Id: id,
-        Instant: instant,
-        Integer: integer,
-        Markdown: markdown,
-        Oid: oid,
-        PositiveInt: positiveInt,
-        String: string,
-        Time: time,
-        UnsignedInt: unsignedInt,
-        Uri: uri,
-        Url: url,
-        Uuid: uuid,
-        Address: Address,
-        Age: Age,
-        Annotation: Annotation,
-        Attachment: Attachment,
-        CodeableConcept: CodeableConcept,
-        Coding: Coding,
-        ContactPoint: ContactPoint,
-        Count: Count,
-        Distance: Distance,
-        Duration: Duration,
-        HumanName: HumanName,
-        Identifier: Identifier,
-        Money: Money,
-        Period: Period,
-        Quantity: Quantity,
-        Range: Range,
-        Ratio: Ratio,
-        Reference: Reference,
-        SampledData: SampledData,
-        Signature: Signature,
-        Timing: Timing,
-        ContactDetail: ContactDetail,
-        Contributor: Contributor,
-        DataRequirement: DataRequirement,
-        Expression: Expression,
-        ParameterDefinition: ParameterDefinition,
-        RelatedArtifact: RelatedArtifact,
-        TriggerDefinition: TriggerDefinition,
-        UsageContext: UsageContext,
-        Dosage: Dosage,
-        Meta: Meta,
-    } = null,
-    /// A sample value for this element demonstrating the type of information that would typically be found in the element.
-    example: ?[]const ElementDefinition_Example = null,
-    /// The minimum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
-    minValue: ?union(enum) {
-        Date: date,
-        DateTime: dateTime,
-        Instant: instant,
-        Time: time,
-        Decimal: decimal,
-        Integer: integer,
-        PositiveInt: positiveInt,
-        UnsignedInt: unsignedInt,
-        Quantity: Quantity,
-    } = null,
-    /// The maximum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
-    maxValue: ?union(enum) {
-        Date: date,
-        DateTime: dateTime,
-        Instant: instant,
-        Time: time,
-        Decimal: decimal,
-        Integer: integer,
-        PositiveInt: positiveInt,
-        UnsignedInt: unsignedInt,
-        Quantity: Quantity,
-    } = null,
-    /// Indicates the maximum length in characters that is permitted to be present in conformant instances and which is expected to be supported by conformant consumers that support the element.
-    maxLength: ?integer = null,
-    /// A reference to an invariant that may make additional statements about the cardinality or value in the instance.
-    condition: ?[]const id = null,
-    /// Formal constraints such as co-occurrence and other constraints that can be computationally evaluated within the context of the instance.
-    constraint: ?[]const ElementDefinition_Constraint = null,
-    /// If true, implementations that produce or consume resources SHALL provide "support" for the element in some meaningful way.  If false, the element may be ignored and not supported. If false, whether to populate or use the data element in any way is at the discretion of the implementation.
-    mustSupport: ?boolean = null,
-    /// If true, the value of this element affects the interpretation of the element or resource that contains it, and the value of the element cannot be ignored. Typically, this is used for status, negation and qualification codes. The effect of this is that the element cannot be ignored by systems: they SHALL either recognize the element and process it, and/or a pre-determination has been made that it is not relevant to their particular system.
-    isModifier: ?boolean = null,
-    /// Explains how that element affects the interpretation of the resource or element that contains it.
-    isModifierReason: ?string = null,
-    /// Whether the element should be included if a client requests a search with the parameter _summary=true.
-    isSummary: ?boolean = null,
-    /// Binds to a value set if this element is coded (code, Coding, CodeableConcept, Quantity), or the data types (string, uri).
-    binding: ?ElementDefinition_Binding = null,
-    /// Identifies a concept from an external specification that roughly corresponds to this element.
-    mapping: ?[]const ElementDefinition_Mapping = null,
-};
-
-/// Base StructureDefinition for Expression Type: A expression that is evaluated in a specified context and returns a value. The context of use of the expression must specify the context in which the expression is evaluated, and how the result of the expression is used.
-pub const Expression = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// A brief, natural language description of the condition that effectively communicates the intended semantics.
-    description: ?string = null,
-    /// A short name assigned to the expression to allow for multiple reuse of the expression in the context where it is defined.
-    name: ?id = null,
-    /// The media type of the language for the expression.
-    language: code,
-    /// An expression in the specified language that returns a value.
-    expression: ?string = null,
-    /// A URI that defines where the expression is found.
-    reference: ?uri = null,
-};
-
-/// Base StructureDefinition for Extension Type: Optional Extension Element - found in all resources.
-pub const Extension = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Source of the definition for the extension code - a logical name or a URL.
-    url: []const u8,
-    /// Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).
-    value: ?union(enum) {
-        Base64Binary: base64Binary,
-        Boolean: boolean,
-        Canonical: canonical,
-        Code: code,
-        Date: date,
-        DateTime: dateTime,
-        Decimal: decimal,
-        Id: id,
-        Instant: instant,
-        Integer: integer,
-        Markdown: markdown,
-        Oid: oid,
-        PositiveInt: positiveInt,
-        String: string,
-        Time: time,
-        UnsignedInt: unsignedInt,
-        Uri: uri,
-        Url: url,
-        Uuid: uuid,
-        Address: Address,
-        Age: Age,
-        Annotation: Annotation,
-        Attachment: Attachment,
-        CodeableConcept: CodeableConcept,
-        Coding: Coding,
-        ContactPoint: ContactPoint,
-        Count: Count,
-        Distance: Distance,
-        Duration: Duration,
-        HumanName: HumanName,
-        Identifier: Identifier,
-        Money: Money,
-        Period: Period,
-        Quantity: Quantity,
-        Range: Range,
-        Ratio: Ratio,
-        Reference: Reference,
-        SampledData: SampledData,
-        Signature: Signature,
-        Timing: Timing,
-        ContactDetail: ContactDetail,
-        Contributor: Contributor,
-        DataRequirement: DataRequirement,
-        Expression: Expression,
-        ParameterDefinition: ParameterDefinition,
-        RelatedArtifact: RelatedArtifact,
-        TriggerDefinition: TriggerDefinition,
-        UsageContext: UsageContext,
-        Dosage: Dosage,
-        Meta: Meta,
-    } = null,
-};
-
-/// Base StructureDefinition for HumanName Type: A human's name with the ability to identify parts and usage.
-pub const HumanName = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Identifies the purpose for this name.
-    use: ?code = null,
-    /// Specifies the entire name as it should be displayed e.g. on an application UI. This may be provided instead of or as well as the specific parts.
-    text: ?string = null,
-    /// The part of a name that links to the genealogy. In some cultures (e.g. Eritrea) the family name of a son is the first name of his father.
-    family: ?string = null,
-    /// Given name.
-    given: ?[]const string = null,
-    /// Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the start of the name.
-    prefix: ?[]const string = null,
-    /// Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the end of the name.
-    suffix: ?[]const string = null,
-    /// Indicates the period of time when this name was valid for the named person.
-    period: ?Period = null,
-};
-
-/// Base StructureDefinition for Identifier Type: An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.
-pub const Identifier = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The purpose of this identifier.
-    use: ?code = null,
-    /// A coded type for the identifier that can be used to determine which identifier to use for a specific purpose.
-    type: ?CodeableConcept = null,
-    /// Establishes the namespace for the value - that is, a URL that describes a set values that are unique.
-    system: ?uri = null,
-    /// The portion of the identifier typically relevant to the user and which is unique within the context of the system.
-    value: ?string = null,
-    /// Time period during which identifier is/was valid for use.
-    period: ?Period = null,
-    /// Organization that issued/manages the identifier.
-    assigner: ?*const Reference = null,
-};
-
-/// Base StructureDefinition for MarketingStatus Type: The marketing status describes the date when a medicinal product is actually put on the market or the date as of which it is no longer available.
-pub const MarketingStatus = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-    /// The country in which the marketing authorisation has been granted shall be specified It should be specified using the ISO 3166 ‑ 1 alpha-2 code elements.
-    country: CodeableConcept,
-    /// Where a Medicines Regulatory Agency has granted a marketing authorisation for which specific provisions within a jurisdiction apply, the jurisdiction can be specified using an appropriate controlled terminology The controlled term and the controlled term identifier shall be specified.
-    jurisdiction: ?CodeableConcept = null,
-    /// This attribute provides information on the status of the marketing of the medicinal product See ISO/TS 20443 for more information and examples.
-    status: CodeableConcept,
-    /// The date when the Medicinal Product is placed on the market by the Marketing Authorisation Holder (or where applicable, the manufacturer/distributor) in a country and/or jurisdiction shall be provided A complete date consisting of day, month and year shall be specified using the ISO 8601 date format NOTE “Placed on the market” refers to the release of the Medicinal Product into the distribution chain.
-    dateRange: Period,
-    /// The date when the Medicinal Product is placed on the market by the Marketing Authorisation Holder (or where applicable, the manufacturer/distributor) in a country and/or jurisdiction shall be provided A complete date consisting of day, month and year shall be specified using the ISO 8601 date format NOTE “Placed on the market” refers to the release of the Medicinal Product into the distribution chain.
-    restoreDate: ?dateTime = null,
-};
-
-/// Base StructureDefinition for Meta Type: The metadata about a resource. This is content in the resource that is maintained by the infrastructure. Changes to the content might not always be associated with version changes to the resource.
-pub const Meta = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The version specific identifier, as it appears in the version portion of the URL. This value changes when the resource is created, updated, or deleted.
-    versionId: ?id = null,
-    /// When the resource last changed - e.g. when the version changed.
-    lastUpdated: ?instant = null,
-    /// A uri that identifies the source system of the resource. This provides a minimal amount of [Provenance](provenance.html#) information that can be used to track or differentiate the source of information in the resource. The source may identify another FHIR server, document, message, database, etc.
-    source: ?uri = null,
-    /// A list of profiles (references to [StructureDefinition](structuredefinition.html#) resources) that this resource claims to conform to. The URL is a reference to [StructureDefinition.url](structuredefinition-definitions.html#StructureDefinition.url).
-    profile: ?[]const canonical = null,
-    /// Security labels applied to this resource. These tags connect specific resources to the overall security policy and infrastructure.
-    security: ?[]const Coding = null,
-    /// Tags applied to this resource. Tags are intended to be used to identify and relate resources to process and workflow, and applications are not required to consider the tags when interpreting the meaning of a resource.
-    tag: ?[]const Coding = null,
-};
-
-/// Base StructureDefinition for Money Type: An amount of economic utility in some recognized currency.
-pub const Money = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Numerical value (with implicit precision).
-    value: ?decimal = null,
-    /// ISO 4217 Currency Code.
-    currency: ?code = null,
-};
-
-/// Base StructureDefinition for Narrative Type: A human-readable summary of the resource conveying the essential clinical and business information for the resource.
-pub const Narrative = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The status of the narrative - whether it's entirely generated (from just the defined data or the extensions too), or whether a human authored it and it may contain additional data.
-    status: code,
-    /// The actual narrative content, a stripped down version of XHTML.
-    div: xhtml,
-};
-
-/// Base StructureDefinition for ParameterDefinition Type: The parameters to the module. This collection specifies both the input and output parameters. Input parameters are provided by the caller as part of the $evaluate operation. Output parameters are included in the GuidanceResponse.
-pub const ParameterDefinition = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The name of the parameter used to allow access to the value of the parameter in evaluation contexts.
-    name: ?code = null,
-    /// Whether the parameter is input or output for the module.
-    use: code,
-    /// The minimum number of times this parameter SHALL appear in the request or response.
-    min: ?integer = null,
-    /// The maximum number of times this element is permitted to appear in the request or response.
-    max: ?string = null,
-    /// A brief discussion of what the parameter is for and how it is used by the module.
-    documentation: ?string = null,
-    /// The type of the parameter.
-    type: code,
-    /// If specified, this indicates a profile that the input data must conform to, or that the output data will conform to.
-    profile: ?canonical = null,
-};
-
-/// Base StructureDefinition for Period Type: A time period defined by a start and end date and optionally time.
-pub const Period = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The start of the period. The boundary is inclusive.
-    start: ?dateTime = null,
-    /// The end of the period. If the end of the period is missing, it means no end was known or planned at the time the instance was created. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.
-    end: ?dateTime = null,
-};
-
-/// Base StructureDefinition for Population Type: A populatioof people with some set of grouping criteria.
-pub const Population = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-    /// The age of the specific population.
-    age: ?union(enum) {
-        Range: Range,
-        CodeableConcept: CodeableConcept,
-    } = null,
-    /// The gender of the specific population.
-    gender: ?CodeableConcept = null,
-    /// Race of the specific population.
-    race: ?CodeableConcept = null,
-    /// The existing physiological conditions of the specific population to which this applies.
-    physiologicalCondition: ?CodeableConcept = null,
-};
-
-/// Base StructureDefinition for ProdCharacteristic Type: The marketing status describes the date when a medicinal product is actually put on the market or the date as of which it is no longer available.
-pub const ProdCharacteristic = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-    /// Where applicable, the height can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
-    height: ?Quantity = null,
-    /// Where applicable, the width can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
-    width: ?Quantity = null,
-    /// Where applicable, the depth can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
-    depth: ?Quantity = null,
-    /// Where applicable, the weight can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
-    weight: ?Quantity = null,
-    /// Where applicable, the nominal volume can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
-    nominalVolume: ?Quantity = null,
-    /// Where applicable, the external diameter can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
-    externalDiameter: ?Quantity = null,
-    /// Where applicable, the shape can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used.
-    shape: ?string = null,
-    /// Where applicable, the color can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used.
-    color: ?[]const string = null,
-    /// Where applicable, the imprint can be specified as text.
-    imprint: ?[]const string = null,
-    /// Where applicable, the image can be provided The format of the image attachment shall be specified by regional implementations.
-    image: ?[]const Attachment = null,
-    /// Where applicable, the scoring can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used.
-    scoring: ?CodeableConcept = null,
-};
-
-/// Base StructureDefinition for ProductShelfLife Type: The shelf-life and storage information for a medicinal product item or container can be described using this class.
-pub const ProductShelfLife = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-    /// Unique identifier for the packaged Medicinal Product.
-    identifier: ?Identifier = null,
-    /// This describes the shelf life, taking into account various scenarios such as shelf life of the packaged Medicinal Product itself, shelf life after transformation where necessary and shelf life after the first opening of a bottle, etc. The shelf life type shall be specified using an appropriate controlled vocabulary The controlled term and the controlled term identifier shall be specified.
-    type: CodeableConcept,
-    /// The shelf life time period can be specified using a numerical value for the period of time and its unit of time measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used.
-    period: Quantity,
-    /// Special precautions for storage, if any, can be specified using an appropriate controlled vocabulary The controlled term and the controlled term identifier shall be specified.
-    specialPrecautionsForStorage: ?[]const CodeableConcept = null,
-};
-
-/// Base StructureDefinition for Quantity Type: A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.
-pub const Quantity = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
-    value: ?decimal = null,
-    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
-    comparator: ?code = null,
-    /// A human-readable form of the unit.
-    unit: ?string = null,
-    /// The identification of the system that provides the coded form of the unit.
-    system: ?uri = null,
-    /// A computer processable form of the unit in some unit representation system.
-    code: ?code = null,
-};
-
-/// Base StructureDefinition for Range Type: A set of ordered Quantities defined by a low and high limit.
-pub const Range = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The low limit. The boundary is inclusive.
-    low: ?Quantity = null,
-    /// The high limit. The boundary is inclusive.
-    high: ?Quantity = null,
-};
-
-/// Base StructureDefinition for Ratio Type: A relationship of two Quantity values - expressed as a numerator and a denominator.
-pub const Ratio = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The value of the numerator.
-    numerator: ?Quantity = null,
-    /// The value of the denominator.
-    denominator: ?Quantity = null,
-};
-
-/// Base StructureDefinition for Reference Type: A reference from one resource to another.
-pub const Reference = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to the service base URL, or an absolute URL that resolves to the location where the resource is found. The reference may be version specific or not. If the reference is not to a FHIR RESTful server, then it should be assumed to be version specific. Internal fragment references (start with '#') refer to contained resources.
-    reference: ?string = null,
-    /// The expected type of the target of the reference. If both Reference.type and Reference.reference are populated and Reference.reference is a FHIR URL, both SHALL be consistent.
-    ///
-    /// The type is the Canonical URL of Resource Definition that is the type this reference refers to. References are URLs that are relative to http://hl7.org/fhir/StructureDefinition/ e.g. "Patient" is a reference to http://hl7.org/fhir/StructureDefinition/Patient. Absolute URLs are only allowed for logical models (and can only be used in references in logical models, not resources).
-    type: ?uri = null,
-    /// An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.
-    identifier: ?Identifier = null,
-    /// Plain text narrative that identifies the resource in addition to the resource reference.
-    display: ?string = null,
-};
-
-/// Base StructureDefinition for RelatedArtifact Type: Related artifacts such as additional documentation, justification, or bibliographic references.
-pub const RelatedArtifact = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The type of relationship to the related artifact.
-    type: code,
-    /// A short label that can be used to reference the citation from elsewhere in the containing artifact, such as a footnote index.
-    label: ?string = null,
-    /// A brief description of the document or knowledge resource being referenced, suitable for display to a consumer.
-    display: ?string = null,
-    /// A bibliographic citation for the related artifact. This text SHOULD be formatted according to an accepted citation format.
-    citation: ?markdown = null,
-    /// A url for the artifact that can be followed to access the actual content.
-    url: ?url = null,
-    /// The document being referenced, represented as an attachment. This is exclusive with the resource element.
-    document: ?Attachment = null,
-    /// The related resource, such as a library, value set, profile, or other knowledge resource.
-    resource: ?canonical = null,
-};
-
-/// Base StructureDefinition for SampledData Type: A series of measurements taken by a device, with upper and lower limits. There may be more than one dimension in the data.
-pub const SampledData = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The base quantity that a measured value of zero represents. In addition, this provides the units of the entire measurement series.
-    origin: Quantity,
-    /// The length of time between sampling times, measured in milliseconds.
-    period: decimal,
-    /// A correction factor that is applied to the sampled data points before they are added to the origin.
-    factor: ?decimal = null,
-    /// The lower limit of detection of the measured points. This is needed if any of the data points have the value "L" (lower than detection limit).
-    lowerLimit: ?decimal = null,
-    /// The upper limit of detection of the measured points. This is needed if any of the data points have the value "U" (higher than detection limit).
-    upperLimit: ?decimal = null,
-    /// The number of sample points at each time point. If this value is greater than one, then the dimensions will be interlaced - all the sample points for a point in time will be recorded at once.
-    dimensions: positiveInt,
-    /// A series of data points which are decimal values separated by a single space (character u20). The special values "E" (error), "L" (below detection limit) and "U" (above detection limit) can also be used in place of a decimal value.
-    data: ?string = null,
-};
-
-/// Base StructureDefinition for Signature Type: A signature along with supporting context. The signature may be a digital signature that is cryptographic in nature, or some other signature acceptable to the domain. This other signature may be as simple as a graphical image representing a hand-written signature, or a signature ceremony Different signature approaches have different utilities.
-pub const Signature = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// An indication of the reason that the entity signed this document. This may be explicitly included as part of the signature information and can be used when determining accountability for various actions concerning the document.
-    type: []const Coding,
-    /// When the digital signature was signed.
-    when: instant,
-    /// A reference to an application-usable description of the identity that signed  (e.g. the signature used their private key).
-    who: Reference,
-    /// A reference to an application-usable description of the identity that is represented by the signature.
-    onBehalfOf: ?Reference = null,
-    /// A mime type that indicates the technical format of the target resources signed by the signature.
-    targetFormat: ?code = null,
-    /// A mime type that indicates the technical format of the signature. Important mime types are application/signature+xml for X ML DigSig, application/jose for JWS, and image/* for a graphical image of a signature, etc.
-    sigFormat: ?code = null,
-    /// The base64 encoding of the Signature content. When signature is not recorded electronically this element would be empty.
-    data: ?base64Binary = null,
-};
-
-/// Base StructureDefinition for SubstanceAmount Type: Chemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.
-pub const SubstanceAmount = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-    /// Used to capture quantitative values for a variety of elements. If only limits are given, the arithmetic mean would be the average. If only a single definite value for a given element is given, it would be captured in this field.
-    amount: ?union(enum) {
-        Quantity: Quantity,
-        Range: Range,
-        String: string,
-    } = null,
-    /// Most elements that require a quantitative value will also have a field called amount type. Amount type should always be specified because the actual value of the amount is often dependent on it. EXAMPLE: In capturing the actual relative amounts of substances or molecular fragments it is essential to indicate whether the amount refers to a mole ratio or weight ratio. For any given element an effort should be made to use same the amount type for all related definitional elements.
-    amountType: ?CodeableConcept = null,
-    /// A textual comment on a numeric value.
-    amountText: ?string = null,
-    /// Reference range of possible or expected values.
-    referenceRange: ?SubstanceAmount_ReferenceRange = null,
-};
-
-/// Base StructureDefinition for Timing Type: Specifies an event that may occur multiple times. Timing schedules are used to record when things are planned, expected or requested to occur. The most common usage is in dosage instructions for medications. They are also used when planning care of various kinds, and may be used for reporting the schedule to which past regular activities were carried out.
-pub const Timing = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.
-    ///
-    /// Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-    modifierExtension: ?[]const Extension = null,
-    /// Identifies specific times when the event occurs.
-    event: ?[]const dateTime = null,
-    /// A set of rules that describe when the event is scheduled.
-    repeat: ?Timing_Repeat = null,
-    /// A code for the timing schedule (or just text in code.text). Some codes such as BID are ubiquitous, but many institutions define their own additional codes. If a code is provided, the code is understood to be a complete statement of whatever is specified in the structured timing data, and either the code or the data may be used to interpret the Timing, with the exception that .repeat.bounds still applies over the code (and is not contained in the code).
-    code: ?CodeableConcept = null,
-};
-
-/// Base StructureDefinition for TriggerDefinition Type: A description of a triggering event. Triggering events can be named events, data events, or periodic, as determined by the type element.
-pub const TriggerDefinition = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The type of triggering event.
-    type: code,
-    /// A formal name for the event. This may be an absolute URI that identifies the event formally (e.g. from a trigger registry), or a simple relative URI that identifies the event in a local context.
-    name: ?string = null,
-    /// The timing of the event (if this is a periodic trigger).
-    timing: ?union(enum) {
-        Timing: Timing,
-        Reference: Reference,
-        Date: date,
-        DateTime: dateTime,
-    } = null,
-    /// The triggering data of the event (if this is a data trigger). If more than one data is requirement is specified, then all the data requirements must be true.
-    data: ?[]const DataRequirement = null,
-    /// A boolean-valued expression that is evaluated in the context of the container of the trigger definition and returns whether or not the trigger fires.
-    condition: ?Expression = null,
-};
-
-/// Base StructureDefinition for UsageContext Type: Specifies clinical/business/etc. metadata that can be used to retrieve, index and/or categorize an artifact. This metadata can either be specific to the applicable population (e.g., age category, DRG) or the specific context of care (e.g., venue, care setting, provider of care).
-pub const UsageContext = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// A code that identifies the type of context being specified by this usage context.
-    code: Coding,
-    /// A value that defines the context specified in this context of use. The interpretation of the value is defined by the code.
-    value: union(enum) {
-        CodeableConcept: CodeableConcept,
-        Quantity: Quantity,
-        Range: Range,
-        Reference: Reference,
-    },
-};
-
-/// An amount of money. With regard to precision, see [Decimal Precision](datatypes.html#precision)
-pub const MoneyQuantity = struct {
-    /// There SHALL be a code if there is a value and it SHALL be an expression of currency.  If system is present, it SHALL be ISO 4217 (system = "urn:iso:std:iso:4217" - currency).
-    Quantity: ?[]const []const u8 = null,
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    @"Quantity.id": ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    @"Quantity.extension": ?[]const Extension = null,
-    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
-    @"Quantity.value": ?decimal = null,
-    /// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is "<" , then the real value is < stated value.
-    @"Quantity.comparator": ?code = null,
-    /// A human-readable form of the unit.
-    @"Quantity.unit": ?string = null,
-    /// The identification of the system that provides the coded form of the unit.
-    @"Quantity.system": ?uri = null,
-    /// A computer processable form of the unit in some unit representation system.
-    @"Quantity.code": ?code = null,
-};
-
-/// A fixed quantity (no comparator)
-pub const SimpleQuantity = struct {
-    /// The comparator is not used on a SimpleQuantity
-    Quantity: ?[]const []const u8 = null,
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    @"Quantity.id": ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    @"Quantity.extension": ?[]const Extension = null,
-    /// The value of the measured amount. The value includes an implicit precision in the presentation of the value.
-    @"Quantity.value": ?decimal = null,
-    /// Not allowed to be used in this context
-    @"Quantity.comparator": ?code = null,
-    /// A human-readable form of the unit.
-    @"Quantity.unit": ?string = null,
-    /// The identification of the system that provides the coded form of the unit.
-    @"Quantity.system": ?uri = null,
-    /// A computer processable form of the unit in some unit representation system.
-    @"Quantity.code": ?code = null,
-};
-
-/// Code filters specify additional constraints on the data, specifying the value set of interest for a particular element of the data. Each code filter defines an additional constraint on the data, i.e. code filters are AND'ed, not OR'ed.
-pub const DataRequirement_CodeFilter = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The code-valued attribute of the filter. The specified path SHALL be a FHIRPath resolveable on the specified type of the DataRequirement, and SHALL consist only of identifiers, constant indexers, and .resolve(). The path is allowed to contain qualifiers (.) to traverse sub-elements, as well as indexers ([x]) to traverse multiple-cardinality sub-elements (see the [Simple FHIRPath Profile](fhirpath.html#simple) for full details). Note that the index must be an integer constant. The path must resolve to an element of type code, Coding, or CodeableConcept.
-    path: ?string = null,
-    /// A token parameter that refers to a search parameter defined on the specified type of the DataRequirement, and which searches on elements of type code, Coding, or CodeableConcept.
-    searchParam: ?string = null,
-    /// The valueset for the code filter. The valueSet and code elements are additive. If valueSet is specified, the filter will return only those data items for which the value of the code-valued element specified in the path is a member of the specified valueset.
-    valueSet: ?canonical = null,
-    /// The codes for the code filter. If values are given, the filter will return only those data items for which the code-valued attribute specified by the path has a value that is one of the specified codes. If codes are specified in addition to a value set, the filter returns items matching a code in the value set or one of the specified codes.
-    code: ?[]const Coding = null,
-};
-
-/// Date filters specify additional constraints on the data in terms of the applicable date range for specific elements. Each date filter specifies an additional constraint on the data, i.e. date filters are AND'ed, not OR'ed.
-pub const DataRequirement_DateFilter = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The date-valued attribute of the filter. The specified path SHALL be a FHIRPath resolveable on the specified type of the DataRequirement, and SHALL consist only of identifiers, constant indexers, and .resolve(). The path is allowed to contain qualifiers (.) to traverse sub-elements, as well as indexers ([x]) to traverse multiple-cardinality sub-elements (see the [Simple FHIRPath Profile](fhirpath.html#simple) for full details). Note that the index must be an integer constant. The path must resolve to an element of type date, dateTime, Period, Schedule, or Timing.
-    path: ?string = null,
-    /// A date parameter that refers to a search parameter defined on the specified type of the DataRequirement, and which searches on elements of type date, dateTime, Period, Schedule, or Timing.
-    searchParam: ?string = null,
-    /// The value of the filter. If period is specified, the filter will return only those data items that fall within the bounds determined by the Period, inclusive of the period boundaries. If dateTime is specified, the filter will return only those data items that are equal to the specified dateTime. If a Duration is specified, the filter will return only those data items that fall within Duration before now.
-    value: ?union(enum) {
-        DateTime: dateTime,
-        Period: Period,
-        Duration: Duration,
-    } = null,
-};
-
-/// Specifies the order of the results to be returned.
-pub const DataRequirement_Sort = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The attribute of the sort. The specified path must be resolvable from the type of the required data. The path is allowed to contain qualifiers (.) to traverse sub-elements, as well as indexers ([x]) to traverse multiple-cardinality sub-elements. Note that the index must be an integer constant.
-    path: string,
-    /// The direction of the sort, ascending or descending.
-    direction: code,
-};
-
-/// The amount of medication administered.
-pub const Dosage_DoseAndRate = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The kind of dose or rate specified, for example, ordered or calculated.
-    type: ?CodeableConcept = null,
-    /// Amount of medication per dose.
-    dose: ?union(enum) {
-        Range: Range,
-        Quantity: Quantity,
-    } = null,
-    /// Amount of medication per unit of time.
-    rate: ?union(enum) {
-        Ratio: Ratio,
-        Range: Range,
-        Quantity: Quantity,
-    } = null,
-};
-
-/// Indicates that the element is sliced into a set of alternative definitions (i.e. in a structure definition, there are multiple different constraints on a single element in the base resource). Slicing can be used in any resource that has cardinality ..* on the base resource, or any resource with a choice of types. The set of slices is any elements that come after this in the element sequence that have the same path, until a shorter path occurs (the shorter path terminates the set).
-pub const ElementDefinition_Slicing = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Designates which child elements are used to discriminate between the slices when processing an instance. If one or more discriminators are provided, the value of the child elements in the instance data SHALL completely distinguish which slice the element in the resource matches based on the allowed values for those elements in each of the slices.
-    discriminator: ?[]const ElementDefinition_Slicing_Discriminator = null,
-    /// A human-readable text description of how the slicing works. If there is no discriminator, this is required to be present to provide whatever information is possible about how the slices can be differentiated.
-    description: ?string = null,
-    /// If the matching elements have to occur in the same order as defined in the profile.
-    ordered: ?boolean = null,
-    /// Whether additional slices are allowed or not. When the slices are ordered, profile authors can also say that additional slices are only allowed at the end.
-    rules: code,
-};
-
-/// Information about the base definition of the element, provided to make it unnecessary for tools to trace the deviation of the element through the derived and related profiles. When the element definition is not the original definition of an element - i.g. either in a constraint on another type, or for elements from a super type in a snap shot - then the information in provided in the element definition may be different to the base definition. On the original definition of the element, it will be same.
-pub const ElementDefinition_Base = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// The Path that identifies the base element - this matches the ElementDefinition.path for that element. Across FHIR, there is only one base definition of any element - that is, an element definition on a [StructureDefinition](structuredefinition.html#) without a StructureDefinition.base.
-    path: string,
-    /// Minimum cardinality of the base element identified by the path.
-    min: unsignedInt,
-    /// Maximum cardinality of the base element identified by the path.
-    max: string,
-};
-
-/// The data type or resource that the value of this element is permitted to be.
-pub const ElementDefinition_Type = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// URL of Data type or Resource that is a(or the) type used for this element. References are URLs that are relative to http://hl7.org/fhir/StructureDefinition e.g. "string" is a reference to http://hl7.org/fhir/StructureDefinition/string. Absolute URLs are only allowed in logical models.
-    code: uri,
-    /// Identifies a profile structure or implementation Guide that applies to the datatype this element refers to. If any profiles are specified, then the content must conform to at least one of them. The URL can be a local reference - to a contained StructureDefinition, or a reference to another StructureDefinition or Implementation Guide by a canonical URL. When an implementation guide is specified, the type SHALL conform to at least one profile defined in the implementation guide.
-    profile: ?[]const canonical = null,
-    /// Used when the type is "Reference" or "canonical", and identifies a profile structure or implementation Guide that applies to the target of the reference this element refers to. If any profiles are specified, then the content must conform to at least one of them. The URL can be a local reference - to a contained StructureDefinition, or a reference to another StructureDefinition or Implementation Guide by a canonical URL. When an implementation guide is specified, the target resource SHALL conform to at least one profile defined in the implementation guide.
-    targetProfile: ?[]const canonical = null,
-    /// If the type is a reference to another resource, how the resource is or can be aggregated - is it a contained resource, or a reference, and if the context is a bundle, is it included in the bundle.
-    aggregation: ?[]const code = null,
-    /// Whether this reference needs to be version specific or version independent, or whether either can be used.
-    versioning: ?code = null,
-};
-
-/// A sample value for this element demonstrating the type of information that would typically be found in the element.
-pub const ElementDefinition_Example = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Describes the purpose of this example amoung the set of examples.
-    label: string,
-    /// The actual value for the element, which must be one of the types allowed for this element.
-    value: union(enum) {
-        Base64Binary: base64Binary,
-        Boolean: boolean,
-        Canonical: canonical,
-        Code: code,
-        Date: date,
-        DateTime: dateTime,
-        Decimal: decimal,
-        Id: id,
-        Instant: instant,
-        Integer: integer,
-        Markdown: markdown,
-        Oid: oid,
-        PositiveInt: positiveInt,
-        String: string,
-        Time: time,
-        UnsignedInt: unsignedInt,
-        Uri: uri,
-        Url: url,
-        Uuid: uuid,
-        Address: Address,
-        Age: Age,
-        Annotation: Annotation,
-        Attachment: Attachment,
-        CodeableConcept: CodeableConcept,
-        Coding: Coding,
-        ContactPoint: ContactPoint,
-        Count: Count,
-        Distance: Distance,
-        Duration: Duration,
-        HumanName: HumanName,
-        Identifier: Identifier,
-        Money: Money,
-        Period: Period,
-        Quantity: Quantity,
-        Range: Range,
-        Ratio: Ratio,
-        Reference: Reference,
-        SampledData: SampledData,
-        Signature: Signature,
-        Timing: Timing,
-        ContactDetail: ContactDetail,
-        Contributor: Contributor,
-        DataRequirement: DataRequirement,
-        Expression: Expression,
-        ParameterDefinition: ParameterDefinition,
-        RelatedArtifact: RelatedArtifact,
-        TriggerDefinition: TriggerDefinition,
-        UsageContext: UsageContext,
-        Dosage: Dosage,
-        Meta: Meta,
-    },
-};
-
-/// Formal constraints such as co-occurrence and other constraints that can be computationally evaluated within the context of the instance.
-pub const ElementDefinition_Constraint = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Allows identification of which elements have their cardinalities impacted by the constraint.  Will not be referenced for constraints that do not affect cardinality.
-    key: id,
-    /// Description of why this constraint is necessary or appropriate.
-    requirements: ?string = null,
-    /// Identifies the impact constraint violation has on the conformance of the instance.
-    severity: code,
-    /// Text that can be used to describe the constraint in messages identifying that the constraint has been violated.
-    human: string,
-    /// A [FHIRPath](fhirpath.html) expression of constraint that can be executed to see if this constraint is met.
-    expression: ?string = null,
-    /// An XPath expression of constraint that can be executed to see if this constraint is met.
-    xpath: ?string = null,
-    /// A reference to the original source of the constraint, for traceability purposes.
-    source: ?canonical = null,
-};
-
-/// Binds to a value set if this element is coded (code, Coding, CodeableConcept, Quantity), or the data types (string, uri).
-pub const ElementDefinition_Binding = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Indicates the degree of conformance expectations associated with this binding - that is, the degree to which the provided value set must be adhered to in the instances.
-    strength: code,
-    /// Describes the intended use of this particular set of codes.
-    description: ?string = null,
-    /// Refers to the value set that identifies the set of codes the binding refers to.
-    valueSet: ?canonical = null,
-};
-
-/// Identifies a concept from an external specification that roughly corresponds to this element.
-pub const ElementDefinition_Mapping = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// An internal reference to the definition of a mapping.
-    identity: id,
-    /// Identifies the computable language in which mapping.map is expressed.
-    language: ?code = null,
-    /// Expresses what part of the target specification corresponds to this element.
-    map: string,
-    /// Comments that provide information about the mapping or its use.
-    comment: ?string = null,
-};
-
-/// Reference range of possible or expected values.
-pub const SubstanceAmount_ReferenceRange = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Lower limit possible or expected.
-    lowLimit: ?Quantity = null,
-    /// Upper limit possible or expected.
-    highLimit: ?Quantity = null,
-};
-
-/// A set of rules that describe when the event is scheduled.
-pub const Timing_Repeat = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// Either a duration for the length of the timing schedule, a range of possible length, or outer bounds for start and/or end limits of the timing schedule.
-    bounds: ?union(enum) {
-        Duration: Duration,
-        Range: Range,
-        Period: Period,
-    } = null,
-    /// A total count of the desired number of repetitions across the duration of the entire timing specification. If countMax is present, this element indicates the lower bound of the allowed range of count values.
-    count: ?positiveInt = null,
-    /// If present, indicates that the count is a range - so to perform the action between [count] and [countMax] times.
-    countMax: ?positiveInt = null,
-    /// How long this thing happens for when it happens. If durationMax is present, this element indicates the lower bound of the allowed range of the duration.
-    duration: ?decimal = null,
-    /// If present, indicates that the duration is a range - so to perform the action between [duration] and [durationMax] time length.
-    durationMax: ?decimal = null,
-    /// The units of time for the duration, in UCUM units.
-    durationUnit: ?code = null,
-    /// The number of times to repeat the action within the specified period. If frequencyMax is present, this element indicates the lower bound of the allowed range of the frequency.
-    frequency: ?positiveInt = null,
-    /// If present, indicates that the frequency is a range - so to repeat between [frequency] and [frequencyMax] times within the period or period range.
-    frequencyMax: ?positiveInt = null,
-    /// Indicates the duration of time over which repetitions are to occur; e.g. to express "3 times per day", 3 would be the frequency and "1 day" would be the period. If periodMax is present, this element indicates the lower bound of the allowed range of the period length.
-    period: ?decimal = null,
-    /// If present, indicates that the period is a range from [period] to [periodMax], allowing expressing concepts such as "do this once every 3-5 days.
-    periodMax: ?decimal = null,
-    /// The units of time for the period in UCUM units.
-    periodUnit: ?code = null,
-    /// If one or more days of week is provided, then the action happens only on the specified day(s).
-    dayOfWeek: ?[]const code = null,
-    /// Specified time of day for action to take place.
-    timeOfDay: ?[]const time = null,
-    /// An approximate time period during the day, potentially linked to an event of daily living that indicates when the action should occur.
-    when: ?[]const code = null,
-    /// The number of minutes from the event. If the event code does not indicate whether the minutes is before or after the event, then the offset is assumed to be after the event.
-    offset: ?unsignedInt = null,
-};
-
-/// Designates which child elements are used to discriminate between the slices when processing an instance. If one or more discriminators are provided, the value of the child elements in the instance data SHALL completely distinguish which slice the element in the resource matches based on the allowed values for those elements in each of the slices.
-pub const ElementDefinition_Slicing_Discriminator = struct {
-    /// Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-    id: ?[]const u8 = null,
-    /// May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-    extension: ?[]const Extension = null,
-    /// How the element value is interpreted when discrimination is evaluated.
-    type: code,
-    /// A FHIRPath expression, using [the simple subset of FHIRPath](fhirpath.html#simple), that is used to identify the element on which discrimination is based.
-    path: string,
+pub const Resource = union(enum) {
+    Account: Account,
+    ActivityDefinition: ActivityDefinition,
+    AdverseEvent: AdverseEvent,
+    AllergyIntolerance: AllergyIntolerance,
+    Appointment: Appointment,
+    AppointmentResponse: AppointmentResponse,
+    AuditEvent: AuditEvent,
+    Basic: Basic,
+    Binary: Binary,
+    BiologicallyDerivedProduct: BiologicallyDerivedProduct,
+    BodyStructure: BodyStructure,
+    Bundle: Bundle,
+    CapabilityStatement: CapabilityStatement,
+    CarePlan: CarePlan,
+    CareTeam: CareTeam,
+    CatalogEntry: CatalogEntry,
+    ChargeItem: ChargeItem,
+    ChargeItemDefinition: ChargeItemDefinition,
+    Claim: Claim,
+    ClaimResponse: ClaimResponse,
+    ClinicalImpression: ClinicalImpression,
+    CodeSystem: CodeSystem,
+    Communication: Communication,
+    CommunicationRequest: CommunicationRequest,
+    CompartmentDefinition: CompartmentDefinition,
+    Composition: Composition,
+    ConceptMap: ConceptMap,
+    Condition: Condition,
+    Consent: Consent,
+    Contract: Contract,
+    Coverage: Coverage,
+    CoverageEligibilityRequest: CoverageEligibilityRequest,
+    CoverageEligibilityResponse: CoverageEligibilityResponse,
+    DetectedIssue: DetectedIssue,
+    Device: Device,
+    DeviceDefinition: DeviceDefinition,
+    DeviceMetric: DeviceMetric,
+    DeviceRequest: DeviceRequest,
+    DeviceUseStatement: DeviceUseStatement,
+    DiagnosticReport: DiagnosticReport,
+    DocumentManifest: DocumentManifest,
+    DocumentReference: DocumentReference,
+    EffectEvidenceSynthesis: EffectEvidenceSynthesis,
+    Encounter: Encounter,
+    Endpoint: Endpoint,
+    EnrollmentRequest: EnrollmentRequest,
+    EnrollmentResponse: EnrollmentResponse,
+    EpisodeOfCare: EpisodeOfCare,
+    EventDefinition: EventDefinition,
+    Evidence: Evidence,
+    EvidenceVariable: EvidenceVariable,
+    ExampleScenario: ExampleScenario,
+    ExplanationOfBenefit: ExplanationOfBenefit,
+    FamilyMemberHistory: FamilyMemberHistory,
+    Flag: Flag,
+    Goal: Goal,
+    GraphDefinition: GraphDefinition,
+    Group: Group,
+    GuidanceResponse: GuidanceResponse,
+    HealthcareService: HealthcareService,
+    ImagingStudy: ImagingStudy,
+    Immunization: Immunization,
+    ImmunizationEvaluation: ImmunizationEvaluation,
+    ImmunizationRecommendation: ImmunizationRecommendation,
+    ImplementationGuide: ImplementationGuide,
+    InsurancePlan: InsurancePlan,
+    Invoice: Invoice,
+    Library: Library,
+    Linkage: Linkage,
+    List: List,
+    Location: Location,
+    Measure: Measure,
+    MeasureReport: MeasureReport,
+    Media: Media,
+    Medication: Medication,
+    MedicationAdministration: MedicationAdministration,
+    MedicationDispense: MedicationDispense,
+    MedicationKnowledge: MedicationKnowledge,
+    MedicationRequest: MedicationRequest,
+    MedicationStatement: MedicationStatement,
+    MedicinalProduct: MedicinalProduct,
+    MedicinalProductAuthorization: MedicinalProductAuthorization,
+    MedicinalProductContraindication: MedicinalProductContraindication,
+    MedicinalProductIndication: MedicinalProductIndication,
+    MedicinalProductIngredient: MedicinalProductIngredient,
+    MedicinalProductInteraction: MedicinalProductInteraction,
+    MedicinalProductManufactured: MedicinalProductManufactured,
+    MedicinalProductPackaged: MedicinalProductPackaged,
+    MedicinalProductPharmaceutical: MedicinalProductPharmaceutical,
+    MedicinalProductUndesirableEffect: MedicinalProductUndesirableEffect,
+    MessageDefinition: MessageDefinition,
+    MessageHeader: MessageHeader,
+    MolecularSequence: MolecularSequence,
+    NamingSystem: NamingSystem,
+    NutritionOrder: NutritionOrder,
+    Observation: Observation,
+    ObservationDefinition: ObservationDefinition,
+    OperationDefinition: OperationDefinition,
+    OperationOutcome: OperationOutcome,
+    Organization: Organization,
+    OrganizationAffiliation: OrganizationAffiliation,
+    Parameters: Parameters,
+    Patient: Patient,
+    PaymentNotice: PaymentNotice,
+    PaymentReconciliation: PaymentReconciliation,
+    Person: Person,
+    PlanDefinition: PlanDefinition,
+    Practitioner: Practitioner,
+    PractitionerRole: PractitionerRole,
+    Procedure: Procedure,
+    Provenance: Provenance,
+    Questionnaire: Questionnaire,
+    QuestionnaireResponse: QuestionnaireResponse,
+    RelatedPerson: RelatedPerson,
+    RequestGroup: RequestGroup,
+    ResearchDefinition: ResearchDefinition,
+    ResearchElementDefinition: ResearchElementDefinition,
+    ResearchStudy: ResearchStudy,
+    ResearchSubject: ResearchSubject,
+    RiskAssessment: RiskAssessment,
+    RiskEvidenceSynthesis: RiskEvidenceSynthesis,
+    Schedule: Schedule,
+    SearchParameter: SearchParameter,
+    ServiceRequest: ServiceRequest,
+    Slot: Slot,
+    Specimen: Specimen,
+    SpecimenDefinition: SpecimenDefinition,
+    StructureDefinition: StructureDefinition,
+    StructureMap: StructureMap,
+    Subscription: Subscription,
+    Substance: Substance,
+    SubstanceNucleicAcid: SubstanceNucleicAcid,
+    SubstancePolymer: SubstancePolymer,
+    SubstanceProtein: SubstanceProtein,
+    SubstanceReferenceInformation: SubstanceReferenceInformation,
+    SubstanceSourceMaterial: SubstanceSourceMaterial,
+    SubstanceSpecification: SubstanceSpecification,
+    SupplyDelivery: SupplyDelivery,
+    SupplyRequest: SupplyRequest,
+    Task: Task,
+    TerminologyCapabilities: TerminologyCapabilities,
+    TestReport: TestReport,
+    TestScript: TestScript,
+    ValueSet: ValueSet,
+    VerificationResult: VerificationResult,
+    VisionPrescription: VisionPrescription,
 };
