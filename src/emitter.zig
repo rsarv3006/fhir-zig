@@ -163,10 +163,10 @@ fn generateZigSourceFhirEnumeration(arena: std.mem.Allocator, fhirEnumeration: i
 }
 
 // TODO: validate this translation against the spec
+// Decimal is left out intentionally so that trailing zeros get handling correctly
 const primitiveMap = std.StaticStringMap([]const u8).initComptime(.{
     .{ "boolean", "bool" },
     .{ "integer", "i32" },
-    .{ "decimal", "f64" },
     .{ "positiveInt", "u32" },
     .{ "unsignedInt", "u32" },
     .{ "number", "f64" },
