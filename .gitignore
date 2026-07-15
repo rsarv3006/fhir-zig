@@ -2,3 +2,5 @@ schema-json/**
 zig-out/**
 .zig-cache/**
 schemas/**
+
+ir-rep.debug.json
