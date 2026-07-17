@@ -88,19 +88,6 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     const id = resource.get("id").?.string;
     const resourceType = resource.get("resourceType").?.string;
 
-    const resourceKindValue = resource.get("kind") orelse return error.NoKindOnResource;
-    const kind = switch (resourceKindValue) {
-        .string => |o| o,
-        else => {
-            std.debug.print("Failed to parse kind for {s}\n", .{id});
-            return error.KindValueNotAString;
-        },
-    };
-
-    const isResource = std.mem.eql(u8, kind, "resource");
-    const isAbstract = if (resource.get("abstract")) |a| a.bool else false;
-    if (isAbstract and isResource) return null;
-
     const description = if (resource.get("description")) |d| d.string else "";
 
     if (std.mem.eql(u8, id, "xhtml")) {
@@ -113,6 +100,19 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     }
 
     if (std.mem.eql(u8, resourceType, "StructureDefinition")) {
+        const resourceKindValue = resource.get("kind") orelse return error.NoKindOnResource;
+        const kind = switch (resourceKindValue) {
+            .string => |o| o,
+            else => {
+                std.debug.print("Failed to parse kind for {s}\n", .{id});
+                return error.KindValueNotAString;
+            },
+        };
+
+        const isResource = std.mem.eql(u8, kind, "resource");
+        const isAbstract = if (resource.get("abstract")) |a| a.bool else false;
+        if (isAbstract and isResource) return null;
+
         const baseTypeName = resource.get("type").?.string;
         const elementsArr = resource.get("snapshot").?.object.get("element").?.array;
         var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, elementsArr.items.len);
