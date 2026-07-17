@@ -20,9 +20,6 @@ fn generateZigSource(arena: std.mem.Allocator, fhirType: ir.FhirType) ![]const u
         .structure => |fhirTypeStruct| {
             return try generateZigSourceFhirStructure(arena, fhirTypeStruct);
         },
-        .primitive => |fhirTypePrimitive| {
-            return try generateZigSourceFhirPrimitive(arena, fhirTypePrimitive);
-        },
         .enumeration => |fhirTypeEnumeration| {
             return try generateZigSourceFhirEnumeration(arena, fhirTypeEnumeration);
         },
@@ -133,15 +130,6 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
     try buffer.appendSlice(arena, "\n};\n\n");
 
     return buffer.toOwnedSlice(arena);
-}
-
-fn generateZigSourceFhirPrimitive(arena: std.mem.Allocator, fhirPrimitive: ir.FhirType_Primitive) ![]const u8 {
-    const description = try getSanitizedDescription(arena, fhirPrimitive.pattern);
-    const name = try getSanitizedName(arena, fhirPrimitive.name);
-
-    const parts = &[_][]const u8{ description, "\n", "pub const ", name, " = ", fhirPrimitiveToZigType(name), ";\n" };
-
-    return try std.mem.concat(arena, u8, parts);
 }
 
 fn generateZigSourceFhirEnumeration(arena: std.mem.Allocator, fhirEnumeration: ir.FhirType_Enumeration) ![]const u8 {

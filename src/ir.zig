@@ -3,12 +3,6 @@
 
 const std = @import("std");
 
-pub const FhirType_Primitive = struct {
-    pattern: ?[]const u8,
-    name: []const u8,
-    type: []const u8,
-};
-
 pub const FhirType_Structure = struct {
     name: []const u8,
     description: ?[]const u8,
@@ -48,7 +42,6 @@ pub const FieldType = union(enum) {
 pub const ChoiceOption = struct { suffix: []const u8, typeRef: FieldType };
 
 pub const FhirType = union(enum) {
-    primitive: FhirType_Primitive,
     structure: FhirType_Structure,
     enumeration: FhirType_Enumeration,
     oneOf: FhirType_OneOf,
