@@ -167,12 +167,39 @@ itself nest (child extensions). It's a good forcing function for testing
 whether a generic codec design holds up, without needing a full `Patient`
 round-trip to find out.
 
-## Open items not yet resolved
+## Resolved since last revision
 
-- Whether any type besides `Resource` needs `.oneOf` treatment (i.e.
-  whether any field resolves directly against the abstract `DomainResource`
-  type rather than always bottoming out at a concrete resource).
-- `System type with no extension` fallback currently defaults silently to
-  `.ref = <raw URI>` when the `structuredefinition-fhir-type` extension is
-  absent on a System-typed element. Should probably be a hard error/log
-  rather than a silent fallthrough.
+- **`decimal` precision**: resolved by mapping `decimal` → `[]const u8`
+  in `primitiveMap`, not `f64`. Preserves the exact JSON number lexeme
+  (trailing zeros, no binary-float lossiness), at the cost of no built-in
+  arithmetic. Sufficient for decode/encode fidelity; a real numeric
+  representation is only worth building once FHIRPath evaluation actually
+  needs to compare `decimal` values, and even then the string form stays,
+  it just gains a lazy parse-to-comparable step alongside it.
+
+## Open items
+
+Tracked as kanban stories, not duplicated here — see the board for
+current status and any discussion. As of this revision, the open items
+that trace back to this document are:
+
+- Confirm `Resource` is the only `.oneOf` case (check whether any field
+  resolves directly against abstract `DomainResource`).
+- Silent fallback on System type with no extension (`.ref = <raw URI>`
+  default) — should be a hard error/log instead.
+- Build the six codec axes described above (primitive wrapper single/
+  repeating, complex `.ref`, choice, `Resource` polymorphism) — tracked
+  as one story per axis under the "Bridge: JSON Codec" section of the
+  board.
+- NDJSON streaming decode entry point, and the separate large-single-
+  Bundle streaming extraction spike (`std.json.Reader` + manual token
+  walk + `innerParse` per entry) — two distinct stories, not one; see
+  "Scope" section above for why they're different problems.
+- Round-trip test harness against the vendored `hl7.fhir.rX.examples`
+  packages, with `hapi.fhir.org` as a non-blocking secondary sanity
+  check.
+
+If a story's board description and this doc's reasoning ever drift apart,
+the board is authoritative for status (done/in-progress/blocked); this doc
+is authoritative for the _design rationale_ behind each axis. Don't let
+either one silently fork into its own TODO list — update both or neither.

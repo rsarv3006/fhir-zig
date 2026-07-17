@@ -60,14 +60,12 @@ fn buildFromBundle(arena: std.mem.Allocator, bundle: std.json.Parsed(std.json.Va
     var fhirTypesArr = try std.ArrayList(ir.FhirType).initCapacity(arena, 1000);
 
     for (entryArray.items) |entry| {
-        const fhirType = parseEntryFromBundle(arena, entry) catch {
-            std.debug.print("Error parsing entry from bundle\n", .{});
+        const fhirType = parseEntryFromBundle(arena, entry) catch |err| {
+            const debugId = utils.extractDebugId(arena, entry);
+            std.debug.print("Failed to parse entry {s}: {s}\n", .{ debugId, @errorName(err) });
             continue;
         };
-
-        if (fhirType) |t| {
-            try fhirTypesArr.append(arena, t);
-        }
+        if (fhirType) |t| try fhirTypesArr.append(arena, t);
     }
 
     return fhirTypesArr;
