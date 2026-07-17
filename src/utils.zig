@@ -95,3 +95,24 @@ pub fn capitalizeFirstLetter(arena: std.mem.Allocator, s: []const u8) ![]const u
     capitalized[0] = std.ascii.toUpper(s[0]);
     return capitalized;
 }
+
+pub fn extractDebugId(arena: std.mem.Allocator, entry: std.json.Value) []const u8 {
+    const entryObj = switch (entry) {
+        .object => |o| o,
+        else => return "<non-object entry>",
+    };
+    const resourceValue = entryObj.get("resource") orelse return "<no resource>";
+    const resource = switch (resourceValue) {
+        .object => |o| o,
+        else => return "<resource not object>",
+    };
+    const resourceType = if (resource.get("resourceType")) |rt| switch (rt) {
+        .string => |s| s,
+        else => "?",
+    } else "?";
+    const id = if (resource.get("id")) |i| switch (i) {
+        .string => |s| s,
+        else => "?",
+    } else "?";
+    return std.fmt.allocPrint(arena, "{s}/{s}", .{ resourceType, id }) catch "<unknown>";
+}
