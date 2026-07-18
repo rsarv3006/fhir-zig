@@ -103,8 +103,7 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
         const kind = try utils.getStr(resource, "kind");
 
         const isResource = std.mem.eql(u8, kind, "resource");
-        // TODO: Update to not use .get
-        const isAbstract = if (resource.get("abstract")) |a| a.bool else false;
+        const isAbstract = utils.getBool(resource, "abstract") catch false;
         if (isAbstract and isResource) return null;
 
         const baseTypeName = try utils.getStr(resource, "type");
@@ -242,17 +241,16 @@ fn attemptToRetrieveValueUrlFromExtension(extensionValue: std.json.Value) !?[]co
     };
 
     for (extensionArray.items) |extension| {
-        switch (extension) {
-            .object => |obj| {
-                if (obj.get("url")) |url| {
-                    if (std.mem.eql(u8, "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type", url.string)) {
-                        if (obj.get("valueUrl")) |value| {
-                            return value.string;
-                        }
-                    }
-                }
-            },
+        const obj = switch (extension) {
+            .object => |o| o,
             else => continue,
+        };
+
+        const url = utils.getStr(obj, "url") catch continue;
+
+        if (std.mem.eql(u8, "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type", url)) {
+            const valueUrl = utils.getStr(obj, "valueUrl") catch continue;
+            return valueUrl;
         }
     }
 
