@@ -118,7 +118,7 @@ pub fn extractDebugId(arena: std.mem.Allocator, entry: std.json.Value) []const u
 }
 
 pub fn getStr(maybeVal: std.json.ObjectMap, key: []const u8) ![]const u8 {
-    errdefer std.log.err("Error for key: {s}", .{key});
+    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
 
     if (maybeVal.get(key)) |maybeStr| {
         switch (maybeStr) {
@@ -126,11 +126,11 @@ pub fn getStr(maybeVal: std.json.ObjectMap, key: []const u8) ![]const u8 {
             else => return error.ValueNotString,
         }
     }
-    return error.ValueNotString;
+    return error.KeyNotPresent;
 }
 
 pub fn getObj(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.ObjectMap {
-    errdefer std.log.err("Error for key: {s}", .{key});
+    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
 
     if (maybeVal.get(key)) |maybeObj| {
         switch (maybeObj) {
@@ -138,11 +138,11 @@ pub fn getObj(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.ObjectMap
             else => return error.ValueNotObject,
         }
     }
-    return error.ValueNotObject;
+    return error.KeyNotPresent;
 }
 
 pub fn getArr(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.Array {
-    errdefer std.log.err("Error for key: {s}", .{key});
+    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
 
     if (maybeVal.get(key)) |maybeArr| {
         switch (maybeArr) {
@@ -150,11 +150,11 @@ pub fn getArr(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.Array {
             else => return error.ValueNotArray,
         }
     }
-    return error.ValueNotArray;
+    return error.KeyNotPresent;
 }
 
 pub fn getInt(maybeVal: std.json.ObjectMap, key: []const u8) !i64 {
-    errdefer std.log.err("Error for key: {s}", .{key});
+    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
 
     if (maybeVal.get(key)) |maybeInt| {
         switch (maybeInt) {
@@ -162,5 +162,17 @@ pub fn getInt(maybeVal: std.json.ObjectMap, key: []const u8) !i64 {
             else => return error.ValueNotInteger,
         }
     }
-    return error.ValueNotInteger;
+    return error.KeyNotPresent;
+}
+
+pub fn getBool(maybeVal: std.json.ObjectMap, key: []const u8) !bool {
+    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
+
+    if (maybeVal.get(key)) |maybeBool| {
+        switch (maybeBool) {
+            .bool => |b| return b,
+            else => return error.ValueNotBool,
+        }
+    }
+    return error.KeyNotPresent;
 }

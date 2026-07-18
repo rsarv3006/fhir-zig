@@ -1,16 +1,18 @@
 # fhir-zig
 
-Building fhir definitions and a fhir validator in zig.
+### Purpose: Building fhir definitions and a fhir validator in zig.
 
-This is very much a work in progress with TODO's and footguns as far as the eye can see (and just past it for fun).
+## NOTE: This project is maintained on [codeberg](https://codeberg.org/rsarv3006/fhir-zig)
+
+Mirrored to Github for visibility.
 
 ## Project Status: WIP
+
+[Kanban board on Codeberg](https://codeberg.org/rsarv3006/fhir-zig/projects/60386)
 
 Currently a major work in progress. Good news though! The R4 and R4 base type files are generated and seem to be (mostly) correct from what I can tell. Further testing needed for sure.
 
 ## RoadMap
-
-Status: Step 1
 
 ### Step 1: Codegen
 
@@ -31,7 +33,7 @@ built schema files are in the output folder
 
 ## AI Policy
 
-AI will NOT write any of the code for this project directly.
+AI will NOT write any of the code for this project directly. Used for archictecture and spec discussion. Validation of all AI output is required. Do not PR AI Slop.
 
 ## Notes
 
@@ -41,10 +43,3 @@ Curl command for the r4 definitions
 curl -o r4schemajson.zip https://hl7.org/fhir/R4/definitions.json.zip
 curl -o r5schemajson.zip https://hl7.org/fhir/R5/definitions.json.zip
 ```
-
-## TODO
-
-- Troubleshoot the 5 Error parsing entry from bundle messages we're seeing
-- codegen is about as robust as tissue paper in a hurricane, intermediate representation needs better json validation and error handling
-- write the generic comptime codec once, get every primitive wrapper type, (This is needed to serialize and deserialize the ?code (and other fields) to and from the expected json fields) (docs file on it so I don't forget)
-- emitter should dump resources into separate files for codegen (involves scafolding the iport/export file stuff too)
