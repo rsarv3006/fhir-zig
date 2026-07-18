@@ -116,3 +116,51 @@ pub fn extractDebugId(arena: std.mem.Allocator, entry: std.json.Value) []const u
     } else "?";
     return std.fmt.allocPrint(arena, "{s}/{s}", .{ resourceType, id }) catch "<unknown>";
 }
+
+pub fn getStr(maybeVal: std.json.ObjectMap, key: []const u8) ![]const u8 {
+    errdefer std.log.err("Error for key: {s}", .{key});
+
+    if (maybeVal.get(key)) |maybeStr| {
+        switch (maybeStr) {
+            .string => |str| return str,
+            else => return error.ValueNotString,
+        }
+    }
+    return error.ValueNotString;
+}
+
+pub fn getObj(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.ObjectMap {
+    errdefer std.log.err("Error for key: {s}", .{key});
+
+    if (maybeVal.get(key)) |maybeObj| {
+        switch (maybeObj) {
+            .object => |o| return o,
+            else => return error.ValueNotObject,
+        }
+    }
+    return error.ValueNotObject;
+}
+
+pub fn getArr(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.Array {
+    errdefer std.log.err("Error for key: {s}", .{key});
+
+    if (maybeVal.get(key)) |maybeArr| {
+        switch (maybeArr) {
+            .array => |a| return a,
+            else => return error.ValueNotArray,
+        }
+    }
+    return error.ValueNotArray;
+}
+
+pub fn getInt(maybeVal: std.json.ObjectMap, key: []const u8) !i64 {
+    errdefer std.log.err("Error for key: {s}", .{key});
+
+    if (maybeVal.get(key)) |maybeInt| {
+        switch (maybeInt) {
+            .integer => |int| return int,
+            else => return error.ValueNotInteger,
+        }
+    }
+    return error.ValueNotInteger;
+}

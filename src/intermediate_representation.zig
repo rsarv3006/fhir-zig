@@ -1,5 +1,4 @@
 const std = @import("std");
-// TODO: this crap needs to stream at some point, file in, ir streamed out
 
 const ir = @import("ir.zig");
 const utils = @import("utils.zig");
@@ -85,10 +84,11 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
 
     var fhirType: ?ir.FhirType = null;
 
-    const id = resource.get("id").?.string;
-    const resourceType = resource.get("resourceType").?.string;
+    const id = try utils.getStr(resource, "id");
 
-    const description = if (resource.get("description")) |d| d.string else "";
+    const resourceType = try utils.getStr(resource, "resourceType");
+
+    const description = utils.getStr(resource, "description") catch "";
 
     if (std.mem.eql(u8, id, "xhtml")) {
         var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, 2);
@@ -100,27 +100,32 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     }
 
     if (std.mem.eql(u8, resourceType, "StructureDefinition")) {
-        const resourceKindValue = resource.get("kind") orelse return error.NoKindOnResource;
-        const kind = switch (resourceKindValue) {
-            .string => |o| o,
-            else => {
-                std.debug.print("Failed to parse kind for {s}\n", .{id});
-                return error.KindValueNotAString;
-            },
-        };
+        const kind = try utils.getStr(resource, "kind");
 
         const isResource = std.mem.eql(u8, kind, "resource");
+        // TODO: Update to not use .get
         const isAbstract = if (resource.get("abstract")) |a| a.bool else false;
         if (isAbstract and isResource) return null;
 
-        const baseTypeName = resource.get("type").?.string;
-        const elementsArr = resource.get("snapshot").?.object.get("element").?.array;
+        const baseTypeName = try utils.getStr(resource, "type");
+
+        const snapshotObj = try utils.getObj(resource, "snapshot");
+        const elementsArr = try utils.getArr(snapshotObj, "element");
+
         var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, elementsArr.items.len);
         for (elementsArr.items) |element| {
-            const path = element.object.get("path").?.string;
+            const elementObj = switch (element) {
+                .object => |o| o,
+                else => return error.ElementIsNotAnObject,
+            };
+            const path = try utils.getStr(elementObj, "path");
+
             if (std.mem.eql(u8, path, baseTypeName)) continue;
 
-            const field = try parseFhirFieldFromSnapshotElement(arena, baseTypeName, element);
+            // TODO: slice refinement base element already covers the field; phase-3: capture for discriminator validation
+            if (elementObj.get("sliceName") != null) continue;
+
+            const field = try parseFhirFieldFromSnapshotElement(arena, baseTypeName, elementObj, path);
             try fields.append(arena, field);
         }
 
@@ -130,12 +135,11 @@ fn parseEntryFromBundle(arena: std.mem.Allocator, entry: std.json.Value) !?ir.Fh
     return fhirType;
 }
 
-fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []const u8, element: std.json.Value) !ir.FhirField {
-    const path = element.object.get("path").?.string;
+fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []const u8, element: std.json.ObjectMap, path: []const u8) !ir.FhirField {
     var id = stripTopLevelPrefix(path, topLevelId);
-    const minSigned = element.object.get("min").?.integer;
-    const maxStr = element.object.get("max").?.string;
-    const definition = element.object.get("definition").?.string;
+    const minSigned = try utils.getInt(element, "min");
+    const maxStr = try utils.getStr(element, "max");
+    const definition = try utils.getStr(element, "definition");
 
     var isSlice = false;
     var max: ?u32 = null;
@@ -143,7 +147,9 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
     if (std.mem.eql(u8, maxStr, "*")) {
         isSlice = true;
     } else {
-        max = try std.fmt.parseUnsigned(u32, maxStr, 10);
+        const parsedMax = try std.fmt.parseUnsigned(u32, maxStr, 10);
+        max = parsedMax;
+        isSlice = parsedMax > 1;
     }
 
     const min: u32 = @intCast(minSigned);
@@ -155,34 +161,24 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
     if (std.mem.containsAtLeast(u8, id, 1, "[x]")) {
         if (std.mem.find(u8, id, "[")) |idSplitIdx| {
             id = id[0..idSplitIdx];
-            if (element.object.get("type")) |elementTypeValue| {
-                switch (elementTypeValue) {
-                    .array => |typeArray| {
-                        var choices = try std.ArrayList(ir.ChoiceOption).initCapacity(arena, typeArray.items.len);
+            const typeArray = try utils.getArr(element, "type");
+            var choices = try std.ArrayList(ir.ChoiceOption).initCapacity(arena, typeArray.items.len);
 
-                        for (typeArray.items) |typeArrayItem| {
-                            switch (typeArrayItem) {
-                                .object => |typeObj| {
-                                    const code = typeObj.get("code") orelse continue;
-                                    const codeString = switch (code) {
-                                        .string => |s| s,
-                                        else => continue,
-                                    };
-                                    const suffix = try utils.capitalizeFirstLetter(arena, codeString);
-                                    const typeRef = try resolveFieldTypeFromTypeObject(typeObj);
-                                    try choices.append(arena, .{ .suffix = suffix, .typeRef = typeRef });
-                                },
-                                else => {},
-                            }
-                        }
-
-                        fieldType = .{ .choice = try choices.toOwnedSlice(arena) };
+            for (typeArray.items) |typeArrayItem| {
+                switch (typeArrayItem) {
+                    .object => |typeObj| {
+                        const codeString = utils.getStr(typeObj, "code") catch continue;
+                        const suffix = try utils.capitalizeFirstLetter(arena, codeString);
+                        const typeRef = try resolveFieldTypeFromTypeObject(typeObj);
+                        try choices.append(arena, .{ .suffix = suffix, .typeRef = typeRef });
                     },
                     else => {},
                 }
             }
+
+            fieldType = .{ .choice = try choices.toOwnedSlice(arena) };
         }
-    } else if (element.object.get("contentReference")) |contentRef| {
+    } else if (element.get("contentReference")) |contentRef| {
         switch (contentRef) {
             .string => |contentReferenceString| {
                 const cleanedRefStr = cleanRef(contentReferenceString);
@@ -193,7 +189,7 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
             },
             else => {},
         }
-    } else if (element.object.get("type")) |elementTypeValue| {
+    } else if (element.get("type")) |elementTypeValue| {
         switch (elementTypeValue) {
             .array => |typeArray| {
                 if (typeArray.items.len == 1) {
@@ -217,15 +213,11 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
 }
 
 fn resolveFieldTypeFromTypeObject(typeObj: std.json.ObjectMap) !ir.FieldType {
-    const code = typeObj.get("code") orelse return error.ExpectedCodeOnTypeObject;
-    const codeString = switch (code) {
-        .string => |s| s,
-        else => return error.CodeNotAString,
-    };
+    const codeString = try utils.getStr(typeObj, "code");
 
     var fieldType: ir.FieldType = .{ .ref = codeString };
 
-    if (std.mem.startsWith(u8, code.string, "http://hl7.org/fhirpath/System.")) {
+    if (std.mem.startsWith(u8, codeString, "http://hl7.org/fhirpath/System.")) {
         if (typeObj.get("extension")) |extension| {
             if (try attemptToRetrieveValueUrlFromExtension(extension)) |valueStr| {
                 fieldType = .{ .primitive = valueStr };
