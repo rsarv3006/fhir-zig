@@ -3,11 +3,11 @@ const std = @import("std");
 const ir = @import("ir.zig");
 const utils = @import("utils.zig");
 
-const SIZE_ESTIMATE: usize = 128;
+const LINE_LENGTH_ESTIMATE: usize = 128;
 
 pub fn emit(arena: std.mem.Allocator, fhirTypes: std.ArrayList(ir.FhirType)) ![]const u8 {
     std.debug.print("Emitting Fhir Types...\n", .{});
-    var buffer = try std.ArrayList(u8).initCapacity(arena, fhirTypes.items.len * SIZE_ESTIMATE);
+    var buffer = try std.ArrayList(u8).initCapacity(arena, fhirTypes.items.len * LINE_LENGTH_ESTIMATE);
     for (fhirTypes.items) |fhirType| {
         try buffer.appendSlice(arena, try generateZigSource(arena, fhirType));
     }

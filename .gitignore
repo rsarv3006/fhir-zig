@@ -4,3 +4,4 @@ zig-out/**
 schemas/**
 
 ir-rep.debug.json
+synthea
