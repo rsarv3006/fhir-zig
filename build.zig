@@ -153,4 +153,10 @@ pub fn build(b: *std.Build) void {
     //
     // Lastly, the Zig build system is relatively simple and self-contained,
     // and reading its source code will allow you to master it.
+    const zprof_dep = b.dependency("zprof", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
+    exe.root_module.addImport("zprof", zprof_dep.module("zprof"));
 }
