@@ -67,7 +67,6 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
         const sanitizedFieldName = try getSanitizedName(arena, field.name);
         const sanitizedFieldDescription = try getSanitizedDescription(arena, field.description);
 
-        try buffer.appendSlice(arena, "    ");
         try buffer.appendSlice(arena, sanitizedFieldDescription);
         try buffer.appendSlice(arena, "\n    ");
         try buffer.appendSlice(arena, sanitizedFieldName);

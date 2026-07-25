@@ -214,17 +214,16 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
 fn resolveFieldTypeFromTypeObject(typeObj: std.json.ObjectMap) !ir.FieldType {
     const codeString = try utils.getStr(typeObj, "code");
 
-    var fieldType: ir.FieldType = .{ .ref = codeString };
-
     if (std.mem.startsWith(u8, codeString, "http://hl7.org/fhirpath/System.")) {
         if (typeObj.get("extension")) |extension| {
             if (try attemptToRetrieveValueUrlFromExtension(extension)) |valueStr| {
-                fieldType = .{ .primitive = valueStr };
+                return .{ .primitive = valueStr };
             }
         }
+        return error.TypeObjHasNoExtension;
     }
 
-    return fieldType;
+    return .{ .ref = codeString };
 }
 
 fn stripTopLevelPrefix(path: []const u8, topLevelId: []const u8) []const u8 {
