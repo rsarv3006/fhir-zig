@@ -89,7 +89,7 @@ fn generateZigSourceFhirStructure(arena: std.mem.Allocator, fhirStruct: ir.FhirT
         }
 
         if (field.is_slice) {
-            try buffer.appendSlice(arena, "[] const ");
+            try buffer.appendSlice(arena, "[]const ");
         }
 
         if (field.is_boxed) {
