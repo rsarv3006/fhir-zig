@@ -36,10 +36,11 @@ pub fn buildIntermediateRepresentationFromBundles(arena: std.mem.Allocator, bund
     }
     try fhirTypesArr.append(arena, .{ .oneOf = .{ .name = "Resource", .refs = try resourceNames.toOwnedSlice(arena) } });
 
+    try attachElementFieldsForPrimitivesFields(arena, &fhirTypesArr);
+
     return fhirTypesArr;
 }
 
-// TODO: This dumpster does not handle bad json structure... at all
 fn buildFromBundle(arena: std.mem.Allocator, bundle: std.json.Parsed(std.json.Value)) !std.ArrayList(ir.FhirType) {
     std.debug.print("Building IR from bundle...\n", .{});
 
@@ -158,6 +159,8 @@ fn parseFhirFieldFromSnapshotElement(arena: std.mem.Allocator, topLevelId: []con
     var fieldType: ir.FieldType = .{ .primitive = "unknown" };
 
     if (std.mem.containsAtLeast(u8, id, 1, "[x]")) {
+        const containing = id[0 .. std.mem.lastIndexOf(u8, id, ".") orelse id.len];
+        std.debug.print("choice-bearing struct: {s}.{s}\n", .{ topLevelId, containing });
         if (std.mem.find(u8, id, "[")) |idSplitIdx| {
             id = id[0..idSplitIdx];
             const typeArray = try utils.getArr(element, "type");
@@ -221,6 +224,10 @@ fn resolveFieldTypeFromTypeObject(typeObj: std.json.ObjectMap) !ir.FieldType {
             }
         }
         return error.TypeObjHasNoExtension;
+    }
+
+    if (utils.fhirPrimitiveZigTypeMap.has(codeString)) {
+        return .{ .primitive = codeString };
     }
 
     return .{ .ref = codeString };
@@ -379,4 +386,51 @@ fn contentReferenceStringToRefStructName(arena: std.mem.Allocator, contentRefStr
         }
     }
     return copy;
+}
+
+fn attachElementFieldsForPrimitivesFields(
+    arena: std.mem.Allocator,
+    fhirTypesArr: *std.ArrayList(ir.FhirType),
+) !void {
+    for (fhirTypesArr.items, 0..) |fhirType, idx| {
+        switch (fhirType) {
+            .structure => |fhirStruct| {
+                var didAddFields = false;
+                var fields = try std.ArrayList(ir.FhirField).initCapacity(arena, 5);
+
+                const isSelfRef = std.mem.eql(u8, fhirStruct.name, "Element");
+                for (fhirStruct.fields.items) |field| {
+                    if (field.type_ref == .primitive) {
+                        const parts = &[_][]const u8{ "_", field.name };
+
+                        const fieldName: []const u8 = try std.mem.concat(arena, u8, parts);
+
+                        const newField: ir.FhirField = .{
+                            .name = fieldName,
+                            .description = field.description,
+                            .type_ref = .{ .ref = "Element" },
+                            .is_optional = true,
+                            .is_slice = field.is_slice,
+                            .is_boxed = isSelfRef,
+                            .max = field.max,
+                            .min = field.min,
+                        };
+                        try fields.append(arena, field);
+                        try fields.append(arena, newField);
+                        didAddFields = true;
+                    } else {
+                        try fields.append(arena, field);
+                    }
+                }
+
+                if (didAddFields) {
+                    var copiedFhirStruct = fhirStruct;
+                    copiedFhirStruct.fields = fields;
+
+                    fhirTypesArr.items[idx] = .{ .structure = copiedFhirStruct };
+                }
+            },
+            else => {},
+        }
+    }
 }

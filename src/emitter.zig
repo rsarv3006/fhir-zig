@@ -20,6 +20,9 @@ fn generateZigSource(arena: std.mem.Allocator, fhirType: ir.FhirType) ![]const u
         .structure => |fhirTypeStruct| {
             return try generateZigSourceFhirStructure(arena, fhirTypeStruct);
         },
+        .primitive => |fhirTypePrimitive| {
+            return try generateZigSourceFhirPrimitive(arena, fhirTypePrimitive);
+        },
         .enumeration => |fhirTypeEnumeration| {
             return try generateZigSourceFhirEnumeration(arena, fhirTypeEnumeration);
         },
@@ -27,6 +30,15 @@ fn generateZigSource(arena: std.mem.Allocator, fhirType: ir.FhirType) ![]const u
             return try generateZigSourceFhirOneOf(arena, fhirTypeOneOf);
         },
     }
+}
+
+fn generateZigSourceFhirPrimitive(arena: std.mem.Allocator, fhirPrimitive: ir.FhirType_Primitive) ![]const u8 {
+    const description = try getSanitizedDescription(arena, fhirPrimitive.pattern);
+    const name = try getSanitizedName(arena, fhirPrimitive.name);
+
+    const parts = &[_][]const u8{ description, "\n", "pub const ", name, " = ", fhirPrimitiveToZigType(name), ";\n" };
+
+    return try std.mem.concat(arena, u8, parts);
 }
 
 fn generateZigSourceFhirOneOf(arena: std.mem.Allocator, fhirTypeOneOf: ir.FhirType_OneOf) ![]const u8 {
@@ -149,19 +161,8 @@ fn generateZigSourceFhirEnumeration(arena: std.mem.Allocator, fhirEnumeration: i
     return try buffer.toOwnedSlice(arena);
 }
 
-// TODO: validate this translation against the spec
-// Decimal is left out intentionally so that trailing zeros get handling correctly
-const primitiveMap = std.StaticStringMap([]const u8).initComptime(.{
-    .{ "boolean", "bool" },
-    .{ "integer", "i32" },
-    .{ "positiveInt", "u32" },
-    .{ "unsignedInt", "u32" },
-    .{ "number", "f64" },
-    .{ "integer64", "i64" },
-});
-
 fn fhirPrimitiveToZigType(name: []const u8) []const u8 {
-    return primitiveMap.get(name) orelse "[]const u8";
+    return utils.fhirPrimitiveZigTypeMap.get(name) orelse "[]const u8";
 }
 
 fn getSanitizedName(arena: std.mem.Allocator, name: []const u8) ![]const u8 {

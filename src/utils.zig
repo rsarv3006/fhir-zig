@@ -1,5 +1,30 @@
 const std = @import("std");
 
+pub const fhirPrimitiveZigTypeMap = std.StaticStringMap([]const u8).initComptime(.{
+    .{ "boolean", "bool" },
+    .{ "integer", "i32" },
+    .{ "unsignedInt", "u32" },
+    .{ "positiveInt", "u32" },
+    .{ "integer64", "i64" },
+    .{ "decimal", "[]const u8" },
+    .{ "string", "[]const u8" },
+    .{ "code", "[]const u8" },
+    .{ "id", "[]const u8" },
+    .{ "uri", "[]const u8" },
+    .{ "url", "[]const u8" },
+    .{ "canonical", "[]const u8" },
+    .{ "oid", "[]const u8" },
+    .{ "uuid", "[]const u8" },
+    .{ "markdown", "[]const u8" },
+    .{ "base64Binary", "[]const u8" },
+    .{ "instant", "[]const u8" },
+    .{ "date", "[]const u8" },
+    .{ "dateTime", "[]const u8" },
+    .{ "time", "[]const u8" },
+    .{ "xhtml", "[]const u8" },
+});
+
+// Zig primitives to make sure we properly escape when they're in variable names
 const primitives = [_][]const u8{
     "i8",
     "u8",
