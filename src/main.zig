@@ -4,10 +4,6 @@ const Io = std.Io;
 const fhir_zig = @import("fhir_zig");
 const Zprof = @import("zprof").Zprof;
 
-// copy to src file I'm lazy and haven't made this not a sharp pointy edge... yet
-// const generatedFhir = @import("./fhir_r4.zig");
-// const generatedFhir = @import("./fhir_r5.zig");
-
 pub fn main(init: std.process.Init) !void {
     // const arena: std.mem.Allocator = init.arena.allocator();
 
@@ -27,11 +23,11 @@ pub fn main(init: std.process.Init) !void {
 
     // _ = arena;
 
-    // const name: generatedFhir.HumanName = .{
-    //     .family = "Test",
-    //     .given = &.{"Mc"},
-    // };
-    // const patient: generatedFhir.Patient = .{ .name = &.{name}, .active = true };
+    const name: fhir_zig.r4.generated.HumanName = .{
+        .family = "Test",
+        .given = &.{"Mc"},
+    };
+    const patient: fhir_zig.r4.generated.Patient = .{ .name = &.{name}, .active = true };
 
-    // _ = patient;
+    _ = patient;
 }

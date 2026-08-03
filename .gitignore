@@ -6,3 +6,5 @@ schemas/**
 ir-rep.debug.json
 synthea
 zig-pkg
+
+output

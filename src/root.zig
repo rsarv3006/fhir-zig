@@ -1,5 +1,9 @@
-//! By convention, root.zig is the root source file when making a package.
+//! fhir-zig: FHIR R4/R5 types and (eventually) validation for Zig.
+
 const std = @import("std");
+pub const r4 = @import("r4/mod.zig");
+pub const r5 = @import("r5/mod.zig");
+
 const Io = std.Io;
 
 const ir = @import("intermediate_representation.zig");
@@ -123,10 +127,10 @@ pub fn emitFhirR4Types(arena: std.mem.Allocator, initIo: Io) !void {
 
     std.debug.print("emitted - {d}\n", .{emitted.len});
 
-    var output_dir: std.Io.Dir = try cwd.openDir(initIo, "output", .{});
+    var output_dir: std.Io.Dir = try cwd.openDir(initIo, "src/r4/generated", .{});
     defer output_dir.close(initIo);
 
-    const irFile: std.Io.File = try output_dir.createFile(initIo, "fhir_r4.zig", .{});
+    const irFile: std.Io.File = try output_dir.createFile(initIo, "fhir.zig", .{});
     defer irFile.close(initIo);
 
     var file_writer = irFile.writer(initIo, &.{});
@@ -199,10 +203,10 @@ pub fn emitFhirR5Types(arena: std.mem.Allocator, initIo: Io) !void {
 
     std.debug.print("emitted - {d}\n", .{emitted.len});
 
-    var output_dir: std.Io.Dir = try cwd.openDir(initIo, "output", .{});
+    var output_dir: std.Io.Dir = try cwd.openDir(initIo, "src/r5/generated", .{});
     defer output_dir.close(initIo);
 
-    const irFile: std.Io.File = try output_dir.createFile(initIo, "fhir_r5.zig", .{});
+    const irFile: std.Io.File = try output_dir.createFile(initIo, "fhir.zig", .{});
     defer irFile.close(initIo);
 
     var file_writer = irFile.writer(initIo, &.{});
