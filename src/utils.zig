@@ -143,8 +143,6 @@ pub fn extractDebugId(arena: std.mem.Allocator, entry: std.json.Value) []const u
 }
 
 pub fn getStr(maybeVal: std.json.ObjectMap, key: []const u8) ![]const u8 {
-    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
-
     if (maybeVal.get(key)) |maybeStr| {
         switch (maybeStr) {
             .string => |str| return str,
@@ -155,8 +153,6 @@ pub fn getStr(maybeVal: std.json.ObjectMap, key: []const u8) ![]const u8 {
 }
 
 pub fn getObj(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.ObjectMap {
-    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
-
     if (maybeVal.get(key)) |maybeObj| {
         switch (maybeObj) {
             .object => |o| return o,
@@ -167,8 +163,6 @@ pub fn getObj(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.ObjectMap
 }
 
 pub fn getArr(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.Array {
-    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
-
     if (maybeVal.get(key)) |maybeArr| {
         switch (maybeArr) {
             .array => |a| return a,
@@ -179,8 +173,6 @@ pub fn getArr(maybeVal: std.json.ObjectMap, key: []const u8) !std.json.Array {
 }
 
 pub fn getInt(maybeVal: std.json.ObjectMap, key: []const u8) !i64 {
-    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
-
     if (maybeVal.get(key)) |maybeInt| {
         switch (maybeInt) {
             .integer => |int| return int,
@@ -191,8 +183,6 @@ pub fn getInt(maybeVal: std.json.ObjectMap, key: []const u8) !i64 {
 }
 
 pub fn getBool(maybeVal: std.json.ObjectMap, key: []const u8) !bool {
-    errdefer |err| std.log.err("Error for key '{s}': {s}", .{ key, @errorName(err) });
-
     if (maybeVal.get(key)) |maybeBool| {
         switch (maybeBool) {
             .bool => |b| return b,

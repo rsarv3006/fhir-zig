@@ -219,3 +219,8 @@ pub fn emitFhirR5Types(arena: std.mem.Allocator, initIo: Io) !void {
     const duration = start.durationTo(end);
     std.debug.print("Elapsed time: {} ms\n", .{duration.toMilliseconds()});
 }
+
+test {
+    _ = @import("json_parse_tests.zig");
+    _ = @import("emitter.zig");
+}

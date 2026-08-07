@@ -26094,6 +26094,8 @@ pub const ValueSet_Compose_Include_Concept_Designation = struct {
     _value: ?Element = null,
 };
 
+const shared = @import("../../shared/parse_resource_union.zig");
+const std = @import("std");
 pub const Resource = union(enum) {
     Account: Account,
     ActivityDefinition: ActivityDefinition,
@@ -26241,4 +26243,8 @@ pub const Resource = union(enum) {
     ValueSet: ValueSet,
     VerificationResult: VerificationResult,
     VisionPrescription: VisionPrescription,
+
+    pub fn jsonParse(allocator: std.mem.Allocator, source: anytype, options: std.json.ParseOptions) !Resource {
+        return shared.parseResourceUnion(Resource, allocator, source, options);
+    }
 };
