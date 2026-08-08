@@ -32340,7 +32340,7 @@ pub const ValueSet_Expansion_Contains_Property_SubProperty = struct {
     },
 };
 
-const shared = @import("../../shared/parse_resource_union.zig");
+const shared = @import("../../shared/mod.zig");
 const std = @import("std");
 pub const Resource = union(enum) {
     Account: Account,
@@ -32504,5 +32504,9 @@ pub const Resource = union(enum) {
 
     pub fn jsonParse(allocator: std.mem.Allocator, source: anytype, options: std.json.ParseOptions) !Resource {
         return shared.parseResourceUnion(Resource, allocator, source, options);
+    }
+
+    pub fn jsonStringify(self: Resource, jws: anytype) !void {
+        return shared.stringifyResourceUnion(Resource, self, jws);
     }
 };

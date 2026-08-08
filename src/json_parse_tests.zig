@@ -121,3 +121,53 @@ test "parseResourceUnion returns error.MissingField when resourceType is not a s
 
     try testing.expectError(error.MissingField, result);
 }
+
+test "Resource round-trips Patient through parse and stringify" {
+    var arena = std.heap.ArenaAllocator.init(testing.allocator);
+    defer arena.deinit();
+    const allocator = arena.allocator();
+
+    const json_text =
+        \\{
+        \\  "resourceType": "Patient",
+        \\  "id": "example",
+        \\  "active": true
+        \\}
+    ;
+
+    const parsed = try std.json.parseFromSliceLeaky(
+        fhir.r4.generated.Resource,
+        allocator,
+        json_text,
+        .{},
+    );
+
+    try testing.expect(parsed == .Patient);
+
+    var out: std.Io.Writer.Allocating = .init(allocator);
+    try std.json.Stringify.value(parsed, .{}, &out.writer);
+
+    const reparsed = try std.json.parseFromSliceLeaky(
+        fhir.r4.generated.Resource,
+        allocator,
+        out.written(),
+        .{},
+    );
+
+    try testing.expect(reparsed == .Patient);
+    try testing.expectEqualStrings("example", reparsed.Patient.id.?);
+    try testing.expectEqual(true, reparsed.Patient.active.?);
+}
+
+test "stringifyResourceUnion emits resourceType for the active variant" {
+    var arena = std.heap.ArenaAllocator.init(testing.allocator);
+    defer arena.deinit();
+
+    const patient = fhir.r4.generated.Patient{ .id = "example", .active = true };
+    const resource = fhir.r4.generated.Resource{ .Patient = patient };
+
+    var out: std.Io.Writer.Allocating = .init(arena.allocator());
+    try std.json.Stringify.value(resource, .{}, &out.writer);
+
+    try testing.expect(std.mem.indexOf(u8, out.written(), "\"resourceType\":\"Patient\"") != null);
+}

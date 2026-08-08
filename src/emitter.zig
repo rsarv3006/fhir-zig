@@ -47,7 +47,7 @@ fn generateZigSourceFhirOneOf(arena: std.mem.Allocator, fhirTypeOneOf: ir.FhirTy
 
     var buffer = try std.ArrayList(u8).initCapacity(arena, name.len + fhirTypeOneOf.refs.len * 10);
     if (std.mem.eql(u8, name, "Resource")) {
-        try buffer.appendSlice(arena, "const shared = @import(\"../../shared/parse_resource_union.zig\");\n");
+        try buffer.appendSlice(arena, "const shared = @import(\"../../shared/mod.zig\");\n");
         try buffer.appendSlice(arena, "const std = @import(\"std\");\n");
     }
 
@@ -63,13 +63,17 @@ fn generateZigSourceFhirOneOf(arena: std.mem.Allocator, fhirTypeOneOf: ir.FhirTy
     }
 
     if (std.mem.eql(u8, name, "Resource")) {
+        // json parse
         try buffer.appendSlice(arena, "\n");
         try buffer.appendSlice(arena, "    pub fn jsonParse(allocator: std.mem.Allocator, source: anytype, options: std.json.ParseOptions) !Resource {\n");
         try buffer.appendSlice(arena, "        return shared.parseResourceUnion(Resource, allocator, source, options);\n");
-        try buffer.appendSlice(arena, "    }\n");
-    }
+        try buffer.appendSlice(arena, "    }\n\n");
 
-    //
+        // json stringify
+        try buffer.appendSlice(arena, "    pub fn jsonStringify(self: Resource, jws: anytype) !void {\n");
+        try buffer.appendSlice(arena, "        return shared.stringifyResourceUnion(Resource, self, jws);\n");
+        try buffer.appendSlice(arena, "    }\n\n");
+    }
 
     try buffer.appendSlice(arena, "};\n");
 
